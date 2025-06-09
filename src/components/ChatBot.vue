@@ -86,8 +86,8 @@
       >
         <div class="space-y-4 flex-1 flex flex-col justify-end">
           <div
-            v-for="(message, index) in messages"
-            :key="index"
+            v-for="(message, idx) in messages"
+            :key="idx"
             class="flex"
             :class="message.isUser ? 'justify-end' : 'justify-start'"
           >
@@ -138,8 +138,8 @@
             </div>
             <div class="space-y-2 flex flex-col items-start">
               <button
-                v-for="(faq, index) in faqs"
-                :key="index"
+                v-for="faq in preguntas"
+                :key="faq.id"
                 @click="handleFaqClick(faq)"
                 :class="[
                   'w-full text-left px-4 py-2 rounded-md transition-colors',
@@ -148,7 +148,7 @@
                     : 'bg-red-600 hover:bg-red-300 text-gray-800',
                 ]"
               >
-                {{ faq.question }}
+                {{ faq.pregunta }}
               </button>
             </div>
           </div>
@@ -187,174 +187,175 @@
 </template>
 
 <script>
-import { ref, nextTick } from 'vue'
+import { nextTick } from 'vue'
 
 export default {
   name: 'ChatBot',
-  setup() {
-    const isChatOpen = ref(false)
-    const isMinimized = ref(false)
-    const newMessage = ref('')
-    const isTyping = ref(false)
-    const messages = ref([])
-    const showFaqs = ref(true)
-    const defaultFaqs = [
-      {
-        question: '¿Cómo crear una cuenta?',
-        answer: "Haz clic en 'Registrarse', completa el formulario y verifica tu email.",
-      },
-      {
-        question: '¿Métodos de pago disponibles?',
-        answer: 'Aceptamos tarjetas de crédito, PayPal y transferencias bancarias.',
-      },
-      {
-        question: '¿Cómo rastrear mi pedido?',
-        answer: "Usa el número de seguimiento enviado a tu email en la sección 'Mis pedidos'.",
-      },
-      {
-        question: '¿Política de devoluciones?',
-        answer: 'Devoluciones gratuitas dentro de 30 días con productos en estado original.',
-      },
-    ]
-    const faqs = ref([...defaultFaqs])
-    const chatMessages = ref(null)
-
-    const openChat = () => {
-      isChatOpen.value = true
-      isMinimized.value = false
-      if (messages.value.length === 0) {
-        showFaqs.value = true
-        faqs.value = [...defaultFaqs] // <-- restaurar todas las preguntas frecuentes
-        messages.value = [
-          {
-            text: '¡Hola! ¿En qué puedo ayudarte hoy?',
-            isUser: false,
-          },
-        ]
+  data() {
+    return {
+      isChatOpen: false,
+      isMinimized: false,
+      newMessage: '',
+      isTyping: false,
+      messages: [],
+      showFaqs: true,
+      preguntas: [], // FAQs traídas del API
+      loading: false,
+      respuesta: '',
+    }
+  },
+  mounted() {
+    // Solo inicializa si $api y $q están disponibles
+    if (this.$api && this.$q) {
+      this.fetchPreguntasFrecuentes()
+    }
+  },
+  //
+  methods: {
+    // Método para obtener las preguntas frecuentes del API
+    // y almacenarlas en el array preguntas
+    fetchPreguntasFrecuentes() {
+      if (!this.$api || !this.$q) return // Previene error si no está en contexto Quasar
+      this.loading = true
+      this.$api
+        .get('api/preguntasfrecuenteschatbot')
+        .then((response) => {
+          this.preguntas = response.data.map((p) => ({
+            id: p.idPregunta,
+            pregunta: p.pregunta,
+          }))
+        })
+        .catch(() => {
+          this.$q.notify({ type: 'negative', message: 'Error al cargar preguntas frecuentes.' })
+        })
+        .finally(() => {
+          this.loading = false
+        })
+    },
+    async handleFaqClick(faq) {
+      if (!this.$api) return
+      this.newMessage = ''
+      // Elimina solo la pregunta seleccionada del array de FAQs
+      const idx = this.preguntas.findIndex((f) => f.id === faq.id)
+      if (idx !== -1) {
+        this.preguntas[idx].clicked = true
+        setTimeout(() => {
+          this.preguntas.splice(idx, 1)
+        }, 300)
       }
-      newMessage.value = ''
-    }
+      this.messages.push({
+        text: faq.pregunta,
+        isUser: true,
+      })
+      await this.fetchRespuestaDePreguntaFrecuentes(faq.id)
+    },
 
-    const closeChat = () => {
-      isChatOpen.value = false
-      isMinimized.value = false
-      showFaqs.value = true
-      newMessage.value = ''
-      messages.value = []
-      faqs.value = [...defaultFaqs] // <-- restaurar todas las preguntas frecuentes
-    }
-
-    const minimizeChat = () => {
-      isChatOpen.value = false
-      isMinimized.value = true
-    }
-
-    const restoreChat = () => {
-      isChatOpen.value = true
-      isMinimized.value = false
-    }
-
-    const onInput = () => {
-      if (newMessage.value.trim() !== '') {
-        showFaqs.value = false
+    // Método para obtener la respuesta de la pregunta frecuente seleccionada
+    async fetchRespuestaDePreguntaFrecuentes(id) {
+      if (!this.$api) return
+      this.isTyping = true
+      this.loading = true
+      try {
+        //http://localhost:5009/api/preguntasfrecuenteschatbot/byid/6
+        const response = await this.$api.get('api/preguntasfrecuenteschatbot/byid/' + id)
+        this.isTyping = false
+        this.loading = false
+        this.messages.push({
+          text: response.data.respuesta,
+          isUser: false,
+        })
+      } catch {
+        this.isTyping = false
+        this.loading = false
+        this.$q.notify({
+          type: 'negative',
+          message: 'Error al cargar respuesta de preguntas frecuentes',
+        })
       }
-    }
+    },
 
-    const scrollToBottom = () => {
+    // Metodo para obtener respuesta cuando se haga una pregunta por input en el chat
+    async fetchRespuestaPorInput(pregunta) {
+      if (!this.$api) return
+      this.isTyping = true
+      this.loading = true
+      try {
+        const response = await this.$api.get('api/preguntasfrecuenteschatbot/byid/1' , {
+          params: { pregunta },
+        })
+        this.isTyping = false
+        this.loading = false
+        this.messages.push({
+          text: response.data.respuesta || 'No encontré una respuesta exacta, ¿puedes reformular?',
+          isUser: false,
+        })
+        this.scrollToBottom()
+      } catch {
+        this.isTyping = false
+        this.loading = false
+        this.messages.push({
+          text: 'Ocurrió un error al buscar la respuesta.',
+          isUser: false,
+        })
+        this.scrollToBottom()
+      }
+    },
+
+    openChat() {
+      this.isChatOpen = true
+      this.isMinimized = false
+      this.showFaqs = true
+      this.messages = [
+        {
+          text: '¡Hola! ¿En qué puedo ayudarte hoy?',
+          isUser: false,
+        },
+      ]
+      if (this.$api) this.fetchPreguntasFrecuentes()
+      this.newMessage = ''
+    },
+    closeChat() {
+      this.isChatOpen = false
+      this.isMinimized = false
+      this.showFaqs = true
+      this.newMessage = ''
+      this.messages = []
+      this.preguntas = [] // <-- limpiar preguntas al cerrar
+    },
+    minimizeChat() {
+      this.isChatOpen = false
+      this.isMinimized = true
+    },
+    restoreChat() {
+      this.isChatOpen = true
+      this.isMinimized = false
+    },
+    onInput() {
+      if (this.newMessage.trim() !== '') {
+        this.showFaqs = false
+      }
+    },
+    scrollToBottom() {
       nextTick(() => {
-        if (chatMessages.value) {
-          chatMessages.value.scrollTop = chatMessages.value.scrollHeight
+        if (this.$refs.chatMessages) {
+          this.$refs.chatMessages.scrollTop = this.$refs.chatMessages.scrollHeight
         }
       })
-    }
-
-    const handleFaqClick = (faq) => {
-      newMessage.value = ''
-      // Elimina solo la pregunta seleccionada del array de FAQs
-      const idx = faqs.value.findIndex((f) => f.question === faq.question)
-      if (idx !== -1) {
-        // Marcar la FAQ como clickeada para el color
-        faqs.value[idx].clicked = true
-        setTimeout(() => {
-          faqs.value.splice(idx, 1)
-        }, 300) // Pequeño delay para mostrar el color
-      }
-      messages.value.push({
-        text: faq.question,
+    },
+    sendMessage() {
+      if (!this.newMessage.trim() || !this.$api) return
+      this.showFaqs = false
+      this.messages.push({
+        text: this.newMessage,
         isUser: true,
       })
-      sendBotResponse(faq.answer, true)
-      scrollToBottom()
-    }
-
-    const sendMessage = async () => {
-      if (!newMessage.value.trim()) return
-      showFaqs.value = false
-      messages.value.push({
-        text: newMessage.value,
-        isUser: true,
-      })
-      const userMsg = newMessage.value
-      newMessage.value = ''
-      isTyping.value = true
-      scrollToBottom()
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      isTyping.value = false
-      messages.value.push({
-        text: getBotResponse(userMsg),
-        isUser: false,
-      })
-      await nextTick()
-      scrollToBottom()
-    }
-
-    const sendBotResponse = async (answer, isFaqAnswer = false) => {
-      isTyping.value = true
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      isTyping.value = false
-      messages.value.push({
-        text: answer,
-        isUser: false,
-        isFaqAnswer, // <-- para fondo negro
-      })
-      await nextTick()
-      scrollToBottom()
-    }
-
-    const getBotResponse = (message) => {
-      const msg = message.toLowerCase()
-      if (msg.includes('hola') || msg.includes('hi')) {
-        return '¡Hola! ¿Cómo estás? ¿En qué puedo ayudarte?'
-      } else if (msg.includes('producto') || msg.includes('comprar')) {
-        return 'Te puedo ayudar con información sobre nuestros productos. ¿Qué te interesa saber?'
-      } else if (msg.includes('precio') || msg.includes('costo')) {
-        return 'Los precios varían según el producto. ¿Podrías ser más específico sobre qué producto te interesa?'
-      } else if (msg.includes('soporte') || msg.includes('ayuda')) {
-        return 'Estoy aquí para ayudarte. También puedes contactar a nuestro equipo de soporte técnico.'
-      } else if (msg.includes('gracias')) {
-        return '¡De nada! ¿Hay algo más en lo que pueda ayudarte?'
-      } else {
-        return 'Interesante pregunta. Déjame pensar... ¿Podrías darme más detalles para ayudarte mejor?'
-      }
-    }
-
-    return {
-      isChatOpen,
-      isMinimized,
-      newMessage,
-      isTyping,
-      messages,
-      openChat,
-      closeChat,
-      minimizeChat,
-      restoreChat,
-      sendMessage,
-      showFaqs,
-      faqs,
-      handleFaqClick,
-      onInput,
-      chatMessages,
-    }
+      const userMsg = this.newMessage
+      this.newMessage = ''
+      this.isTyping = true
+      this.scrollToBottom()
+      // Llama al método correcto para obtener la respuesta del input
+      this.fetchRespuestaPorInput(userMsg)
+    },
   },
 }
 </script>
