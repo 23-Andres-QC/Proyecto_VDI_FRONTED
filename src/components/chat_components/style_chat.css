@@ -1,0 +1,13 @@
+.faq-btn {
+  background: #b23a48 !important;
+  color: #fff !important;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  text-align: left;
+  transition: background 0.2s;
+  opacity: 1 !important;
+}
+.faq-btn:hover {
+  background: #a12a38 !important;
+}
