@@ -255,15 +255,31 @@ export default {
       if (!this.$api) return
       this.isTyping = true
       this.loading = true
+      // Mostrar animación de "escribiendo" durante al menos 1 segundo, pero mantenerla si el API demora
+      const minTyping = new Promise((resolve) => setTimeout(resolve, 1000))
+      const apiPromise = this.$api.get('api/preguntasfrecuenteschatbot/byid/' + id)
+      let response
       try {
-        //http://localhost:5009/api/preguntasfrecuenteschatbot/byid/6
-        const response = await this.$api.get('api/preguntasfrecuenteschatbot/byid/' + id)
+        response = await Promise.race([
+          (async () => {
+            await minTyping
+            return null
+          })(),
+          (async () => {
+            response = await apiPromise
+            return response
+          })(),
+        ])
+        // Espera a que ambas promesas terminen si la API fue más rápida que 1s
+        await minTyping
+        if (!response) response = await apiPromise
         this.isTyping = false
         this.loading = false
         this.messages.push({
           text: response.data.respuesta,
           isUser: false,
         })
+        this.scrollToBottom()
       } catch {
         this.isTyping = false
         this.loading = false
@@ -271,6 +287,7 @@ export default {
           type: 'negative',
           message: 'Error al cargar respuesta de preguntas frecuentes',
         })
+        this.scrollToBottom()
       }
     },
 
@@ -279,10 +296,26 @@ export default {
       if (!this.$api) return
       this.isTyping = true
       this.loading = true
+      // Mostrar animación de "escribiendo" durante al menos 1 segundo, pero mantenerla si el API demora
+      const minTyping = new Promise((resolve) => setTimeout(resolve, 1000))
+      const apiPromise = this.$api.get('api/preguntasfrecuenteschatbot/byid/1', {
+        params: { pregunta },
+      })
+      let response
       try {
-        const response = await this.$api.get('api/preguntasfrecuenteschatbot/byid/1' , {
-          params: { pregunta },
-        })
+        response = await Promise.race([
+          (async () => {
+            await minTyping
+            return null
+          })(),
+          (async () => {
+            response = await apiPromise
+            return response
+          })(),
+        ])
+        // Espera a que ambas promesas terminen si la API fue más rápida que 1s
+        await minTyping
+        if (!response) response = await apiPromise
         this.isTyping = false
         this.loading = false
         this.messages.push({
@@ -337,8 +370,12 @@ export default {
     },
     scrollToBottom() {
       nextTick(() => {
-        if (this.$refs.chatMessages) {
-          this.$refs.chatMessages.scrollTop = this.$refs.chatMessages.scrollHeight
+        const el = this.$refs.chatMessages
+        if (el) {
+          el.scrollTo({
+            top: el.scrollHeight,
+            behavior: 'smooth',
+          })
         }
       })
     },
