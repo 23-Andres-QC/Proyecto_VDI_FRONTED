@@ -13,6 +13,8 @@ const routes = [
   },
 
   { path: '/chat', component: () => import('components/ChatBot.vue') },
+
+  { path: '/p', component: () => import('components/Preguntas_Frecuentes.vue') },
 ]
 
 export default routes
