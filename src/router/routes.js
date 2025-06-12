@@ -15,6 +15,12 @@ const routes = [
   { path: '/chat', component: () => import('components/ChatBot.vue') },
 
   { path: '/p', component: () => import('components/Preguntas_Frecuentes.vue') },
+
+  { path: '/perfil-a', component: () => import('components/Perfil_Administrador.vue') },
+
+  { path: '/perfil-p', component: () => import('components/Perfil_Profesor.vue') },
+
+  { path: '/lst-p', component: () => import('components/Lista_profesores.vue') }
 ]
 
 export default routes
