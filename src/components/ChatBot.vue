@@ -296,10 +296,10 @@ export default {
       if (!this.$api) return
       this.isTyping = true
       this.loading = true
-      // Mostrar animación de "escribiendo" durante al menos 1 segundo, pero mantenerla si el API demora
       const minTyping = new Promise((resolve) => setTimeout(resolve, 1000))
-      const apiPromise = this.$api.get('api/preguntasfrecuenteschatbot/byid/1', {
-        params: { pregunta },
+      // Enviar el body como un string JSON (ejemplo: "pregunta"), y header application/json
+      const apiPromise = this.$api.post('api/gemini/ask', JSON.stringify(pregunta), {
+        headers: { 'Content-Type': 'application/json' },
       })
       let response
       try {
@@ -313,13 +313,18 @@ export default {
             return response
           })(),
         ])
-        // Espera a que ambas promesas terminen si la API fue más rápida que 1s
         await minTyping
         if (!response) response = await apiPromise
         this.isTyping = false
         this.loading = false
+        // Mostrar la respuesta real si existe, aunque sea string vacío o null
+        let respuesta = response && response.data ? response.data : null
+        // Si la respuesta es un objeto con propiedad 'respuesta', úsala, si no, usa el string directo
+        if (respuesta && typeof respuesta === 'object' && 'respuesta' in respuesta) {
+          respuesta = respuesta.respuesta
+        }
         this.messages.push({
-          text: response.data.respuesta || 'No encontré una respuesta exacta, ¿puedes reformular?',
+          text: respuesta ? respuesta : 'No encontré una respuesta exacta, ¿puedes reformular?',
           isUser: false,
         })
         this.scrollToBottom()
