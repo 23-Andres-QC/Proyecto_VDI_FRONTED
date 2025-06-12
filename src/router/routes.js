@@ -2,17 +2,12 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    children: [
+      { path: '', component: () => import('pages/LoginPage.vue') }, // <- esta es la página por defecto
+      { path: 'reset-password', component: () => import('pages/ChangePasswordForm.vue') },
+      { path: 'usuarios', component: () => import('pages/RegisterPage.vue') },
+    ],
   },
-
-  // Always leave this as last one,
-  // but you can also remove it
-  {
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue'),
-  },
-
-  { path: '/chat', component: () => import('components/ChatBot.vue') },
 ]
 
 export default routes
