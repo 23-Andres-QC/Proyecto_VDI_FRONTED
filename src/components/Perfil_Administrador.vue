@@ -15,7 +15,7 @@
         :key="menuItem.id"
         class="menu-btn"
         :class="{ active: menuItem.active }"
-        @click="selectMenuItem(menuItem.id)"
+        @click="handleButtonClick(menuItem)"
       >
         {{ menuItem.label }}
       </button>
@@ -28,7 +28,7 @@ import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   name: 'UserSidebar',
-  emits: ['menu-selected'],
+  emits: ['menu-selected', 'menu-button-clicked'],
   setup(props, { emit }) {
     const userProfile = ref({
       name: 'Eduardo Vergara',
@@ -56,10 +56,17 @@ export default defineComponent({
       emit('menu-selected', selectedItem)
     }
 
+    const handleButtonClick = (menuItem) => {
+      selectMenuItem(menuItem.id)
+      // Emitir evento personalizado con el objeto del menú
+      emit('menu-button-clicked', menuItem)
+    }
+
     return {
       userProfile,
       menuItems,
       selectMenuItem,
+      handleButtonClick,
     }
   },
 })

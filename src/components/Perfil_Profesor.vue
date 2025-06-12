@@ -3,11 +3,7 @@
     <!-- User Profile Card -->
     <div class="profile-card">
       <div class="profile-image-container">
-        <img
-          :src="userProfile.avatar"
-          :alt="userProfile.fullName"
-          class="profile-image"
-        />
+        <img :src="userProfile.avatar" :alt="userProfile.fullName" class="profile-image" />
       </div>
       <div class="profile-info">
         <h3 class="user-full-name">{{ userProfile.fullName }}</h3>
@@ -21,8 +17,8 @@
         v-for="menuItem in menuItems"
         :key="menuItem.id"
         class="menu-btn"
-        :class="{ 'active': menuItem.active }"
-        @click="selectMenuItem(menuItem.id)"
+        :class="{ active: menuItem.active }"
+        @click="handleButtonClick(menuItem)"
       >
         {{ menuItem.label }}
       </button>
@@ -40,7 +36,7 @@ export default defineComponent({
     const userProfile = ref({
       fullName: 'Eduardo Coli Vergara',
       additionalName: 'Marcos',
-      avatar: '/src/assets/Logo_Universidad.png' // Ruta de la imagen del usuario
+      avatar: '/src/assets/Logo_Universidad.png', // Ruta de la imagen del usuario
     })
 
     const menuItems = ref([
@@ -48,18 +44,24 @@ export default defineComponent({
       { id: 2, label: 'Ver lista cerrada', active: false },
       { id: 3, label: 'Mensajes', active: false },
       { id: 4, label: 'Consulta lista cerrada', active: false },
-      { id: 5, label: 'Consulta ISSN', active: false }
+      { id: 5, label: 'Consulta ISSN', active: false },
     ])
 
     const selectMenuItem = (id) => {
       // Desactivar todos los elementos
-      menuItems.value.forEach(item => {
+      menuItems.value.forEach((item) => {
         item.active = item.id === id
       })
 
       // Emitir evento para comunicar la selección al componente padre
-      const selectedItem = menuItems.value.find(item => item.id === id)
+      const selectedItem = menuItems.value.find((item) => item.id === id)
       emit('menu-selected', selectedItem)
+    }
+
+    const handleButtonClick = (menuItem) => {
+      selectMenuItem(menuItem.id)
+      // Emitir evento personalizado con el objeto del menú
+      emit('menu-button-clicked', menuItem)
     }
 
     const updateUserProfile = (newProfile) => {
@@ -70,9 +72,10 @@ export default defineComponent({
       userProfile,
       menuItems,
       selectMenuItem,
-      updateUserProfile
+      updateUserProfile,
+      handleButtonClick,
     }
-  }
+  },
 })
 </script>
 
