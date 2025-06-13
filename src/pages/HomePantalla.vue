@@ -14,7 +14,7 @@
               alt="Universidad Esan"
               class="logo-img"
             />
-          </div>          git commit -m "Pantalla principal del proyecto: HomePantalla.vue"          git commit -m "Pantalla principal del proyecto: HomePantalla.vue"
+          </div>
           <div class="nav-title">Vicerrectorrado<br />de Investigación</div>
         </div>
 
@@ -54,14 +54,24 @@
 
         <!-- Tarjetas de acceso rápido a secciones principales -->
         <div class="hero-cards">
-          <q-card class="hero-card" @click="window.open('https://investigaciones.esan.edu.pe/', '_blank')">
+          <q-card
+            class="hero-card"
+            @click="window.open('https://investigaciones.esan.edu.pe/', '_blank')"
+          >
             <q-card-section class="text-center">
               <q-icon name="assessment" size="48px" class="hero-card-icon" />
               <h3>Dirección de Investigación</h3>
             </q-card-section>
           </q-card>
           <q-card
-            class="hero-card" @click="window.open('https://investigaciones.esan.edu.pe/presentacion-esan-ediciones/', '_blank')">
+            class="hero-card"
+            @click="
+              window.open(
+                'https://investigaciones.esan.edu.pe/presentacion-esan-ediciones/',
+                '_blank',
+              )
+            "
+          >
             <q-card-section class="text-center">
               <q-icon name="menu_book" size="48px" class="hero-card-icon" />
               <h3>Esan ediciones</h3>
