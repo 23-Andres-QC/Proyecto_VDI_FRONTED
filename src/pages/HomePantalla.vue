@@ -25,7 +25,7 @@
           <q-btn flat label="Nosotros" @click="scrollTo('nosotros')" />
           <q-btn flat label="Recursos" @click="scrollTo('recursos')" />
           <q-btn flat label="Publicaciones" @click="scrollTo('publicaciones')" />
-          <q-btn class="login-btn" label="Inicio sesión" @click="scrollTo('login')" />
+          <q-btn class="login-btn" label="Inicio sesión" @click="goToLogin" />
         </div>
       </q-toolbar>
     </q-header>
@@ -401,10 +401,18 @@
 <script>
 import { defineComponent } from 'vue'
 import { scroll } from 'quasar'
+import { useRouter } from 'vue-router'
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 
 export default defineComponent({
   name: 'HomePantalla',
+  setup() {
+    const router = useRouter()
+    function goToLogin() {
+      router.push('/login')
+    }
+    return { goToLogin }
+  },
   methods: {
     // Función para navegación suave entre secciones
     // Utiliza la API de scroll de Quasar para animaciones fluidas
