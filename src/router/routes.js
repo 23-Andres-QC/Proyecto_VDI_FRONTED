@@ -13,6 +13,8 @@ const routes = [
   },
 
   { path: '/chat', component: () => import('components/ChatBot.vue') },
+  { path: '/Revista', component: () => import('pages/RevistaPage.vue') },
+  { path: '/ListaCerrada', component: () => import('pages/ListaCerradaPage.vue') },
 ]
 
 export default routes
