@@ -1,0 +1,98 @@
+.exportar-contenedor {
+  background: #dbdbdb;
+  border: 3px solid #2196f3;
+  border-radius: 12px;
+  padding: 18px 18px 28px 18px;
+  max-width: 480px;
+  margin: 24px 0 0 30px; /* cambiado: margen izquierdo 30px */
+  box-sizing: border-box;
+}
+
+.exportar-tabs {
+  display: flex;
+  background: #f6f0f7;
+  border-radius: 6px 6px 0 0;
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.exportar-tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 10px 0;
+  font-weight: 500;
+  color: #222;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  border-bottom: 2px solid transparent;
+}
+
+.exportar-tab-btn.active {
+  color: #4b2e83;
+  border-bottom: 2px solid #4b2e83;
+  background: #fff;
+}
+
+.exportar-label {
+  display: block;
+  font-weight: 600;
+  margin: 18px 0 8px 0;
+}
+
+.exportar-input,
+.exportar-textarea {
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 1rem;
+  margin-bottom: 12px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.exportar-textarea {
+  min-height: 140px;
+  resize: none;
+}
+
+.exportar-btn {
+  float: right;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 8px 32px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.exportar-search {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+  margin-bottom: 16px;
+  font-size: 1rem;
+  background: #fff;
+}
+
+.exportar-select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: none;
+  background: #fff;
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.revista-select {
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-top: 10px;
+}
