@@ -7,6 +7,7 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
       { path: 'home', component: () => import('pages/HomePantalla.vue') }, // Sin la barra inicial
+      { path: 'home1', component: () => import('pages/HomeHTML.vue') }, // Sin la barra inicial
     ],
   },
   //Rutas de autenticación
