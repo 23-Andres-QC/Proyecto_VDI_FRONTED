@@ -4,18 +4,19 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/LoginPage.vue') },
-      { path: 'reset-password', component: () => import('pages/ChangePasswordForm.vue') },
-      { path: 'home', component: () => import('pages/HomePantalla.vue') },
-      { path: 'usuarios', component: () => import('pages/RegisterPage.vue') },
-      { path: 'perfil-p', component: () => import('pages/Perfil_profesor_page.vue') },
-      { path: 'perfil-a', component: () => import('pages/Perfil_Administrador_page.vue') },
+      { path: '/login', component: () => import('pages/LoginPage.vue') },
+      { path: '/reset-password', component: () => import('pages/ChangePasswordForm.vue') },
+      { path: '', component: () => import('pages/HomePantalla.vue') },
+      { path: '/usuarios', component: () => import('pages/RegisterPage.vue') },
+      { path: '/perfil-p', component: () => import('pages/Perfil_profesor_page.vue') },
+      { path: '/perfil-a', component: () => import('pages/Perfil_Administrador_page.vue') },
     ],
   },
   {
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue'),
-  },
+    path: '/:catchAll(.*)*',   component: () => import('pages/ErrorNotFound.vue'),  },
+  { path: '/casa', component: () => import('pages/HomePantalla.vue') },
+
+  { path: '/loginn', component: () => import('pages/LoginPage.vue') },
   // Rutas adicionales
   { path: '/chat', component: () => import('components/ChatBot.vue') },
   { path: '/Revista', component: () => import('pages/RevistaPage.vue') },
