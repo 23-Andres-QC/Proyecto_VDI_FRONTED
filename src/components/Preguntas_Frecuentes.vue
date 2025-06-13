@@ -127,7 +127,7 @@ export default defineComponent({
     const nuevaPregunta = ref('')
     const nuevaRespuesta = ref('')
     // Obtener el IdUsuario del usuario logueado
-    const IdUsuario = window?.$q?.sessionStorage?.getItem('IdUsuario') || 2 // fallback demo
+    const IdUsuario = window?.$q?.sessionStorage?.getItem('IdUsuario') || 7 // fallback demo
     let blurTimeout = null
     let preguntaFocus = false
     let respuestaFocus = false
