@@ -1,8 +1,8 @@
 <style src="./StylessTipo.css"></style>
 
 <template>
-  <div class="ventana-contenedor">
-    <div class="tabs-container">
+  <div class="ventana-contenedor mejor-tipo">
+    <div class="tabs-container tabs-centrado">
       <!-- Botón Usuarios -->
       <button
         :class="['tab-btn', { active: selectedTab === 'Usuarios' }]"
@@ -61,3 +61,31 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.mejor-tipo {
+  background: #f8fafc;
+  border: 2px solid #2196f3;
+  border-radius: 10px;
+  padding: 8px 18px 8px 18px;
+  margin: 0;
+  box-shadow: 0 2px 8px rgba(33,150,243,0.07);
+  max-width: 100%;
+}
+.tabs-centrado {
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+.tabs-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 0;
+}
+.tab-btn {
+  padding: 6px 18px;
+  font-size: 1rem;
+  border-radius: 8px;
+}
+</style>
