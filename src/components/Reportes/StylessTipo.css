@@ -1,0 +1,61 @@
+.ventana-contenedor {
+  background: #f5f5f5;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  padding: 24px 18px 18px 18px;
+  max-width: 400px;
+  margin: 30px 0 0 30px; /* margen a la izquierda, sin auto */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.tabs-container {
+  display: flex;
+  gap: 7px;
+  margin-bottom: 14px;
+}
+
+.tab-btn {
+  background: #e5e5e5;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 18px;
+  color: #222;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tab-btn.active {
+  background-color: #222;
+  color: #fff;
+}
+
+.checkmark {
+  font-size: 12px;
+  margin-right: 4px;
+}
+
+/* Estilos para el select (combo box) igual que botón */
+.tabs-container select.tab-btn {
+  appearance: none; /* quita estilo nativo */
+  background-color: #e5e5e5;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 18px;
+  color: #222;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Estado activo del select */
+.tabs-container select.tab-btn.active {
+  background-color: #222;
+  color: #fff;
+}

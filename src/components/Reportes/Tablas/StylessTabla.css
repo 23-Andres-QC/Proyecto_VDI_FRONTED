@@ -1,0 +1,41 @@
+.tabla-issn-contenedor {
+  padding: 8px;
+  max-width: 1200px; /* ancho máximo */
+  margin: 0 auto; /* centrar horizontal */
+}
+
+.tabla-scroll {
+  overflow: auto;
+  max-height: 200px; /* altura más pequeña */
+  border: 2px solid #2196f3;
+  border-radius: 12px;
+}
+
+.tabla-issn {
+  width: max-content;
+  border-collapse: collapse;
+  background: #f6f0f7;
+  font-size: 1rem;
+}
+
+.tabla-issn th,
+.tabla-issn td {
+  padding: 2px 6px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+  white-space: nowrap;
+}
+
+.tabla-issn th {
+  background-color: #dbdbdb;
+  color: #222;
+  font-weight: bold;
+}
+
+.tabla-issn tbody tr:hover {
+  background-color: #e9e9e9;
+}
+
+.tabla-issn tbody tr:last-child td {
+  border-bottom: none;
+}
