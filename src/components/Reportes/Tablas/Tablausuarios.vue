@@ -2,7 +2,7 @@
 
 <template>
   <div class="contenedor-reporte">
-    <div class="filtros-contenedor filtro-reporte">
+    <div class="filtros-contenedor filtro-reporte filtro-reporte-una-fila">
       <select v-model="estado" class="filtro-select">
         <option disabled value="">Estado</option>
         <option>Activo</option>
