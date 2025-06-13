@@ -2,7 +2,7 @@
 
 <template>
   <div class="ventana-contenedor">
-    <div class="tabs-container">
+    <div class="tabs-vertical-container">
       <!-- Botón Usuarios -->
       <button
         :class="['tab-btn', { active: selectedTab === 'Usuarios' }]"
@@ -43,21 +43,21 @@ export default {
   data() {
     return {
       selectedTab: 'Usuarios', // tab actual
-      Revista: '' // opción del combo de revistas
-    };
+      Revista: '', // opción del combo de revistas
+    }
   },
   methods: {
     cambiarTab(tab) {
-      this.selectedTab = tab;
+      this.selectedTab = tab
       // Emitir el tab actual y si es revistas también el tipo
       if (tab === 'revistas') {
-        this.$emit('mostrar-reporte', tab, this.Revista);
+        this.$emit('mostrar-reporte', tab, this.Revista)
       } else {
-        this.$emit('mostrar-reporte', tab);
+        this.$emit('mostrar-reporte', tab)
         // Reiniciar Revista si cambia de tab
-        this.Revista = '';
+        this.Revista = ''
       }
-    }
-  }
-};
+    },
+  },
+}
 </script>

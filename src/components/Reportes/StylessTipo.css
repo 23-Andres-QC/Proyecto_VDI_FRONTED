@@ -5,7 +5,7 @@
   padding: 24px 18px 18px 18px;
   max-width: 400px;
   margin: 30px 0 0 30px; /* margen a la izquierda, sin auto */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .tabs-container {
@@ -23,7 +23,9 @@
   font-weight: 500;
   cursor: pointer;
   position: relative;
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -51,11 +53,35 @@
   cursor: pointer;
   font-family: inherit;
   font-size: 1rem;
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
 }
 
 /* Estado activo del select */
 .tabs-container select.tab-btn.active {
   background-color: #222;
   color: #fff;
+}
+
+.tabs-vertical-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.tab-btn {
+  border-radius: 0;
+  margin-bottom: 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.tab-btn:last-child {
+  border-bottom: none;
+}
+
+.tabs-vertical-container .tab-btn {
+  width: 100%;
+  border-radius: 0;
+  margin-bottom: 0;
 }

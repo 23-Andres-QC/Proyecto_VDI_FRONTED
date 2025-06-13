@@ -1,7 +1,6 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <!-- Header -->
-    <q-header class="header-container">
+    <q-header v-if="!isHomePantalla" class="header-container">
       <div class="header-content">
         <!-- Logo Section -->
         <div class="logo-section">
@@ -12,11 +11,12 @@
         <!-- Header Actions -->
         <div class="header-actions">
           <q-btn
+            v-if="buttonLabel"
+            :label="buttonLabel"
             color="dark"
-            label="Cerrar sesión"
             size="sm"
             class="logout-btn"
-            @click="handleLogout"
+            @click="handleHeaderButton"
             no-caps
           />
         </div>
@@ -33,74 +33,71 @@
       </div>
     </q-page-container>
 
-    <!-- Footer -->
     <q-footer class="footer-container">
       <div class="footer-content">
         <p class="footer-text">© Universidad ESAN | Alonso de Molina 1652, Surco, Lima, Perú</p>
       </div>
     </q-footer>
   </q-layout>
-  <router-view />
 </template>
-<script>
-import { defineComponent } from 'vue'
-import { useRouter } from 'vue-router'
+
+<script setup>
+//Linea 59 configuras en donde quieras que aparesca este Header y Footer
+import { ref, computed, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 
-export default defineComponent({
-  name: 'MainLayout',
-  setup() {
-    const $router = useRouter()
-    const $q = useQuasar()
+const route = useRoute()
+const router = useRouter()
+const $q = useQuasar()
 
-    const handleLogout = () => {
-      // Mostrar diálogo de confirmación
-      $q.dialog({
-        title: 'Cerrar Sesión',
-        message: '¿Estás seguro de que deseas cerrar sesión?',
-        cancel: true,
-        persistent: true,
-        ok: {
-          label: 'Sí, cerrar sesión',
-          color: 'negative',
-        },
-      }).onOk(() => {
-        // Lógica de logout
-        performLogout()
-      })
-    }
+// Estado de autenticación simple (puedes mejorar esto con Vuex o Pinia)
+const isAuthenticated = ref(false)
 
-    const performLogout = () => {
-      try {
-        // Limpiar datos de sesión
-        localStorage.removeItem('user_token')
-        localStorage.removeItem('user_data')
-        sessionStorage.clear()
+// Detectar si estamos en la página de login
+const isLoginPage = computed(() => route.path === '/login')
+const isHomePantalla = computed(() => route.path === '/home')
 
-        // Mostrar notificación
-        $q.notify({
-          type: 'positive',
-          message: 'Sesión cerrada exitosamente',
-          position: 'top',
-        })
+// Cambia el texto y acción del botón según el estado
+const buttonLabel = computed(() => {
+  if (isLoginPage.value) {
+    return 'Salir'
+  } else if (!isAuthenticated.value) {
+    return '' // No mostrar 'Ingresar'
+  } else {
+    return 'Cerrar sesión'
+  }
+})
 
-        // Redirigir al login
-        $router.push('/login')
-      } catch (error) {
-        console.error('Error al cerrar sesión:', error)
-        $q.notify({
-          type: 'negative',
-          message: 'Error al cerrar sesión',
-          position: 'top',
-        })
-      }
-    }
+function handleHeaderButton() {
+  if (isLoginPage.value) {
+    router.back() // Volver a la página anterior
+  } else if (!isAuthenticated.value) {
+    router.push('/login') // Ir a login
+  } else {
+    // Cerrar sesión
+    isAuthenticated.value = false
+    localStorage.removeItem('user_token')
+    localStorage.removeItem('user_data')
+    sessionStorage.clear()
+    $q.notify({
+      type: 'positive',
+      message: 'Sesión cerrada exitosamente',
+      position: 'top',
+    })
+    router.push('/login')
+  }
+}
 
-    return {
-      handleLogout,
+// Simulación: cuando se pasa de login a otra página, marcar autenticado
+watch(
+  () => route.path,
+  (newPath, oldPath) => {
+    if (oldPath === '/login' && newPath !== '/login') {
+      isAuthenticated.value = true
     }
   },
-})
+)
 </script>
 
 <style scoped>
@@ -278,4 +275,3 @@ export default defineComponent({
   transform: translateY(1px);
 }
 </style>
-

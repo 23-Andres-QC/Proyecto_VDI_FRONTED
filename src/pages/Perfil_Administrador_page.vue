@@ -36,6 +36,9 @@
     >
       <!-- Componente varios -->
       <ListaProfesores v-if="mostrarComponente === 'lista'" style="width: 100%; height: 100%" />
+      <div v-if="mostrarComponente === 'reportes'" style="width: 100%; height: 100%">
+        <ReportesPage style="width: 100%; height: 100%" />
+      </div>
       <div
         v-if="mostrarComponente === 'preguntas'"
         style="width: 100%; display: flex; justify-content: center"
@@ -51,12 +54,15 @@ import { ref } from 'vue'
 import Perfil_Administrador from 'components/Perfil_Administrador.vue'
 import ListaProfesores from 'components/Lista_profesores.vue'
 import PreguntasFrecuentes from 'components/Preguntas_Frecuentes.vue'
+import ReportesPage from './ReportesPage.vue'
 
 const mostrarComponente = ref('lista')
 
 function handleMenuButtonClicked(menuItem) {
   if (menuItem.id === 4) {
     mostrarComponente.value = 'lista'
+  } else if (menuItem.id === 5) {
+    mostrarComponente.value = 'reportes'
   } else if (menuItem.id === 6) {
     mostrarComponente.value = 'preguntas'
   } else {
