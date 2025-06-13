@@ -1,11 +1,82 @@
 .exportar-contenedor {
-  background: #dbdbdb;
-  border: 3px solid #2196f3;
-  border-radius: 12px;
-  padding: 18px 18px 28px 18px;
-  max-width: 480px;
-  margin: 24px 0 0 30px; /* cambiado: margen izquierdo 30px */
+  background: #f8fafc;
+  border: 2px solid #2196f3;
+  border-radius: 10px;
+  padding: 12px 18px 12px 18px;
+  margin: 0;
+  box-shadow: 0 2px 8px rgba(33,150,243,0.07);
+  max-width: 100%;
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exportar-form-flex {
+  display: flex;
+  flex-direction: row;
+  gap: 18px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.exportar-form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 180px;
+  flex: 1 1 0;
+}
+
+.exportar-btn-col {
+  justify-content: flex-end;
+  align-items: flex-end;
+  min-width: 120px;
+}
+
+.exportar-btn {
+  width: 100%;
+  padding: 8px 0;
+  font-size: 1rem;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #2196f3 0%, #e91e63 100%);
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.exportar-btn:hover {
+  background: linear-gradient(90deg, #1976d2 0%, #ad1457 100%);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.exportar-label {
+  font-size: 0.98rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.exportar-input,
+.exportar-select,
+.exportar-textarea {
+  border: 1.5px solid #2196f3;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 1rem;
+  background: #fff;
   box-sizing: border-box;
+}
+
+.exportar-search {
+  border: 1.5px solid #2196f3;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 1rem;
+  background: #fff;
+  margin-bottom: 0;
 }
 
 .exportar-tabs {
@@ -13,19 +84,20 @@
   background: #f6f0f7;
   border-radius: 6px 6px 0 0;
   overflow: hidden;
-  margin-bottom: 18px;
+  margin-bottom: 8px;
 }
 
 .exportar-tab-btn {
   flex: 1;
   background: transparent;
   border: none;
-  padding: 10px 0;
+  padding: 8px 0;
   font-weight: 500;
   color: #222;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
   border-bottom: 2px solid transparent;
+  font-size: 1rem;
 }
 
 .exportar-tab-btn.active {
@@ -34,65 +106,7 @@
   background: #fff;
 }
 
-.exportar-label {
-  display: block;
-  font-weight: 600;
-  margin: 18px 0 8px 0;
-}
-
-.exportar-input,
 .exportar-textarea {
-  width: 100%;
-  border: none;
-  border-radius: 4px;
-  padding: 8px;
-  font-size: 1rem;
-  margin-bottom: 12px;
-  background: #fff;
-  box-sizing: border-box;
-}
-
-.exportar-textarea {
-  min-height: 140px;
+  min-height: 60px;
   resize: none;
-}
-
-.exportar-btn {
-  float: right;
-  background: #111;
-  color: #fff;
-  border: none;
-  border-radius: 16px;
-  padding: 8px 32px;
-  font-size: 1.1rem;
-  font-weight: 500;
-  cursor: pointer;
-  margin-top: 8px;
-}
-
-.exportar-search {
-  width: 100%;
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #bbb;
-  margin-bottom: 16px;
-  font-size: 1rem;
-  background: #fff;
-}
-
-.exportar-select {
-  width: 100%;
-  padding: 8px;
-  border-radius: 4px;
-  border: none;
-  background: #fff;
-  font-size: 1rem;
-  margin-bottom: 12px;
-}
-
-.revista-select {
-  padding: 8px;
-  border-radius: 6px;
-  font-size: 1rem;
-  margin-top: 10px;
 }
