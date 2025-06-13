@@ -18,6 +18,10 @@ const routes = [
 
   { path: '/chat', component: () => import('components/ChatBot.vue') },
 
+  { path: '/Revista', component: () => import('pages/RevistaPage.vue') },
+  { path: '/ListaCerrada', component: () => import('pages/ListaCerradaPage.vue') },
+
+
   { path: '/p', component: () => import('components/Preguntas_Frecuentes.vue') },
 
   { path: '/perfil-a', component: () => import('components/Perfil_Administrador.vue') },
@@ -25,6 +29,7 @@ const routes = [
   { path: '/perfil-p', component: () => import('components/Perfil_Profesor.vue') },
 
   { path: '/lst-p', component: () => import('components/Lista_profesores.vue') }
+
 ]
 
 export default routes
