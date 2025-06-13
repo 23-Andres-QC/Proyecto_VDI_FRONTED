@@ -1,89 +1,281 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-        <div>Quasar v{{$q.version}}</div>
-      </q-toolbar>
+  <q-layout view="hHh lpR fFf">
+    <!-- Header -->
+    <q-header class="header-container">
+      <div class="header-content">
+        <!-- Logo Section -->
+        <div class="logo-section">
+          <img src="../assets/Logo_Universidad.png" alt="Universidad ESAN" class="logo-image" />
+          <span class="logo-text">Universidad ESAN</span>
+        </div>
+
+        <!-- Header Actions -->
+        <div class="header-actions">
+          <q-btn
+            color="dark"
+            label="Cerrar sesión"
+            size="sm"
+            class="logout-btn"
+            @click="handleLogout"
+            no-caps
+          />
+        </div>
+      </div>
     </q-header>
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list>
-        <q-item-label header>Essential Links</q-item-label>
-        <EssentialLink v-for="link in linksList" :key="link.title" v-bind="link" />
-      </q-list>
-    </q-drawer>
-    <q-page-container>
-      <router-view />
+
+    <!-- Main Page Container -->
+    <q-page-container class="main-container">
+      <div class="page-wrapper">
+        <!-- Content Area -->
+        <div class="content-area">
+          <router-view />
+        </div>
+      </div>
     </q-page-container>
+
+    <!-- Footer -->
+    <q-footer class="footer-container">
+      <div class="footer-content">
+        <p class="footer-text">© Universidad ESAN | Alonso de Molina 1652, Surco, Lima, Perú</p>
+      </div>
+    </q-footer>
   </q-layout>
   <router-view />
 </template>
+<script>
+import { defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 
-<script setup>
-// Layout comentado: solo muestra la vista de la ruta
+export default defineComponent({
+  name: 'MainLayout',
+  setup() {
+    const $router = useRouter()
+    const $q = useQuasar()
 
-import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
+    const handleLogout = () => {
+      // Mostrar diálogo de confirmación
+      $q.dialog({
+        title: 'Cerrar Sesión',
+        message: '¿Estás seguro de que deseas cerrar sesión?',
+        cancel: true,
+        persistent: true,
+        ok: {
+          label: 'Sí, cerrar sesión',
+          color: 'negative',
+        },
+      }).onOk(() => {
+        // Lógica de logout
+        performLogout()
+      })
+    }
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
+    const performLogout = () => {
+      try {
+        // Limpiar datos de sesión
+        localStorage.removeItem('user_token')
+        localStorage.removeItem('user_data')
+        sessionStorage.clear()
 
-const leftDrawerOpen = ref(false)
+        // Mostrar notificación
+        $q.notify({
+          type: 'positive',
+          message: 'Sesión cerrada exitosamente',
+          position: 'top',
+        })
 
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value
+        // Redirigir al login
+        $router.push('/login')
+      } catch (error) {
+        console.error('Error al cerrar sesión:', error)
+        $q.notify({
+          type: 'negative',
+          message: 'Error al cerrar sesión',
+          position: 'top',
+        })
+      }
+    }
+
+    return {
+      handleLogout,
+    }
+  },
+})
+</script>
+
+<style scoped>
+/* Layout Base */
+.q-layout {
+  min-height: 100vh;
 }
 
-</script>
+/* Header */
+.header-container {
+  background-color: #d32f2f;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-left: 14px;
+  letter-spacing: 1px;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+}
+
+.logout-btn {
+  background-color: #333;
+  color: white;
+  border-radius: 4px;
+  font-size: 13px;
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #555;
+}
+
+/* Main Container */
+.main-container {
+  background-color: #f5f5f5;
+  min-height: calc(100vh - 120px); /* Ajustar según altura del header y footer */
+}
+
+.page-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  width: 100%;
+}
+
+.content-area {
+  min-height: calc(100vh - 120px);
+  background-color: #f5f5f5;
+}
+
+/* Footer */
+.footer-container {
+  background-color: #333;
+  color: white;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.footer-content {
+  padding: 16px 24px;
+  text-align: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.footer-text {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 400;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .header-content,
+  .page-wrapper,
+  .footer-content {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-content {
+    padding: 8px 12px;
+  }
+
+  .logo-image {
+    height: 32px;
+  }
+
+  .logout-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .footer-content {
+    padding: 12px 16px;
+  }
+
+  .footer-text {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-content {
+    padding: 8px 10px;
+  }
+
+  .logo-image {
+    height: 28px;
+  }
+
+  .logout-btn {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  .footer-content {
+    padding: 10px 12px;
+  }
+
+  .footer-text {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+}
+
+/* Utilidades adicionales */
+.q-page {
+  padding: 0;
+}
+
+/* Animaciones */
+.header-container {
+  transition: box-shadow 0.3s ease;
+}
+
+.logout-btn {
+  transition: all 0.2s ease;
+}
+
+.logout-btn:active {
+  transform: translateY(1px);
+}
+</style>
+
