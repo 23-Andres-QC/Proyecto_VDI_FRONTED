@@ -40,8 +40,8 @@
       </div>
     </q-footer>
   </q-layout>
+  <router-view />
 </template>
-
 <script>
 import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
@@ -278,3 +278,4 @@ export default defineComponent({
   transform: translateY(1px);
 }
 </style>
+

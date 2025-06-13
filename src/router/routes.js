@@ -1,10 +1,13 @@
 const routes = [
+  // Rutas de la aplicación
+  // Ruta principal
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/LoginPage.vue') }, // <- esta es la página por defecto
       { path: 'reset-password', component: () => import('pages/ChangePasswordForm.vue') },
+       { path: 'home', component: () => import('pages/HomePantalla.vue') }, // Sin la barra inicial
       { path: 'usuarios', component: () => import('pages/RegisterPage.vue') },
     ],
   },
@@ -13,12 +16,12 @@ const routes = [
 
     ],
   },
-
   {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
   },
 
+// Rutas adicionales
   { path: '/chat', component: () => import('components/ChatBot.vue') },
 
   { path: '/Revista', component: () => import('pages/RevistaPage.vue') },
