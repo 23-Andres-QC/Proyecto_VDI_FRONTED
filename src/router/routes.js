@@ -12,6 +12,7 @@ const routes = [
       { path: '/perfil-a', component: () => import('pages/Perfil_Administrador_page.vue') },
     ],
   },
+  {path: '/rep', component: () => import('pages/ReportesPage.vue') },
   {
     path: '/:catchAll(.*)*',   component: () => import('pages/ErrorNotFound.vue'),  },
   { path: '/casa', component: () => import('pages/HomePantalla.vue') },
