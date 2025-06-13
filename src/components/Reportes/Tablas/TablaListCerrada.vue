@@ -53,6 +53,7 @@ export default {
       revistas: []
     }
   },
+  
   mounted() {
     fetch('http://localhost:5009/api/Revista/lcd') // pon aquí tu endpoint real
       .then(response => response.json())

@@ -9,7 +9,6 @@
             <th>idUsuario</th>
             <th>Nombre y Apellido</th>
             <th>Correo</th>
-            <th>Id Rol</th>
             <th>Estado</th>
             <th>Fecha Creacion</th>
             <th>Fecha Modificacion</th>
@@ -20,7 +19,6 @@
             <td>{{ usuario.idUsuario }}</td>
             <td>{{ usuario.nombreyApellido }}</td>
             <td>{{ usuario.correo }}</td>
-            <td>{{ usuario.idRol }}</td>
             <td>{{ usuario.estado === 1 ? 'Activo' : 'Inactivo' }}</td>
             <td>{{ formatFecha(usuario.fechaCreacion) }}</td>
             <td>{{ usuario.fechaModificacion ? formatFecha(usuario.fechaModificacion) : 'Sin modificar' }}</td>

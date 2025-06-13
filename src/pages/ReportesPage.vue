@@ -84,7 +84,7 @@ export default {
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 40px; /* espacio entre columnas */
+  gap: 40px;
   margin-top: 20px;
   padding: 0 40px;
 }
@@ -100,7 +100,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-width: 1000px; /* puedes ajustar el ancho de la tabla + filtros */
+  max-width: 1000px;
   flex-grow: 1;
 }
 </style>

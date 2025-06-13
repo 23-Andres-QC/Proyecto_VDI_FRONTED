@@ -2,13 +2,6 @@
 
 <template>
   <div class="filtros-contenedor">
-    <select v-model="tipoUsuario" class="filtro-select">
-      <option disabled value="">Tipo usuarios</option>
-      <option>Administrador</option>
-      <option>Auxiliar</option>
-      <option>Investigador</option>
-      <option>Visitante</option>
-    </select>
 
     <select v-model="estado" class="filtro-select">
       <option disabled value="">Estado</option>
@@ -29,7 +22,6 @@ export default {
   name: 'FiltrosUsuarios',
   data() {
     return {
-      tipoUsuario: '',
       estado: '',
       fechaInicio: '',
       fechaFin: ''
@@ -39,7 +31,7 @@ export default {
     buscar() {
       // Aquí va la lógica de búsqueda
       alert(
-        `Tipo: ${this.tipoUsuario}\nEstado: ${this.estado}\nInicio: ${this.fechaInicio}\nFin: ${this.fechaFin}`
+        `Tipo: $\nEstado: ${this.estado}\nInicio: ${this.fechaInicio}\nFin: ${this.fechaFin}`
       );
     }
   }
