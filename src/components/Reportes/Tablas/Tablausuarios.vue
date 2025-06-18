@@ -83,18 +83,50 @@ export default {
       });
     }
   },
+  watch: {
+    usuariosFiltrados: {
+      handler(nuevos, antiguos) {
+        this.emitirFiltrados();
+      },
+      deep: true
+    },
+    estado: 'emitirFiltrados',
+    fechaInicio: 'emitirFiltrados',
+    fechaFin: 'emitirFiltrados',
+    busqueda: 'emitirFiltrados'
+  },
   mounted() {
     // Ejemplo usando fetch (puedes cambiar por axios si quieres)
     fetch('http://localhost:5009/api/usuario') // <-- pon aquí tu endpoint real
       .then(response => response.json())
       .then(data => {
         this.usuarios = data;
+        this.emitirFiltrados();
       })
       .catch(error => {
         console.error('Error al obtener usuarios:', error);
       });
   },
   methods: {
+    emitirFiltrados() {
+      // Transformar los datos para exportar igual que en la tabla visual
+      const datosExportar = this.usuariosFiltrados.map(usuario => ({
+        idUsuario: usuario.idUsuario,
+        nombreyApellido: usuario.nombreyApellido,
+        correo: usuario.correo,
+        estado: usuario.estado === 1 ? 'Activo' : 'Inactivo',
+        fechaCreacion: this.formatFecha(usuario.fechaCreacion),
+        fechaModificacion: usuario.fechaModificacion ? this.formatFecha(usuario.fechaModificacion) : 'Sin modificar'
+      }));
+      this.$emit('update:filtrados', datosExportar, [
+        'idUsuario',
+        'nombreyApellido',
+        'correo',
+        'estado',
+        'fechaCreacion',
+        'fechaModificacion'
+      ]);
+    },
     formatFecha(fecha) {
       if (!fecha) return '';
       const date = new Date(fecha);
