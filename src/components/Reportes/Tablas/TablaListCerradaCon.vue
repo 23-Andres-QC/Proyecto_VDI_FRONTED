@@ -40,7 +40,6 @@
               <th>Nombre</th>
               <th>Categoría</th>
               <th>Puntaje</th>
-              <th>Incentivo (USD)</th>
               <th>SCOPUS</th>
               <th>WoS (Q)</th>
               <th>ESCI Q</th>
@@ -58,7 +57,6 @@
               <td>{{ revista.nombre }}</td>
               <td>{{ revista.categoria2 }}</td>
               <td>{{ revista.puntaje }}</td>
-              <td>{{ revista.incentivoUSD }}</td>
               <td>{{ revista.scopus }}</td>
               <td>{{ revista.woS_Q }}</td>
               <td>{{ revista.escI_Q }}</td>
@@ -76,7 +74,7 @@
 
 <script>
 export default {
-  name: 'TablaListCerrada',
+  name: 'TablaListCerradaCon',
   data() {
     return {
       revistas: [],
@@ -118,7 +116,6 @@ export default {
           nombre: revista.nombre,
           categoria2: revista.categoria2,
           puntaje: revista.puntaje,
-          incentivoUSD: revista.incentivoUSD,
           scopus: revista.scopus,
           woS_Q: revista.woS_Q,
           escI_Q: revista.escI_Q,
@@ -127,7 +124,6 @@ export default {
           abdc: revista.abdc,
           woS_LATAM: revista.woS_LATAM,
         }))
-        this.emitirFiltrados() // Emitir los datos filtrados cada vez que cambien
       },
       deep: true,
     },
@@ -178,7 +174,10 @@ export default {
   },
   methods: {
     emitirFiltrados() {
-      const datosTransformados = this.revistasFiltradas.map((item) => [item.issn, item.nombre])
+      const datosTransformados = this.revistasFiltradas.map((revista) => [
+        revista.issn,
+        revista.nombre,
+      ])
       this.$emit('update:filtrados', datosTransformados)
     },
     limpiarFiltros() {
