@@ -36,10 +36,10 @@ const routes = [
   { path: '/perfil-a', component: () => import('components/Perfil_Administrador.vue') },
   { path: '/perfil-p', component: () => import('components/Perfil_Profesor.vue') },
   { path: '/lst-p', component: () => import('components/Lista_profesores.vue') },
-  { path: '/conrev', component: () => import('components/Reportes/TablaConsultarRevistas.vue') },
+  { path: '/conrev', component: () => import('src/components/Reportes/ConsultarRevistas.vue') },
   {
     path: '/conlist',
-    component: () => import('components/Reportes/TablaConsultarListaCerrada.vue'),
+    component: () => import('src/components/Reportes/ConsultarListaCerrada.vue'),
   },
 ]
 

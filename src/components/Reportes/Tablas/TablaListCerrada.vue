@@ -1,7 +1,7 @@
 <style src="./StylessTabla.css"></style>
 
 <template>
-  <div class="contenedor-reporte">
+  <div class="contenedor-reporte-listaCerrada">
     <div class="filtros-container filtro-reporte">
       <select v-model="tipoCaracteristica" class="combo-box">
         <option disabled value="">Tipo de característica</option>
@@ -31,7 +31,7 @@
     </div>
     <div class="tabla-issn-contenedor">
       <div class="tabla-scroll">
-        <table class="tabla-issn">
+        <table class="tabla-listaCerrada">
           <thead>
             <tr>
               <th>ISSN</th>

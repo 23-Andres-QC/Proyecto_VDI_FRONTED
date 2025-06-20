@@ -10,17 +10,17 @@
     </div>
     <div class="contenido-reporte ancho-tabla tabla-menos-abajo" style="gap: 10px">
       <div v-if="reporteSeleccionado === 'Usuarios'" class="tabla-usuarios">
-        <Tablausuarios ref="tablaRef" @update:filtrados="actualizarTabla" />
+        <Tablausuarios ref="tablaRefUsuarios" @update:filtrados="actualizarTabla" />
       </div>
       <div v-else-if="reporteSeleccionado === 'Profesores Importados'" class="tabla-profesores">
-        <TablaProfesores ref="tablaRef" @update:filtrados="actualizarTabla" />
+        <TablaProfesores ref="tablaRefProfesores" @update:filtrados="actualizarTabla" />
       </div>
       <div v-else-if="reporteSeleccionado === 'revistas'">
         <div v-if="tipoRevistaSeleccionado === 'ISSN'" class="tabla-issn">
-          <TablaISSN ref="tablaRef" @update:filtrados="actualizarTabla" />
+          <TablaISSN ref="tablaRefISSN" @update:filtrados="actualizarTabla" />
         </div>
         <div v-else-if="tipoRevistaSeleccionado === 'Lista Cerrada'" class="tabla-lista-cerrada">
-          <TablaListCerrada ref="tablaRef" @update:filtrados="actualizarTabla" />
+          <TablaListCerrada ref="tablaRefListaCerrada" @update:filtrados="actualizarTabla" />
         </div>
       </div>
     </div>
@@ -40,6 +40,11 @@ const reporteSeleccionado = ref('Usuarios')
 const tipoRevistaSeleccionado = ref('')
 const tablaActual = ref([])
 
+const tablaRefUsuarios = ref(null)
+const tablaRefProfesores = ref(null)
+const tablaRefISSN = ref(null)
+const tablaRefListaCerrada = ref(null)
+
 function cambiarReporte(nuevoReporte, tipoRevista = '') {
   reporteSeleccionado.value = nuevoReporte
   if (nuevoReporte === 'revistas') {
@@ -52,8 +57,23 @@ function cambiarReporte(nuevoReporte, tipoRevista = '') {
 
 function actualizarTabla(filtrados) {
   console.log('Datos filtrados recibidos:', filtrados)
-  // Convert Vue Proxy to plain JavaScript array
-  tablaActual.value = JSON.parse(JSON.stringify(filtrados))
+
+  // Si los datos filtrados están vacíos, verificar si hay datos iniciales
+  if (!filtrados || filtrados.length === 0) {
+    console.warn('No se recibieron datos filtrados, verificando datos iniciales...')
+    const tablaRef =
+      reporteSeleccionado.value === 'Usuarios'
+        ? tablaRefUsuarios.value
+        : reporteSeleccionado.value === 'Profesores Importados'
+          ? tablaRefProfesores.value
+          : tipoRevistaSeleccionado.value === 'ISSN'
+            ? tablaRefISSN.value
+            : tablaRefListaCerrada.value
+    tablaActual.value = tablaRef?.revistas || []
+  } else {
+    // Convert Vue Proxy a un array de JavaScript
+    tablaActual.value = JSON.parse(JSON.stringify(filtrados))
+  }
 }
 
 async function manejarEnvio({ formato, correos }) {
@@ -85,7 +105,7 @@ async function manejarEnvio({ formato, correos }) {
 <style scoped>
 .contenedor-reportes {
   position: relative;
-  width: 850px;
+  width: 700px;
   height: 750px;
   border: 2px solid black;
   margin: 0 auto;
@@ -95,31 +115,31 @@ async function manejarEnvio({ formato, correos }) {
 }
 
 .header-reportes-min {
-  top: 100px;
+  top: 80px;
 }
 
 /* Independent positioning for tables */
 .tabla-usuarios {
   position: absolute;
-  top: 400px;
-  left: 510px;
+  top: 170px;
+  left: 20px;
 }
 
 .tabla-profesores {
   position: absolute;
-  top: 440px;
-  left: 420px;
+  top: 170px;
+  left: 20px;
 }
 
 .tabla-issn {
   position: absolute;
-  top: 440px;
-  left: 5px;
+  top: 170px;
+  left: 10px;
 }
 
 .tabla-lista-cerrada {
   position: absolute;
-  top: 440px;
-  left: 510px;
+  top: 10px;
+  left: 10px;
 }
 </style>

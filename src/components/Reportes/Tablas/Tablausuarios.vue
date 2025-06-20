@@ -1,7 +1,7 @@
 <style src="./StylessTabla.css"></style>
 
 <template>
-  <div class="contenedor-reporte">
+  <div class="contenedor-reporte-usuarios">
     <div class="filtros-contenedor filtro-reporte filtro-reporte-una-fila">
       <select v-model="estado" class="filtro-select">
         <option disabled value="">Estado</option>
@@ -18,9 +18,9 @@
       />
       <button class="filtro-issn-btn" @click="limpiarFiltros">Limpiar</button>
     </div>
-    <div class="tabla-issn-contenedor">
+    <div class="tabla-usuarios-contenedor">
       <div class="tabla-scroll">
-        <table class="tabla-issn">
+        <table class="tabla-usuarios">
           <thead>
             <tr>
               <th>Nombre y Apellido</th>
@@ -132,9 +132,9 @@ export default {
   },
   methods: {
     emitirFiltrados() {
-      const datosJSON = JSON.stringify(this.usuariosFiltrados);
-      console.log('Datos emitidos como JSON:', datosJSON);
-      this.$emit('update:filtrados', datosJSON);
+      const datosJSON = JSON.stringify(this.usuariosFiltrados)
+      console.log('Datos emitidos como JSON:', datosJSON)
+      this.$emit('update:filtrados', datosJSON)
     },
     limpiarFiltros() {
       this.estado = ''

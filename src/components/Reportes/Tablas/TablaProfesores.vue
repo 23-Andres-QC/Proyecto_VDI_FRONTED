@@ -1,6 +1,6 @@
 <style src="./StylessTabla.css"></style>
 <template>
-  <div class="contenedor-reporte">
+  <div class="contenedor-reporte-profesores">
     <div class="filtros-profesores-contenedor filtro-reporte">
       <select v-model="tipoProfesor" class="filtro-profesores-select">
         <option disabled value="">Tipo profesores</option>
@@ -14,9 +14,9 @@
       />
       <button class="filtro-issn-btn" @click="limpiarFiltros">Limpiar</button>
     </div>
-    <div class="tabla-issn-contenedor">
+    <div class="tabla-profesores-contenedor">
       <div class="tabla-scroll">
-        <table class="tabla-issn">
+        <table class="tabla-profesores">
           <thead>
             <tr>
               <th>Correos</th>
@@ -84,9 +84,9 @@ export default {
   },
   methods: {
     emitirFiltrados() {
-      const datosJSON = JSON.stringify(this.profesoresFiltrados);
-      console.log('Datos emitidos como JSON:', datosJSON);
-      this.$emit('update:filtrados', datosJSON);
+      const datosJSON = JSON.stringify(this.profesoresFiltrados)
+      console.log('Datos emitidos como JSON:', datosJSON)
+      this.$emit('update:filtrados', datosJSON)
     },
     limpiarFiltros() {
       this.tipoProfesor = ''

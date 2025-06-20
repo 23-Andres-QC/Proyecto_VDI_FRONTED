@@ -1,13 +1,12 @@
 /* Essential styles for the 9 components */
 .contenedor-reporte {
-  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 800px;
+  width: 100%;
   margin: 0 auto;
-  padding: 20px;
-  border: 2px solid red;
+  padding: 10px;
+  border: 1px solid red;
   border-radius: 10px;
   position: absolute;
   top: 50%;
@@ -30,7 +29,7 @@
 .tipo-btn {
   background-color: white;
   color: black;
-  border: 1px solid #ddd;
+  border: 1px solid black;
   border-radius: 5px;
   padding: 10px;
   cursor: pointer;
@@ -67,14 +66,15 @@
 .exportar-contenedor select.active {
   background-color: red;
   color: white;
-  border: 1px solid red;
+  border: 1px solid black;
 }
 
 .exportar-contenedor textarea {
   height: 40px;
+  width: 450px;
   font-size: 16px;
   padding: 5px;
-  border: 1px solid #ddd;
+  border: 1px solid black;
   border-radius: 5px;
   background-color: white;
   color: black;
@@ -86,7 +86,7 @@
   height: 40px;
   font-size: 16px;
   padding: 5px;
-  border: 1px solid #ddd;
+  border: 1px solid black;
   border-radius: 5px;
   background-color: white;
   color: black;
@@ -96,7 +96,7 @@
   height: 40px;
   font-size: 16px;
   padding: 5px;
-  border: 1px solid #ddd;
+  border: 1px solid red;
   border-radius: 5px;
   background-color: white;
   color: black;

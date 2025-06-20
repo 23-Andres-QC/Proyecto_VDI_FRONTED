@@ -1,19 +1,23 @@
 <style src="./StylessTabla.css"></style>
 
 <template>
-  <div class="contenedor-reporte">
+  <div class="contenedor-reporte-issn">
     <div class="filtro-issn-contenedor filtro-reporte">
-      <select v-model="tipoCalificacion" class="filtro-issn-select">
+      <select v-model="tipoCalificacionIssn" class="filtro-issn-select">
         <option disabled value="">Tipo de calificación</option>
-        <option v-for="tipo in tiposCalificacion" :key="tipo" :value="tipo">{{ tipo }}</option>
+        <option v-for="tipo in tiposCalificacionIssn" :key="tipo" :value="tipo">{{ tipo }}</option>
       </select>
-      <select v-model="calificacion" class="filtro-issn-select" :disabled="!tipoCalificacion">
+      <select
+        v-model="calificacionIssn"
+        class="filtro-issn-select"
+        :disabled="!tipoCalificacionIssn"
+      >
         <option disabled value="">Calificación</option>
-        <option v-for="item in calificaciones" :key="item" :value="item">{{ item }}</option>
+        <option v-for="item in calificacionesIssn" :key="item" :value="item">{{ item }}</option>
       </select>
 
       <input
-        v-model="busqueda"
+        v-model="busquedaIssn"
         type="text"
         class="filtro-issn-input"
         placeholder="Buscar por ISSN o nombre"
@@ -127,53 +131,53 @@ export default {
   data() {
     return {
       revistas: [],
-      tipoCalificacion: '',
-      tiposCalificacion: [],
-      calificacion: '',
-      calificaciones: [],
-      busqueda: '',
-      datosFiltrados: [],
+      tipoCalificacionIssn: '',
+      tiposCalificacionIssn: [],
+      calificacionIssn: '',
+      calificacionesIssn: [],
+      busquedaIssn: '',
+      datosFiltradosIssn: [],
     }
   },
   watch: {
-    tipoCalificacion(newVal) {
-      this.calificacion = ''
+    tipoCalificacionIssn(newVal) {
+      this.calificacionIssn = ''
       if (newVal) {
         fetch(`http://localhost:5009/api/Revista/distinct-metadatos/${encodeURIComponent(newVal)}`)
           .then((response) => response.json())
           .then((data) => {
-            this.calificaciones = data
+            this.calificacionesIssn = data
           })
           .catch((error) => {
-            this.calificaciones = []
+            this.calificacionesIssn = []
             console.error('Error al obtener calificaciones:', error)
           })
       } else {
-        this.calificaciones = []
+        this.calificacionesIssn = []
       }
     },
     revistasFiltradas: {
       handler() {
-        this.datosFiltrados = this.revistasFiltradas.map((revista) => ({
+        this.datosFiltradosIssn = this.revistasFiltradas.map((revista) => ({
           issn: revista.issn,
-          nombre: revista.nombre,
-          scopus: revista.scopus,
-          woSQ: revista.woSQ,
-          woSS: revista.woSS,
-          woSEsci: revista.woSEsci,
-          esciQ: revista.esciQ,
-          ajg4star: revista.ajg4star,
-          ajg: revista.ajg,
-          ajgS: revista.ajgS,
-          cnrs: revista.cnrs,
-          cnrsS: revista.cnrsS,
-          abdc: revista.abdc,
-          abdcS: revista.abdcS,
-          alMenosUnaLista: revista.alMenosUnaLista,
-          soloUnaLista: revista.soloUnaLista,
-          scielo: revista.scielo,
-          woSLatam: revista.woSLatam,
-          top50: revista.top50,
+          nombreIssn: revista.nombre,
+          scopusIssn: revista.scopus,
+          woSQIssn: revista.woSQ,
+          woSSIssn: revista.woSS,
+          woSEsciIssn: revista.woSEsci,
+          esciQIssn: revista.esciQ,
+          ajg4starIssn: revista.ajg4star,
+          ajgIssn: revista.ajg,
+          ajgSIssn: revista.ajgS,
+          cnrsIssn: revista.cnrs,
+          cnrsSIssn: revista.cnrsS,
+          abdcIssn: revista.abdc,
+          abdcSIssn: revista.abdcS,
+          alMenosUnaListaIssn: revista.alMenosUnaLista,
+          soloUnaListaIssn: revista.soloUnaLista,
+          scieloIssn: revista.scielo,
+          woSLatamIssn: revista.woSLatam,
+          top50Issn: revista.top50,
         }))
         this.emitirFiltrados() // Emitir los datos filtrados cada vez que cambien
       },
@@ -182,26 +186,28 @@ export default {
   },
   computed: {
     revistasFiltradas() {
+      if (!this.tipoCalificacionIssn && !this.calificacionIssn && !this.busquedaIssn) {
+        return this.revistas // Mostrar todos los datos si no hay filtros
+      }
+
       return this.revistas.filter((revista) => {
         let coincideColumna = true
-        if (this.tipoCalificacion && this.calificacion) {
-          // Buscar la columna ignorando mayúsculas, minúsculas y guiones bajos
+        if (this.tipoCalificacionIssn && this.calificacionIssn) {
           const columna = Object.keys(revista).find(
             (key) =>
               key.replace(/[_\s]/g, '').toLowerCase() ===
-              this.tipoCalificacion.replace(/[_\s]/g, '').toLowerCase(),
+              this.tipoCalificacionIssn.replace(/[_\s]/g, '').toLowerCase(),
           )
 
           if (!columna) return false
           const valorColumna = revista[columna]
           coincideColumna =
             String(valorColumna).trim().toLowerCase() ===
-            String(this.calificacion).trim().toLowerCase()
+            String(this.calificacionIssn).trim().toLowerCase()
         }
 
-        // Buscar solo por ISSN o nombre
-        const texto = this.busqueda.toLowerCase()
-        const coincideBusqueda = this.busqueda
+        const texto = this.busquedaIssn.toLowerCase()
+        const coincideBusqueda = this.busquedaIssn
           ? String(revista.issn).toLowerCase().includes(texto) ||
             String(revista.nombre).toLowerCase().includes(texto)
           : true
@@ -212,14 +218,14 @@ export default {
   },
   methods: {
     emitirFiltrados() {
-      const datosJSON = JSON.stringify(this.listaFiltrada);
-      console.log('Datos emitidos como JSON:', datosJSON);
-      this.$emit('update:filtrados', datosJSON);
+      const datosJSON = JSON.stringify(this.listaFiltrada)
+      console.log('Datos emitidos como JSON:', datosJSON)
+      this.$emit('update:filtrados', datosJSON)
     },
     limpiarFiltros() {
-      this.tipoCalificacion = ''
-      this.calificacion = ''
-      this.busqueda = ''
+      this.tipoCalificacionIssn = ''
+      this.calificacionIssn = ''
+      this.busquedaIssn = ''
     },
   },
   mounted() {
@@ -227,6 +233,7 @@ export default {
       .then((response) => response.json())
       .then((data) => {
         this.revistas = data
+        console.log('Datos iniciales cargados:', this.revistas) // Verificar datos iniciales
       })
       .catch((error) => {
         console.error('Error al obtener revistas:', error)
@@ -235,7 +242,7 @@ export default {
     fetch('http://localhost:5009/api/Revista/columnas-metadatos')
       .then((response) => response.json())
       .then((data) => {
-        this.tiposCalificacion = data
+        this.tiposCalificacionIssn = data
       })
       .catch((error) => {
         console.error('Error al obtener tipos de calificación:', error)

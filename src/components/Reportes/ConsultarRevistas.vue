@@ -1,31 +1,18 @@
 <template>
   <div class="contenedor-principal">
+    <div class="contenedor-exportar-centrado">
+      <input type="text" placeholder="Correo" class="input-correo" />
+      <button class="btn-enviar">Enviar</button>
+    </div>
     <div class="contenedor-centralizado">
-      <div class="contenedor-reportes-principal">
-        <div class="contenedor-reportes-vertical">
-          <div class="contenedor-header-reportes ancho-tabla">
-            <div class="contenedor-exportar-centrado">
-              <input type="text" placeholder="Correo" class="input-correo" />
-              <button class="btn-enviar">Enviar</button>
-            </div>
-          </div>
-          <div class="contenido-reporte ancho-tabla tabla-menos-abajo">
-            <div>
-              <TablaListCerradaCon ref="tablaRef" @update:filtrados="actualizarTabla" />
-            </div>
-          </div>
-        </div>
-      </div>
+      <TablaISSN ref="tablaRef" @update:filtrados="actualizarTabla" />
     </div>
   </div>
 </template>
 
 <style scoped>
 .contenedor-principal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; /* Full page height */
+  height: 100%; /* Full page height */
   width: 100%; /* Full page width */
 }
 .contenedor-centralizado {
@@ -33,15 +20,16 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 2px solid #87ceeb; /* Light blue border */
 }
 .contenedor-exportar-centrado {
+  padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px; /* Add spacing between input and button */
 }
 .input-correo {
+  width: 400px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -57,11 +45,24 @@
 .btn-enviar:hover {
   background-color: #45a049;
 }
+.btn-exportar {
+  padding: 10px 20px;
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn-exportar:hover {
+  background-color: #1976d2;
+}
 </style>
 
 <script setup>
 import { ref } from 'vue'
-import TablaListCerradaCon from 'components/Reportes/Tablas/TablaListCerradaCon.vue'
+import TablaISSN from 'components/Reportes/Tablas/TablaISSN.vue'
 
 const tablaActual = ref([])
 
