@@ -100,16 +100,15 @@ export default {
   watch: {
     usuariosFiltrados: {
       handler() {
-        this.datosFiltrados = this.usuariosFiltrados.map((usuario) => ({
-          idUsuario: usuario.idUsuario,
-          nombreyApellido: usuario.nombreyApellido,
-          correo: usuario.correo,
-          estado: usuario.estado === 1 ? 'Activo' : 'Inactivo',
-          fechaCreacion: this.formatFecha(usuario.fechaCreacion),
-          fechaModificacion: usuario.fechaModificacion
-            ? this.formatFecha(usuario.fechaModificacion)
-            : 'Sin modificar',
-        }))
+        // Siempre emitir los datos filtrados como array de valores (en el orden de las columnas del Excel)
+        this.datosFiltrados = this.usuariosFiltrados.map((usuario) => [
+          usuario.nombreyApellido,
+          usuario.correo,
+          usuario.estado === 1 ? 'Activo' : 'Inactivo',
+          this.formatFecha(usuario.fechaCreacion),
+          usuario.fechaModificacion ? this.formatFecha(usuario.fechaModificacion) : 'Sin modificar',
+        ])
+        this.emitirFiltrados()
       },
       deep: true,
     },
@@ -132,8 +131,7 @@ export default {
   },
   methods: {
     emitirFiltrados() {
-      const datosJSON = JSON.stringify(this.usuariosFiltrados)
-      console.log('Datos emitidos como JSON:', datosJSON)
+      const datosJSON = JSON.stringify(this.datosFiltrados)
       this.$emit('update:filtrados', datosJSON)
     },
     limpiarFiltros() {

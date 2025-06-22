@@ -71,21 +71,21 @@ export default {
   watch: {
     profesoresFiltrados: {
       handler() {
-        this.datosFiltrados = this.profesoresFiltrados.map((profesor) => ({
-          correo: profesor.correo,
-          nombreyApellido: profesor.nombreyApellido,
-          dni: profesor.dni,
-          categoria: profesor.categoria,
-        }))
-        this.emitirFiltrados() // Emitir los datos filtrados cada vez que cambien
+        // Emitir los datos filtrados como array de arrays en el orden de las columnas del Excel
+        this.datosFiltrados = this.profesoresFiltrados.map((profesor) => [
+          profesor.correo,
+          profesor.nombreyApellido,
+          profesor.dni,
+          profesor.categoria,
+        ])
+        this.emitirFiltrados()
       },
       deep: true,
     },
   },
   methods: {
     emitirFiltrados() {
-      const datosJSON = JSON.stringify(this.profesoresFiltrados)
-      console.log('Datos emitidos como JSON:', datosJSON)
+      const datosJSON = JSON.stringify(this.datosFiltrados)
       this.$emit('update:filtrados', datosJSON)
     },
     limpiarFiltros() {

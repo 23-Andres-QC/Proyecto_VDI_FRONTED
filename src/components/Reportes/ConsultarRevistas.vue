@@ -1,8 +1,8 @@
 <template>
   <div class="contenedor-principal">
     <div class="contenedor-exportar-centrado">
-      <input type="text" placeholder="Correo" class="input-correo" />
-      <button class="btn-enviar">Enviar</button>
+      <input v-model="correos" type="text" placeholder="Correo" class="input-correo" />
+      <button class="btn-enviar" @click="enviarExportar">Enviar</button>
     </div>
     <div class="contenedor-centralizado">
       <TablaISSN ref="tablaRef" @update:filtrados="actualizarTabla" />
@@ -20,6 +20,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  top: 170px;
+  left: 20px;
 }
 .contenedor-exportar-centrado {
   padding: 10px;
@@ -63,10 +65,35 @@
 <script setup>
 import { ref } from 'vue'
 import TablaISSN from 'components/Reportes/Tablas/TablaISSN.vue'
+import { exportarExcelPorTipo } from './exportarUtils.js'
 
 const tablaActual = ref([])
+const correos = ref('')
 
 function actualizarTabla(filtrados) {
-  tablaActual.value = filtrados
+  // Si los datos vienen como string JSON, conviértelos a array
+  let datos = filtrados
+  if (typeof filtrados === 'string') {
+    try {
+      datos = JSON.parse(filtrados)
+    } catch {
+      datos = []
+    }
+  }
+  tablaActual.value = datos
+}
+
+async function enviarExportar() {
+  if (!correos.value) {
+    alert('Por favor ingrese el correo.')
+    return
+  }
+  const datosExportar =
+    Array.isArray(tablaActual.value) && tablaActual.value.length > 0
+      ? JSON.parse(JSON.stringify(tablaActual.value))
+      : [{ mensaje: 'No hay datos disponibles para exportar.' }]
+  const fechaActual = new Date().toISOString().split('T')[0]
+  const nombreReporte = `ISSN_${fechaActual}`
+  await exportarExcelPorTipo(datosExportar, 'ISSN', 'Excel', correos.value, nombreReporte)
 }
 </script>

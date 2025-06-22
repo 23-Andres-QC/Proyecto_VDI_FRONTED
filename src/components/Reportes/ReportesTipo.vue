@@ -70,10 +70,11 @@ export default {
   },
   methods: {
     cambiarTab(tab) {
-      this.selectedTab = tab
       if (tab === 'revistas') {
-        this.$emit('mostrar-reporte', tab, this.Revista)
+        this.selectedTab = this.Revista // Ahora selectedTab será 'ISSN' o 'Lista Cerrada'
+        this.$emit('mostrar-reporte', this.selectedTab)
       } else {
+        this.selectedTab = tab
         this.$emit('mostrar-reporte', tab)
         this.Revista = ''
       }
@@ -87,10 +88,14 @@ export default {
       const confirmacion = window.confirm('¿Está seguro de que desea exportar los datos?')
       if (!confirmacion) return
 
+      // Determina el tipoTabla correcto según la selección
+      let tipoTabla = this.selectedTab === 'revistas' ? this.Revista : this.selectedTab
+
       this.$emit('enviar-reporte', {
         formato: this.formato,
         descripcion: this.descripcion,
         correos: this.correos,
+        tipoTabla, // Este campo será siempre el correcto para el switch
       })
     },
   },

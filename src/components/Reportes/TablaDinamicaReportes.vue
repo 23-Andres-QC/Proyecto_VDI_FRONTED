@@ -15,13 +15,11 @@
       <div v-else-if="reporteSeleccionado === 'Profesores Importados'" class="tabla-profesores">
         <TablaProfesores ref="tablaRefProfesores" @update:filtrados="actualizarTabla" />
       </div>
-      <div v-else-if="reporteSeleccionado === 'revistas'">
-        <div v-if="tipoRevistaSeleccionado === 'ISSN'" class="tabla-issn">
-          <TablaISSN ref="tablaRefISSN" @update:filtrados="actualizarTabla" />
-        </div>
-        <div v-else-if="tipoRevistaSeleccionado === 'Lista Cerrada'" class="tabla-lista-cerrada">
-          <TablaListCerrada ref="tablaRefListaCerrada" @update:filtrados="actualizarTabla" />
-        </div>
+      <div v-else-if="reporteSeleccionado === 'ISSN'" class="tabla-issn">
+        <TablaISSN ref="tablaRefISSN" @update:filtrados="actualizarTabla" />
+      </div>
+      <div v-else-if="reporteSeleccionado === 'Lista Cerrada'" class="tabla-lista-cerrada">
+        <TablaListCerrada ref="tablaRefListaCerrada" @update:filtrados="actualizarTabla" />
       </div>
     </div>
   </div>
@@ -56,10 +54,19 @@ function cambiarReporte(nuevoReporte, tipoRevista = '') {
 }
 
 function actualizarTabla(filtrados) {
-  console.log('Datos filtrados recibidos:', filtrados)
+  // Asegurarse de que los datos sean un array, aunque vengan como string JSON
+  let datos = filtrados
+  if (typeof filtrados === 'string') {
+    try {
+      datos = JSON.parse(filtrados)
+    } catch {
+      datos = []
+    }
+  }
+  console.log('Datos filtrados recibidos:', datos)
 
   // Si los datos filtrados están vacíos, verificar si hay datos iniciales
-  if (!filtrados || filtrados.length === 0) {
+  if (!Array.isArray(datos) || datos.length === 0) {
     console.warn('No se recibieron datos filtrados, verificando datos iniciales...')
     const tablaRef =
       reporteSeleccionado.value === 'Usuarios'
@@ -72,7 +79,7 @@ function actualizarTabla(filtrados) {
     tablaActual.value = tablaRef?.revistas || []
   } else {
     // Convert Vue Proxy a un array de JavaScript
-    tablaActual.value = JSON.parse(JSON.stringify(filtrados))
+    tablaActual.value = JSON.parse(JSON.stringify(datos))
   }
 }
 
@@ -133,13 +140,13 @@ async function manejarEnvio({ formato, correos }) {
 
 .tabla-issn {
   position: absolute;
-  top: 170px;
+  top: 160px;
   left: 10px;
 }
 
 .tabla-lista-cerrada {
   position: absolute;
-  top: 10px;
+  top: 160px;
   left: 10px;
 }
 </style>

@@ -158,28 +158,52 @@ export default {
     },
     revistasFiltradas: {
       handler() {
-        this.datosFiltradosIssn = this.revistasFiltradas.map((revista) => ({
-          issn: revista.issn,
-          nombreIssn: revista.nombre,
-          scopusIssn: revista.scopus,
-          woSQIssn: revista.woSQ,
-          woSSIssn: revista.woSS,
-          woSEsciIssn: revista.woSEsci,
-          esciQIssn: revista.esciQ,
-          ajg4starIssn: revista.ajg4star,
-          ajgIssn: revista.ajg,
-          ajgSIssn: revista.ajgS,
-          cnrsIssn: revista.cnrs,
-          cnrsSIssn: revista.cnrsS,
-          abdcIssn: revista.abdc,
-          abdcSIssn: revista.abdcS,
-          alMenosUnaListaIssn: revista.alMenosUnaLista,
-          soloUnaListaIssn: revista.soloUnaLista,
-          scieloIssn: revista.scielo,
-          woSLatamIssn: revista.woSLatam,
-          top50Issn: revista.top50,
-        }))
-        this.emitirFiltrados() // Emitir los datos filtrados cada vez que cambien
+        // Emitir los datos filtrados como array de arrays en el orden de las columnas del Excel
+        this.datosFiltradosIssn = this.revistasFiltradas.map((revista) => [
+          revista.issn,
+          revista.nombre,
+          revista.scopus,
+          revista.woSQ,
+          revista.woSS,
+          revista.woSEsci,
+          revista.esciQ,
+          revista.ajg4star,
+          revista.ajg,
+          revista.ajgS,
+          revista.cnrs,
+          revista.cnrsS,
+          revista.abdc,
+          revista.abdcS,
+          revista.alMenosUnaLista,
+          revista.soloUnaLista,
+          revista.scielo,
+          revista.woSLatam,
+          revista.top50,
+          revista.n,
+          revista.beallsList,
+          revista.mdpi,
+          revista.insights,
+          revista.ajgExiste,
+          revista.cnrsExiste,
+          revista.abdcExiste,
+          revista.woSTopExiste,
+          revista.woSEsciExiste,
+          revista.scopusExiste,
+          revista.soloScieloExiste,
+          revista.especial216b,
+          revista.latamSinEsciExiste,
+          revista.esciScieloSinScopus,
+          revista.multiple,
+          revista.multidisciplinaryWos,
+          revista.coautoriaEsan,
+          revista.posicionAutor,
+          revista.jif,
+          revista.country,
+          revista.multyAlMenosUnaLista,
+          revista.multidisciplinaryScopus,
+          revista.multidisciplinaryWosOScopys,
+        ])
+        this.emitirFiltrados()
       },
       deep: true,
     },
@@ -218,8 +242,7 @@ export default {
   },
   methods: {
     emitirFiltrados() {
-      const datosJSON = JSON.stringify(this.listaFiltrada)
-      console.log('Datos emitidos como JSON:', datosJSON)
+      const datosJSON = JSON.stringify(this.datosFiltradosIssn)
       this.$emit('update:filtrados', datosJSON)
     },
     limpiarFiltros() {
@@ -233,7 +256,6 @@ export default {
       .then((response) => response.json())
       .then((data) => {
         this.revistas = data
-        console.log('Datos iniciales cargados:', this.revistas) // Verificar datos iniciales
       })
       .catch((error) => {
         console.error('Error al obtener revistas:', error)

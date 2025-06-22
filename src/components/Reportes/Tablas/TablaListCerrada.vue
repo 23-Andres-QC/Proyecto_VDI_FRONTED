@@ -111,23 +111,24 @@ export default {
     },
     revistasFiltradas: {
       handler() {
-        this.datosFiltrados = this.revistasFiltradas.map((revista) => ({
-          issn: revista.issn,
-          issN2: revista.issN2,
-          issN3: revista.issN3,
-          nombre: revista.nombre,
-          categoria2: revista.categoria2,
-          puntaje: revista.puntaje,
-          incentivoUSD: revista.incentivoUSD,
-          scopus: revista.scopus,
-          woS_Q: revista.woS_Q,
-          escI_Q: revista.escI_Q,
-          ajg: revista.ajg,
-          cnrs: revista.cnrs,
-          abdc: revista.abdc,
-          woS_LATAM: revista.woS_LATAM,
-        }))
-        this.emitirFiltrados() // Emitir los datos filtrados cada vez que cambien
+        // Emitir los datos filtrados como array de arrays en el orden de las columnas del Excel
+        this.datosFiltrados = this.revistasFiltradas.map((revista) => [
+          revista.issn,
+          revista.issN2,
+          revista.issN3,
+          revista.nombre,
+          revista.categoria2,
+          revista.puntaje,
+          revista.incentivoUSD,
+          revista.scopus,
+          revista.woS_Q,
+          revista.escI_Q,
+          revista.ajg,
+          revista.cnrs,
+          revista.abdc,
+          revista.woS_LATAM,
+        ])
+        this.emitirFiltrados()
       },
       deep: true,
     },
@@ -178,8 +179,8 @@ export default {
   },
   methods: {
     emitirFiltrados() {
-      const datosTransformados = this.revistasFiltradas.map((item) => [item.issn, item.nombre])
-      this.$emit('update:filtrados', datosTransformados)
+      const datosJSON = JSON.stringify(this.datosFiltrados)
+      this.$emit('update:filtrados', datosJSON)
     },
     limpiarFiltros() {
       this.tipoCaracteristica = ''

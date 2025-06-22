@@ -43,8 +43,8 @@ export default defineComponent({
       { id: 1, label: 'Ver Revistas', active: false },
       { id: 2, label: 'Ver lista cerrada', active: false },
       { id: 3, label: 'Mensajes', active: false },
-      { id: 4, label: 'Consulta lista cerrada', active: false },
-      { id: 5, label: 'Consulta ISSN', active: false },
+      { id: 5, label: 'Consulta ISSN', active: false }, // Ahora ISSN arriba
+      { id: 4, label: 'Consulta lista cerrada', active: false }, // Luego lista cerrada
     ])
 
     const selectMenuItem = (id) => {
