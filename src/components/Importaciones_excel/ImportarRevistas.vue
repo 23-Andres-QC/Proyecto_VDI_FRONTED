@@ -1,8 +1,9 @@
 <template>
-  <div class="importar-revistas-bg">
-    <div class="importar-revistas-panel card-style">
+  <div class="importar-revistas-bg-flotante">
+    <div class="importar-revistas-panel card-style importar-revistas-flotante">
       <div class="importar-header">
-        <h2>Importar revistas</h2>
+        <span class="importar-titulo">Importar revistas</span>
+        <q-btn flat round dense icon="close" class="cerrar-x" @click="$emit('cancelar')" />
       </div>
       <div class="importar-instruccion">Selecciona un archivo .xlsx para importar revistas</div>
       <div class="importar-form-row">
@@ -36,7 +37,8 @@
             row-key="ISSN"
             dense
             flat
-            :rows-per-page="20"
+            :pagination="pagination"
+            :rows-per-page-options="[5, 10, 20, 50, 100, 200, 500, 1000]"
             class="tabla-excel zebra-table"
             style="min-width: 900px"
             v-model:pagination="pagination"
@@ -79,12 +81,19 @@
 import { ref } from 'vue'
 import * as XLSX from 'xlsx'
 import { api } from 'src/boot/axios'
-import { Notify } from 'quasar'
+import { useQuasar } from 'quasar'
+
+const $q = useQuasar()
 
 const archivo = ref(null)
 const tabla = ref([])
 const apiData = ref([])
-const pagination = ref({ rowsPerPage: 20 })
+const pagination = ref({
+  page: 1,
+  rowsPerPage: 20,
+  rowsNumber: 0,
+})
+const mostrarTabla = ref(false)
 
 // Ajusta los nombres de columnas para mayor legibilidad
 const columnas = [
@@ -257,6 +266,7 @@ function onFileChange(file) {
       return obj
     })
     // --- Fin de la generación de la previa visualización ---
+    mostrarTabla.value = true // Mostrar la tabla automáticamente al cargar archivo
     // --- Nuevo: Mapeo por nombre flexible y adaptación de encabezados personalizados ---
     // Lista de campos esperados por la API en orden (según tu JSON ejemplo)
     // --- Mapeo por nombre flexible y adaptación de encabezados personalizados para la API ---
@@ -347,20 +357,22 @@ function onFileChange(file) {
 async function importarExcel() {
   if (!tabla.value.length) return
   try {
+    console.log('Datos enviados al backend:', apiData.value.length ? apiData.value : tabla.value)
     await api.post(
       '/api/Revista?idUsuario=6&tipoRevista=SCI',
       apiData.value.length ? apiData.value : tabla.value,
     )
-    Notify.create({ type: 'positive', message: 'Importación completada' })
+    $q.notify({ type: 'positive', message: 'Importación completada' })
   } catch (e) {
     console.error('Error importando revistas:', e)
-    Notify.create({ type: 'negative', message: 'Error en la importación' })
+    $q.notify({ type: 'negative', message: 'Error en la importación' })
   }
 }
 
 function cancelarImportacion() {
   archivo.value = null
   tabla.value = []
+  mostrarTabla.value = false
 }
 </script>
 
@@ -377,7 +389,9 @@ function cancelarImportacion() {
 .card-style {
   background: #fff;
   border-radius: 24px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), 0 1.5px 8px rgba(228, 177, 171, 0.10);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.18),
+    0 1.5px 8px rgba(228, 177, 171, 0.1);
   padding: 2.5rem 2.8rem 2.5rem 2.8rem;
   max-width: 1500px;
   width: 99vw;
@@ -388,18 +402,90 @@ function cancelarImportacion() {
   justify-content: center;
   text-align: center;
 }
-.importar-header,
+.importar-revistas-bg-flotante {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.18);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 2.5vh;
+  overflow-y: auto;
+}
+.importar-revistas-flotante {
+  max-width: 1800px;
+  width: 98vw;
+  min-width: 1200px;
+  min-height: 180px;
+  height: auto;
+  margin: 0 auto 2.5vh auto;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  background: #fff;
+  position: relative;
+  padding: 1.1rem 1.5rem 2.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: visible;
+  overflow-x: hidden;
+}
+.importar-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+.importar-titulo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  background: #e53935;
+  border-radius: 16px;
+  padding: 1.2rem 2.5rem;
+  width: auto;
+  min-width: 320px;
+  text-align: center;
+  margin: 0 auto;
+  display: block;
+}
+.cerrar-x {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #fff;
+  background: #e53935;
+  z-index: 2;
+  transition: background 0.2s;
+}
+.cerrar-x:hover {
+  background: #b71c1c;
+}
 .visualizacion-header {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.importar-header h2,
 .visualizacion-header h3 {
-  margin-left: auto;
-  margin-right: auto;
+  background: #e53935;
+  color: #fff;
+  padding: 0.9rem 0.5rem 0.5rem 0.5rem;
   text-align: center;
+  border-radius: 10px 10px 0 0;
+  margin-bottom: 1.1rem;
+  font-size: 1.45rem;
+  font-weight: bold;
+  width: 100%;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border-bottom: 3px solid #f5f5f5;
 }
 .importar-instruccion {
   color: #222;
@@ -435,7 +521,7 @@ function cancelarImportacion() {
   border-radius: 12px;
   min-width: 140px;
   min-height: 48px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -454,55 +540,34 @@ function cancelarImportacion() {
 .importar-btn:hover,
 .cancelar-btn:hover {
   filter: brightness(0.93);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.16);
-}
-.visualizacion-header h3 {
-  background: #e53935;
-  color: #fff;
-  padding: 0.9rem 0.5rem 0.9rem 0.5rem;
-  text-align: center;
-  border-radius: 10px 10px 0 0;
-  margin-bottom: 1.1rem;
-  font-size: 1.45rem;
-  font-weight: bold;
-  width: 100%;
-  letter-spacing: 1px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  border-bottom: 3px solid #f5f5f5;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
 }
 .tabla-container {
   background: transparent;
   width: 100%;
-  max-width: 1400px;
+  max-width: 100vw;
   margin: 0 auto 2.2rem auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow-x: auto;
 }
 .tabla-scroll {
-  min-width: 1200px;
-  max-width: 1400px;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: auto;
+  overflow-y: auto;
   background: #fff;
   border-radius: 14px;
   padding: 1.2rem 1.2rem 1.2rem 1.2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow-x: auto;
-  overflow-y: auto;
-  max-height: 900px;
   margin: 0 auto;
   display: flex;
   justify-content: center;
 }
-.tabla-scroll-center {
-  margin-left: auto;
-  margin-right: auto;
-  width: fit-content;
-  max-width: 100%;
-  display: flex;
-  justify-content: center;
-}
 .tabla-excel {
+  min-width: 2100px;
   background: #e3f6ff;
   border-radius: 8px;
   font-size: 1.05rem;
@@ -515,7 +580,7 @@ function cancelarImportacion() {
   text-align: center;
 }
 .tabla-excel thead tr {
-  background: #1565c0;
+  background: #e53935 !important;
   color: #fff;
   font-weight: bold;
   position: sticky;
@@ -527,50 +592,107 @@ function cancelarImportacion() {
   border-bottom: 5px solid #e53935;
 }
 .tabla-excel th {
-  background: #1565c0 !important;
+  background: #e53935 !important;
   color: #fff !important;
   font-weight: 900 !important;
-  font-size: 1.25rem !important;
+  font-size: 1.15rem !important;
   padding: 1.1rem 1.6rem !important;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.10);
-  border-bottom: 5px solid #e53935;
-  box-shadow: 0 2px 8px rgba(13,71,161,0.10);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-bottom: 2px solid #fff;
+  border-right: 2px solid #fff;
   letter-spacing: 1.5px;
+  white-space: normal !important;
+  word-break: break-word !important;
+  min-width: 120px !important;
+  max-width: 200px !important;
 }
 .tabla-excel td {
   padding: 1.1rem 1.6rem;
   text-align: center !important;
   min-width: 120px !important;
+  max-width: 200px !important;
+  background: #fff !important;
+  border-bottom: 1.5px solid #e0e0e0;
+  border-right: 1.5px solid #e0e0e0;
+  white-space: normal !important;
+  word-break: break-word !important;
+}
+.tabla-excel tbody tr:nth-child(even) {
+  background: #f9f9f9 !important;
+}
+.tabla-excel tbody tr:nth-child(odd) {
+  background: #fff !important;
 }
 
 /* Anchos personalizados para columnas principales (ajustar según columnas de revistas) */
-.tabla-excel th:nth-child(1), .tabla-excel td:nth-child(1) { min-width: 90px !important; }
-.tabla-excel th:nth-child(2), .tabla-excel td:nth-child(2) { min-width: 90px !important; }
-.tabla-excel th:nth-child(3), .tabla-excel td:nth-child(3) { min-width: 90px !important; }
-.tabla-excel th:nth-child(4), .tabla-excel td:nth-child(4) { min-width: 220px !important; }
-.tabla-excel th:nth-child(5), .tabla-excel td:nth-child(5) { min-width: 140px !important; }
-.tabla-excel th:nth-child(6), .tabla-excel td:nth-child(6) { min-width: 90px !important; }
-.tabla-excel th:nth-child(7), .tabla-excel td:nth-child(7) { min-width: 120px !important; }
-.tabla-excel th:nth-child(8), .tabla-excel td:nth-child(8) { min-width: 90px !important; }
-.tabla-excel th:nth-child(9), .tabla-excel td:nth-child(9) { min-width: 90px !important; }
-.tabla-excel th:nth-child(10), .tabla-excel td:nth-child(10) { min-width: 90px !important; }
-.tabla-excel th:nth-child(11), .tabla-excel td:nth-child(11) { min-width: 90px !important; }
-.tabla-excel th:nth-child(12), .tabla-excel td:nth-child(12) { min-width: 90px !important; }
-.tabla-excel th:nth-child(13), .tabla-excel td:nth-child(13) { min-width: 90px !important; }
-.tabla-excel th:nth-child(14), .tabla-excel td:nth-child(14) { min-width: 110px !important; }
+.tabla-excel th:nth-child(1),
+.tabla-excel td:nth-child(1) {
+  min-width: 90px !important;
+}
+.tabla-excel th:nth-child(2),
+.tabla-excel td:nth-child(2) {
+  min-width: 90px !important;
+}
+.tabla-excel th:nth-child(3),
+.tabla-excel td:nth-child(3) {
+  min-width: 90px !important;
+}
+.tabla-excel th:nth-child(4),
+.tabla-excel td:nth-child(4) {
+  min-width: 220px !important;
+}
+.tabla-excel th:nth-child(5),
+.tabla-excel td:nth-child(5) {
+  min-width: 140px !important;
+}
+.tabla-excel th:nth-child(6),
+.tabla-excel td:nth-child(6) {
+  min-width: 90px !important;
+}
+.tabla-excel th:nth-child(7),
+.tabla-excel td:nth-child(7) {
+  min-width: 120px !important;
+}
+.tabla-excel th:nth-child(8),
+.tabla-excel td:nth-child(8) {
+  min-width: 90px !important;
+}
+.tabla-excel th:nth-child(9),
+.tabla-excel td:nth-child(9) {
+  min-width: 90px !important;
+}
+.tabla-excel th:nth-child(10),
+.tabla-excel td:nth-child(10) {
+  min-width: 90px !important;
+}
+.tabla-excel th:nth-child(11),
+.tabla-excel td:nth-child(11) {
+  min-width: 90px !important;
+}
+.tabla-excel th:nth-child(12),
+.tabla-excel td:nth-child(12) {
+  min-width: 90px !important;
+}
+.tabla-excel th:nth-child(13),
+.tabla-excel td:nth-child(13) {
+  min-width: 90px !important;
+}
+.tabla-excel th:nth-child(14),
+.tabla-excel td:nth-child(14) {
+  min-width: 110px !important;
+}
 .acciones-previa {
   width: 100%;
   display: flex;
-  flex-direction: row;
   justify-content: center;
-  align-items: center;
-  gap: 2.5rem;
-  margin-top: 3.5rem;
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.5rem;
-  background: transparent;
-  position: relative;
-  z-index: 1;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  z-index: 10;
+  padding-bottom: 1.2rem;
 }
 @media (max-width: 900px) {
   .acciones-previa {
@@ -578,6 +700,29 @@ function cancelarImportacion() {
     gap: 1.2rem;
     margin-top: 2.2rem;
     width: 100%;
+  }
+}
+@media (max-width: 1800px) {
+  .importar-revistas-flotante {
+    min-width: 900px;
+    max-width: 100vw;
+    padding: 1rem 0.5rem 2.5rem 0.5rem;
+  }
+  .tabla-scroll {
+    min-width: 800px;
+    padding: 0.5rem;
+  }
+}
+@media (max-width: 1100px) {
+  .importar-revistas-flotante {
+    min-width: 0;
+    width: 100vw;
+    max-width: 100vw;
+    padding: 0.5rem 0.2rem 2.5rem 0.2rem;
+  }
+  .tabla-scroll {
+    min-width: 0;
+    padding: 0.2rem;
   }
 }
 </style>

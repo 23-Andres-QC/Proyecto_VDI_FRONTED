@@ -10,11 +10,14 @@ const routes = [
       { path: '/usuarios', component: () => import('pages/RegisterPage.vue') },
       { path: '/perfil-p', component: () => import('pages/Perfil_profesor_page.vue') },
       { path: '/perfil-a', component: () => import('pages/Perfil_Administrador_page.vue') },
+      { path: '/importar-docentes', component: () => import('pages/ImportarDocentesPage.vue') },
     ],
   },
-  {path: '/rep', component: () => import('pages/ReportesPage.vue') },
+  { path: '/rep', component: () => import('pages/ReportesPage.vue') },
   {
-    path: '/:catchAll(.*)*',   component: () => import('pages/ErrorNotFound.vue'),  },
+    path: '/:catchAll(.*)*',
+    component: () => import('pages/ErrorNotFound.vue'),
+  },
   { path: '/casa', component: () => import('pages/HomePantalla.vue') },
 
   { path: '/loginn', component: () => import('pages/LoginPage.vue') },
@@ -33,6 +36,14 @@ const routes = [
   { path: '/perfil-a', component: () => import('components/Perfil_Administrador.vue') },
   { path: '/perfil-p', component: () => import('components/Perfil_Profesor.vue') },
   { path: '/lst-p', component: () => import('components/Lista_profesores.vue') },
+  {
+    path: '/visualizacion-revistas',
+    component: () => import('components/VisualizacionSoloRevistas.vue'),
+  },
+  {
+    path: '/visualizacion-lista-cerrada',
+    component: () => import('components/VisualizacionSoloListaCerrada.vue'),
+  },
 ]
 
 export default routes

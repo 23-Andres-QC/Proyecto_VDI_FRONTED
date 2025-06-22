@@ -11,6 +11,9 @@
           @keyup.enter="performSearch"
         />
         <button class="search-btn" @click="performSearch">Buscar</button>
+        <button class="actualizar-btn" @click="actualizarDatos">
+          <i class="material-icons">refresh</i> Actualizar
+        </button>
       </div>
     </div>
 
@@ -175,8 +178,26 @@ export default defineComponent({
     })
 
     const performSearch = () => {
-      // Aquí puedes agregar lógica adicional para la búsqueda
+      // La búsqueda es reactiva
       console.log('Buscando:', searchQuery.value)
+    }
+
+    const actualizarDatos = async () => {
+      searchQuery.value = ''
+      try {
+        const profesoresRes = await api.get('/api/ProfesoresAdmis')
+        users.value = profesoresRes.data.map((prof) => ({
+          id: prof.idProfesorAdmis,
+          idCateg: prof.idCateg,
+          categoria: prof.categoria,
+          dni: prof.dni,
+          nombreyApellido: prof.nombreyApellido,
+          correo: prof.correo,
+          estado: prof.estado,
+        }))
+      } catch (error) {
+        console.error('Error al obtener datos:', error)
+      }
     }
 
     // Obtener la descripción de la categoría por id
@@ -244,9 +265,10 @@ export default defineComponent({
 
     return {
       searchQuery,
+      performSearch,
+      actualizarDatos,
       users,
       filteredUsers,
-      performSearch,
       editRowId,
       editRow,
       categorias,
@@ -271,16 +293,21 @@ export default defineComponent({
 /* Search Section */
 .search-section {
   margin-bottom: 20px;
+  padding: 0 20px;
 }
 
 .search-input-container {
   display: flex;
   gap: 10px;
   align-items: center;
+  justify-content: center;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .search-input {
-  flex: 1;
+  flex: 0 1 350px;
+  min-width: 200px;
   padding: 8px 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -306,6 +333,28 @@ export default defineComponent({
 
 .search-btn:hover {
   background-color: #555;
+}
+
+.actualizar-btn {
+  padding: 8px 20px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.2s;
+}
+
+.actualizar-btn:hover {
+  background-color: #1565c0;
+}
+
+.actualizar-btn i {
+  font-size: 18px;
 }
 
 /* Table Container */
