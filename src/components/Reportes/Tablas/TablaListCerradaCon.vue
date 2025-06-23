@@ -1,7 +1,7 @@
 <style src="./StylessTabla.css"></style>
 
 <template>
-  <div class="contenedor-reporte-listaCerrada">
+  <div class="contenedor-reporte">
     <div class="filtros-container filtro-reporte">
       <select v-model="tipoCaracteristica" class="combo-box">
         <option disabled value="">Tipo de característica</option>
@@ -31,7 +31,7 @@
     </div>
     <div class="tabla-issn-contenedor">
       <div class="tabla-scroll">
-        <table class="tabla-listaCerrada">
+        <table class="tabla-issn">
           <thead>
             <tr>
               <th>ISSN</th>
@@ -40,7 +40,6 @@
               <th>Nombre</th>
               <th>Categoría</th>
               <th>Puntaje</th>
-              <th>Incentivo (USD)</th>
               <th>SCOPUS</th>
               <th>WoS (Q)</th>
               <th>ESCI Q</th>
@@ -58,7 +57,6 @@
               <td>{{ revista.nombre }}</td>
               <td>{{ revista.categoria2 }}</td>
               <td>{{ revista.puntaje }}</td>
-              <td>{{ revista.incentivoUSD }}</td>
               <td>{{ revista.scopus }}</td>
               <td>{{ revista.woS_Q }}</td>
               <td>{{ revista.escI_Q }}</td>
@@ -76,7 +74,7 @@
 
 <script>
 export default {
-  name: 'TablaListCerrada',
+  name: 'TablaListCerradaCon',
   data() {
     return {
       revistas: [],
@@ -119,7 +117,6 @@ export default {
           revista.nombre,
           revista.categoria2,
           revista.puntaje,
-          revista.incentivoUSD,
           revista.scopus,
           revista.woS_Q,
           revista.escI_Q,

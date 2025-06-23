@@ -50,6 +50,12 @@
       >
         <varios style="width: 70%" />
       </div>
+      <div v-if="mostrarComponente === 'consultarListaCerrada'" style="width: 100%; height: 100%">
+        <ConsultarListaCerrada />
+      </div>
+      <div v-if="mostrarComponente === 'consultarRevistas'" style="width: 100%; height: 100%">
+        <ConsultarRevistas />
+      </div>
     </div>
   </q-page>
 </template>
@@ -57,9 +63,14 @@
 <script setup>
 import { ref } from 'vue'
 import PerfilProfesor from 'components/Perfil_Profesor.vue'
+
+import revista from 'components/Revista_prueba.vue'
+import ConsultarListaCerrada from 'src/components/Reportes/ConsultarListaCerrada.vue'
+import ConsultarRevistas from 'src/components/Reportes/ConsultarRevistas.vue'
 import VisualizacionSoloRevistas from 'components/VisualizacionSoloRevistas.vue'
 import VisualizacionSoloListaCerrada from 'components/VisualizacionSoloListaCerrada.vue'
 import ListaProfesores from 'components/Lista_profesores.vue'
+
 
 const mostrarComponente = ref('revista')
 
@@ -70,6 +81,10 @@ function handleMenuButtonClicked(menuItem) {
     mostrarComponente.value = 'listaCerrada'
   } else if (menuItem.id === 6) {
     mostrarComponente.value = 'preguntas'
+  } else if (menuItem.id === 4) {
+    mostrarComponente.value = 'consultarListaCerrada'
+  } else if (menuItem.id === 5) {
+    mostrarComponente.value = 'consultarRevistas'
   } else {
     mostrarComponente.value = 'lista'
   }

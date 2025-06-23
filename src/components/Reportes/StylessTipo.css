@@ -1,94 +1,110 @@
-.ventana-contenedor {
-
-  background: #f5f5f5;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  padding: 24px 18px 18px 18px;
-  max-width: 400px;
-  margin: 30px 0 0 30px; /* margen a la izquierda, sin auto */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-
+/* Essential styles for the 9 components */
+.contenedor-reporte {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px;
+  border: 1px solid red;
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.tabs-container {
+.tipo-contenedor-horizontal {
   display: flex;
   flex-direction: row;
-  width: 100%;
-  margin-bottom: 0;
+  align-items: center;
   justify-content: center;
-  align-items: center;
-  gap: 12px;
-}
-
-.tab-btn {
-  background: #e5e5e5;
-  border: none;
-  border-radius: 8px;
-  padding: 6px 18px;
-  color: #222;
-  font-weight: 500;
-  cursor: pointer;
-  position: relative;
-  transition:
-    background-color 0.2s,
-    color 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 1rem;
-}
-
-.tab-btn.active {
-  background-color: #222;
-  color: #fff;
-}
-
-.checkmark {
-  font-size: 12px;
-  margin-right: 4px;
-}
-
-/* Estilos para el select (combo box) igual que botón */
-.tabs-container select.tab-btn {
-  appearance: none; /* quita estilo nativo */
-  background-color: #e5e5e5;
-  border: none;
-  border-radius: 8px;
-  padding: 6px 18px;
-  color: #222;
-  font-weight: 500;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 1rem;
-  transition:
-    background-color 0.2s,
-    color 0.2s;
-}
-
-/* Estado activo del select */
-.tabs-container select.tab-btn.active {
-  background-color: #222;
-  color: #fff;
-}
-
-.tabs-vertical-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.tab-btn {
-  border-radius: 0;
-  margin-bottom: 0;
-  border-bottom: 1px solid #ccc;
-}
-
-.tab-btn:last-child {
-  border-bottom: none;
-}
-
-.tabs-vertical-container .tab-btn {
+  gap: 10px;
   width: 100%;
-  border-radius: 0;
-  margin-bottom: 0;
+  margin-bottom: 10px;
+  text-align: center; /* Center the components */
+}
+
+/* Default state for tipo-btn */
+.tipo-btn {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* Active state for tipo-btn */
+.tipo-btn.active {
+  background-color: red;
+  color: white;
+  border: 1px solid red;
+}
+
+.exportar-contenedor {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Default state for select */
+.exportar-contenedor select {
+  height: 40px;
+  font-size: 16px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: white;
+  color: black;
+}
+
+/* Active state for select */
+.exportar-contenedor select.active {
+  background-color: red;
+  color: white;
+  border: 1px solid black;
+}
+
+.exportar-contenedor textarea {
+  height: 40px;
+  width: 450px;
+  font-size: 16px;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: white;
+  color: black;
+  resize: both;
+  overflow: auto;
+}
+
+.exportar-contenedor input {
+  height: 40px;
+  font-size: 16px;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: white;
+  color: black;
+}
+
+.exportar-contenedor button {
+  height: 40px;
+  font-size: 16px;
+  padding: 5px;
+  border: 1px solid red;
+  border-radius: 5px;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+.exportar-contenedor button:active,
+.exportar-contenedor button:hover {
+  background-color: red;
+  color: white;
 }

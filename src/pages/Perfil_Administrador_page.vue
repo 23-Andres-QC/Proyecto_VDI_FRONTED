@@ -170,7 +170,7 @@
       <!-- Otros componentes -->
       <ListaProfesores v-if="mostrarComponente === 'lista'" style="width: 100%; height: 100%" />
       <div v-if="mostrarComponente === 'reportes'" style="width: 100%; height: 100%">
-        <ReportesPage style="width: 100%; height: 100%" />
+        <TablaDinamicaReportes style="width: 100%; height: 100%" />
       </div>
       <div
         v-if="mostrarComponente === 'preguntas'"
@@ -187,12 +187,15 @@ import { ref } from 'vue'
 import Perfil_Administrador from 'components/Perfil_Administrador.vue'
 import ListaProfesores from 'components/Lista_profesores.vue'
 import PreguntasFrecuentes from 'components/Preguntas_Frecuentes.vue'
+import TablaDinamicaReportes from 'components/Reportes/TablaDinamicaReportes.vue'
+
 import ReportesPage from './ReportesPage.vue'
 import ImportarRevistas from 'components/Importaciones_excel/ImportarRevistas.vue'
 import VisualizacionSoloRevistas from 'components/VisualizacionSoloRevistas.vue'
 import ImportarListaCerrada from 'components/Importaciones_excel/ImportarListaCerrada.vue'
 import VisualizacionSoloListaCerrada from 'components/VisualizacionSoloListaCerrada.vue'
 import ImportarDocentes from 'components/Importaciones_excel/ImportarDocentes.vue'
+
 
 const mostrarComponente = ref('adminRevistas')
 const mostrarImportar = ref(false)
