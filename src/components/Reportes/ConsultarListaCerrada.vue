@@ -21,7 +21,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  top: 170px;
+  top: 200px;
   left: 20px;
 }
 .contenedor-exportar-centrado {

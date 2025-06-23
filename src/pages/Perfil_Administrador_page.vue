@@ -189,13 +189,11 @@ import ListaProfesores from 'components/Lista_profesores.vue'
 import PreguntasFrecuentes from 'components/Preguntas_Frecuentes.vue'
 import TablaDinamicaReportes from 'components/Reportes/TablaDinamicaReportes.vue'
 
-import ReportesPage from './ReportesPage.vue'
 import ImportarRevistas from 'components/Importaciones_excel/ImportarRevistas.vue'
 import VisualizacionSoloRevistas from 'components/VisualizacionSoloRevistas.vue'
 import ImportarListaCerrada from 'components/Importaciones_excel/ImportarListaCerrada.vue'
 import VisualizacionSoloListaCerrada from 'components/VisualizacionSoloListaCerrada.vue'
 import ImportarDocentes from 'components/Importaciones_excel/ImportarDocentes.vue'
-
 
 const mostrarComponente = ref('adminRevistas')
 const mostrarImportar = ref(false)

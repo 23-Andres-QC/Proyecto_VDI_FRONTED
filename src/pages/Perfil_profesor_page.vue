@@ -63,30 +63,21 @@
 <script setup>
 import { ref } from 'vue'
 import PerfilProfesor from 'components/Perfil_Profesor.vue'
-
-import revista from 'components/Revista_prueba.vue'
 import ConsultarListaCerrada from 'src/components/Reportes/ConsultarListaCerrada.vue'
 import ConsultarRevistas from 'src/components/Reportes/ConsultarRevistas.vue'
-import VisualizacionSoloRevistas from 'components/VisualizacionSoloRevistas.vue'
-import VisualizacionSoloListaCerrada from 'components/VisualizacionSoloListaCerrada.vue'
-import ListaProfesores from 'components/Lista_profesores.vue'
-
+//import VisualizacionSoloRevistas from 'components/VisualizacionSoloRevistas.vue'
+//import VisualizacionSoloListaCerrada from 'components/VisualizacionSoloListaCerrada.vue'
+//import ListaProfesores from 'components/Lista_profesores.vue'
 
 const mostrarComponente = ref('revista')
 
 function handleMenuButtonClicked(menuItem) {
   if (menuItem.id === 1) {
-    mostrarComponente.value = 'revista'
-  } else if (menuItem.id === 2) {
-    mostrarComponente.value = 'listaCerrada'
-  } else if (menuItem.id === 6) {
-    mostrarComponente.value = 'preguntas'
-  } else if (menuItem.id === 4) {
     mostrarComponente.value = 'consultarListaCerrada'
-  } else if (menuItem.id === 5) {
+  } else if (menuItem.id === 2) {
     mostrarComponente.value = 'consultarRevistas'
   } else {
-    mostrarComponente.value = 'lista'
+    mostrarComponente.value = 'consultarRevistas'
   }
 }
 </script>

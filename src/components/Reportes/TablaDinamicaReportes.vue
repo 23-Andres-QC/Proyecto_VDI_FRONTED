@@ -110,43 +110,37 @@ async function manejarEnvio({ formato, correos }) {
 </script>
 
 <style scoped>
-.contenedor-reportes {
-  position: relative;
-  width: 700px;
-  height: 750px;
-  border: 2px solid black;
-  margin: 0 auto;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+.Tipo {
+  top: 180px;
+  left: 70px;
 }
-
 .header-reportes-min {
-  top: 80px;
+  top: 100px;
+  left: 850px;
 }
 
 /* Independent positioning for tables */
 .tabla-usuarios {
   position: absolute;
-  top: 170px;
-  left: 20px;
+  top: 180px;
+  left: 350px;
 }
 
 .tabla-profesores {
   position: absolute;
-  top: 170px;
-  left: 20px;
+  top: 180px;
+  left: 350px;
 }
 
 .tabla-issn {
   position: absolute;
-  top: 160px;
-  left: 10px;
+  top: 180px;
+  left: 350px;
 }
 
 .tabla-lista-cerrada {
   position: absolute;
-  top: 160px;
-  left: 10px;
+  top: 180px;
+  left: 350px;
 }
 </style>

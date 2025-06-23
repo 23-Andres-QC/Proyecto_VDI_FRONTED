@@ -18,15 +18,7 @@ const routes = [
   // path: '/:catchAll(.*)*',   component: () => import('pages/ErrorNotFound.vue'),  },
   //{ path: '/casa', component: () => import('pages/HomePantalla.vue') },
 
-  { path: '/rep', component: () => import('pages/ReportesPage.vue') },
-  {
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue'),
-  },
-  { path: '/casa', component: () => import('pages/HomePantalla.vue') },
-
-
-  { path: '/loginn', component: () => import('pages/LoginPage.vue') },
+  /*
   // Rutas adicionales
   { path: '/chat', component: () => import('components/ChatBot.vue') },
   { path: '/Revista', component: () => import('pages/RevistaPage.vue') },
@@ -50,6 +42,7 @@ const routes = [
   {
     path: '/conlist',
     component: () => import('src/components/Reportes/ConsultarListaCerrada.vue'),
+  },
   {
     path: '/visualizacion-revistas',
     component: () => import('components/VisualizacionSoloRevistas.vue'),
@@ -58,6 +51,7 @@ const routes = [
     path: '/visualizacion-lista-cerrada',
     component: () => import('components/VisualizacionSoloListaCerrada.vue'),
   },
+  */
 ]
 
 export default routes
