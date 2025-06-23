@@ -10,7 +10,7 @@
         <div class="logo-section">
           <div class="logo-placeholder">
             <img
-              src="src/assets/Home_imagenes/LogoEsan.jpg"
+              src="src/assets/Home_imagenes/LogoNegro.jpg"
               alt="Universidad Esan"
               class="logo-img"
             />
@@ -27,8 +27,8 @@
           <q-btn-dropdown
             flat
             label="Publicaciones"
-            @mouseover="dropdownVisible = true"
-            @mouseleave="dropdownVisible = false"
+            @mouseover="showDropdown"
+            @mouseleave="hideDropdown"
             :model="dropdownVisible"
           >
             <q-list>
@@ -175,7 +175,6 @@
         </div>
       </div>
     </section>
-
     <!-- ========================================= -->
     <!-- BLOQUE 5: LÍNEAS DE INVESTIGACIÓN -->
     <!-- ========================================= -->
@@ -342,72 +341,82 @@
         </div>
       </div>
     </section>
-
     <!-- ========================================= -->
-    <!-- BLOQUE 6: SECCIÓN DE CONTACTO Y FOOTER -->
+    <!-- BLOQUE 6: FOOTER INTEGRADO -->
     <!-- ========================================= -->
-    <!-- Información de contacto y mapa del sitio web -->
-    <section class="contact-section" id="contacto">
-      <div class="container">
-        <div class="row q-gutter-xl">
-          <!-- Columna de información de contacto -->
-          <div class="col-md-6 col-12">
-            <div class="contact-info">
-              <h3 class="contact-title">Comuníquese con nosotros</h3>
-              <div class="contact-item">
-                <strong>Dirección:</strong>
-                <span>Alonso de Molina 1652, Monterrico, Surco</span>
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-content">
+          <!-- Primera columna: Logo y contacto -->
+          <div class="footer-section">
+            <div class="logo-section">
+              <div class="logo">
+                <div class="logo-icon">
+                  <q-icon name="warning" size="20px" />
+                </div>
+                <div>
+                  <div class="logo-text">esan</div>
+                </div>
               </div>
-              <div class="contact-item">
-                <strong>Teléfono:</strong>
-                <span>317-7200, 712-7200</span>
+              <div class="department">
+                VICERRECTORADO DE<br />
+                INVESTIGACIÓN
               </div>
-              <div class="contact-item">
-                <strong>Correo:</strong>
-                <span>informes@esan.edu.pe</span>
-              </div>
+            </div>
 
-              <!-- Enlaces a redes sociales -->
+            <div class="contact-info" @click="sendEmail">
+              <q-icon name="email" size="16px" />
+              <span>dinv@esan.edu.pe</span>
+            </div>
+
+            <div class="social-section">
+              <h3>Nuestras Redes Sociales</h3>
               <div class="social-links">
-                <q-btn round color="grey-8" icon="facebook" />
-                <q-btn round color="grey-8" icon="work" />
-                <q-btn round color="grey-8" icon="video_library" />
-                <q-btn round color="grey-8" icon="photo_camera" />
+                <a href="#" class="social-link" aria-label="Facebook">
+                  <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="#" class="social-link" aria-label="LinkedIn">
+                  <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+                <a href="#" class="social-link" aria-label="x-Twitter">
+                  <i class="fa-brands fa-x-twitter"></i>
+                </a>
+                <a href="#" class="social-link" aria-label="Instagram">
+                  <i class="fa-brands fa-instagram"></i>
+                </a>
               </div>
             </div>
           </div>
 
-          <!-- Columna de mapa del sitio/navegación -->
-          <div class="col-md-6 col-12">
-            <div class="site-map">
-              <h3 class="map-title">TEMA</h3>
-              <div class="row">
-                <div class="col-6">
-                  <q-btn flat align="left" label="Inicio" @click="scrollTo('inicio')" />
-                  <q-btn flat align="left" label="Esan ediciones" @click="scrollTo('ediciones')" />
-                  <q-btn
-                    flat
-                    align="left"
-                    label="Directorio de investigaciones"
-                    @click="scrollTo('directorio')"
-                  />
-                </div>
-                <div class="col-6">
-                  <q-btn flat align="left" label="Comunícate" @click="scrollTo('comunicate')" />
-                  <q-btn flat align="left" label="Biblioteca" @click="scrollTo('biblioteca')" />
-                  <q-btn
-                    flat
-                    align="left"
-                    label="Investigaciones"
-                    @click="scrollTo('investigaciones')"
-                  />
-                </div>
-              </div>
+          <!-- Segunda columna: Sobre ESAN VDI -->
+          <div class="footer-section">
+            <h3>Sobre ESAN VDI</h3>
+            <ul>
+              <li><a href="#nosotros" @click="scrollTo('nosotros')">Nosotros</a></li>
+              <li><a href="#gestion-investigacion">Gestión de la Investigación</a></li>
+              <li><a href="#esan-ediciones" @click="openEsanEdiciones">ESAN Ediciones</a></li>
+            </ul>
+          </div>
+
+          <!-- Tercera columna: Información de interés -->
+          <div class="footer-section">
+            <h3>Información de Interés</h3>
+            <ul>
+              <li><a href="#politica-privacidad">Política de Privacidad</a></li>
+              <li><a href="#libro-reclamaciones">Libro de reclamaciones</a></li>
+            </ul>
+
+            <div class="book-icon">
+              <q-icon name="menu_book" size="48px" />
             </div>
           </div>
         </div>
+
+        <div class="footer-bottom">
+          <!-- Copyright removido según solicitud -->
+        </div>
       </div>
-    </section>
+    </footer>
   </q-page>
 </template>
 
@@ -465,6 +474,30 @@ export default defineComponent({
       console.log('Opening link: https://biblioteca.uesan.edu.pe/')
       window.open('https://biblioteca.uesan.edu.pe/', '_blank')
     },
+    showDropdown() {
+      this.dropdownVisible = true
+    },
+    hideDropdown() {
+      this.dropdownVisible = false
+    },
+  },
+  openUeEsan() {
+    console.log('Opening link: https://www.ue.edu.pe/pregrado/')
+    window.open('https://www.ue.edu.pe/pregrado/', '_blank')
+  },
+  openRecursos() {
+    console.log('Opening link: https://biblioteca.uesan.edu.pe/')
+    window.open('https://biblioteca.uesan.edu.pe/', '_blank')
+  },
+  showDropdown() {
+    this.dropdownVisible = true
+  },
+  hideDropdown() {
+    this.dropdownVisible = false
+  },
+  // Función para enviar email
+  sendEmail() {
+    window.location.href = 'mailto:dinv@esan.edu.pe'
   },
 })
 </script>
@@ -596,7 +629,7 @@ export default defineComponent({
 
 .hero-card {
   background: linear-gradient(135deg, #e53e3e, #ff6b6b);
-  color: white;
+  color: rgb(163, 160, 160);
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 200px;
@@ -771,13 +804,11 @@ export default defineComponent({
 }
 
 .research-card {
-  background: white;
-  transition: all 0.3s ease;
-  cursor: pointer;
+  background: #c1c0c0 !important; /* Forzar el color solicitado */
+  box-shadow: none !important; /* Asegurar que no haya sombras que alteren la percepción del color */
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    background: #f7c0c0 !important;
   }
 
   &.full-width {
@@ -801,55 +832,203 @@ export default defineComponent({
 /* ========================================= */
 /* ESTILOS DE LA SECCIÓN DE CONTACTO */
 /* ========================================= */
-.contact-section {
-  background: #1a1a1a;
+.footer {
+  background: #000000;
   color: white;
-  padding: 4rem 0;
+  padding: 40px 0 20px;
+  margin-top: auto;
 }
 
-.contact-title {
-  font-size: 1.8rem;
-  margin-bottom: 2rem;
-  color: white;
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
-.contact-item {
-  margin-bottom: 1.5rem;
+.footer-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 30px;
+}
 
-  strong {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #e53e3e;
-  }
+.footer-section h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
 
-  span {
-    color: #ccc;
-  }
+.footer-section ul {
+  list-style: none;
+}
+
+.footer-section ul li {
+  margin-bottom: 12px;
+}
+
+.footer-section ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  transition: opacity 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.logo-section {
+  margin-bottom: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+}
+
+.logo-icon i {
+  color: #000000;
+  font-size: 20px;
+}
+
+.logo-text {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.department {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-bottom: 15px;
+}
+
+.contact-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.contact-info i {
+  margin-right: 10px;
+  width: 16px;
+}
+
+.social-section h3 {
+  margin-bottom: 15px;
 }
 
 .social-links {
   display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
+  gap: 15px;
 }
 
-.map-title {
-  font-size: 1.8rem;
-  margin-bottom: 2rem;
+.social-link {
+  width: 40px;
+  height: 40px;
+  border: 2px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
 
-.site-map {
-  .q-btn {
-    color: #ccc;
-    width: 100%;
-    justify-content: flex-start;
-    margin-bottom: 0.5rem;
+.social-link:hover {
+  background: white;
+  color: #000000;
+  transform: translateY(-2px);
+}
 
-    &:hover {
-      color: #e53e3e;
-    }
+.book-icon {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.book-icon i {
+  font-size: 48px;
+  opacity: 0.8;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 20px;
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
   }
+
+  .social-links {
+    justify-content: center;
+  }
+
+  .footer-section {
+    text-align: center;
+  }
+
+  .logo {
+    justify-content: center;
+  }
+
+  .contact-info {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 30px 0 15px;
+  }
+
+  .footer-container {
+    padding: 0 15px;
+  }
+
+  .footer-content {
+    gap: 25px;
+  }
+
+  .logo-text {
+    font-size: 20px;
+  }
+}
+
+.contact-section {
+  padding: 2rem 0; // Reducir el espacio superior e inferior
+}
+
+.contact-title {
+  margin-bottom: 1rem; // Reducir el margen inferior del título
+}
+
+.contact-item {
+  margin-bottom: 1rem; // Reducir el margen entre elementos de contacto
+}
+
+.social-links {
+  margin-top: 1rem; // Reducir el margen superior de los enlaces sociales
 }
 
 /* ========================================= */
