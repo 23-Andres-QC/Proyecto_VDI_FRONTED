@@ -10,7 +10,7 @@
         <div class="logo-section">
           <div class="logo-placeholder">
             <img
-              src="src/assets/Home_imagenes/LogoNegro.jpg"
+              src="src/assets/Home_imagenes/LogoEsan.jpg"
               alt="Universidad Esan"
               class="logo-img"
             />
@@ -20,11 +20,38 @@
 
         <!-- Menú de navegación principal -->
         <div class="nav-menu">
-          <q-btn flat label="UE Esan" @click="scrollTo('inicio')" />
-          <q-btn flat label="Portal Académico" @click="scrollTo('portal')" />
+          <q-btn flat label="UE Esan" @click="openUeEsan" />
+          <q-btn flat label="Portal Académico" @click="openPortalAcademico" />
           <q-btn flat label="Nosotros" @click="scrollTo('nosotros')" />
-          <q-btn flat label="Recursos" @click="scrollTo('recursos')" />
-          <q-btn flat label="Publicaciones" @click="scrollTo('publicaciones')" />
+          <q-btn flat label="Recursos" @click="openRecursos" />
+          <q-btn-dropdown
+            flat
+            label="Publicaciones"
+            @mouseover="dropdownVisible = true"
+            @mouseleave="dropdownVisible = false"
+            :model="dropdownVisible"
+          >
+            <q-list>
+              <q-item clickable>
+                <q-item-section>Publicaciones 2020</q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section>Publicaciones 2021</q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section>Publicaciones 2022</q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section>Publicaciones 2023</q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section>Publicaciones 2024</q-item-section>
+              </q-item>
+              <q-item clickable>
+                <q-item-section>Publicaciones 2025</q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
           <q-btn class="login-btn" label="Inicio sesión" @click="goToLogin" />
         </div>
       </q-toolbar>
@@ -38,7 +65,7 @@
       <!-- Contenedor de imagen de fondo con overlay oscuro -->
       <div class="hero-background">
         <img
-          src="src/assets/Home_imagenes/Estudiante.jpg"
+          src="src/assets/Home_imagenes/CampusEsan.jpg"
           alt="Estudiante investigando en biblioteca"
           class="hero-image"
         />
@@ -54,24 +81,13 @@
 
         <!-- Tarjetas de acceso rápido a secciones principales -->
         <div class="hero-cards">
-          <q-card
-            class="hero-card"
-            @click="window.open('https://investigaciones.esan.edu.pe/', '_blank')"
-          >
+          <q-card class="hero-card" @click="scrollTo('nosotros')">
             <q-card-section class="text-center">
               <q-icon name="assessment" size="48px" class="hero-card-icon" />
               <h3>Dirección de Investigación</h3>
             </q-card-section>
           </q-card>
-          <q-card
-            class="hero-card"
-            @click="
-              window.open(
-                'https://investigaciones.esan.edu.pe/presentacion-esan-ediciones/',
-                '_blank',
-              )
-            "
-          >
+          <q-card class="hero-card" @click="openEsanEdiciones">
             <q-card-section class="text-center">
               <q-icon name="menu_book" size="48px" class="hero-card-icon" />
               <h3>Esan ediciones</h3>
@@ -413,6 +429,11 @@ export default defineComponent({
     }
     return { goToLogin }
   },
+  data() {
+    return {
+      dropdownVisible: false,
+    }
+  },
   methods: {
     // Función para navegación suave entre secciones
     // Utiliza la API de scroll de Quasar para animaciones fluidas
@@ -422,6 +443,27 @@ export default defineComponent({
       const offset = element.offsetTop
       const duration = 1000 // Duración de la animación en milisegundos
       setVerticalScrollPosition(target, offset, duration)
+    },
+    openEsanEdiciones() {
+      console.log('Opening link: https://ediciones.esan.edu.pe/')
+      window.open('https://ediciones.esan.edu.pe/', '_blank')
+    },
+    openPortalAcademico() {
+      console.log(
+        'Opening link: https://pa.uesan.edu.pe/index.php?msg3=El%20nombre%20de%20usuario%20y%20la%20contrase%C3%B1a%20no%20coinciden%20o%20no%20tienes%20acceso%20a%20esta%20plataforma%20virtual.',
+      )
+      window.open(
+        'https://pa.uesan.edu.pe/index.php?msg3=El%20nombre%20de%20usuario%20y%20la%20contrase%C3%B1a%20no%20coinciden%20o%20no%20tienes%20acceso%20a%20esta%20plataforma%20virtual.',
+        '_blank',
+      )
+    },
+    openUeEsan() {
+      console.log('Opening link: https://www.ue.edu.pe/pregrado/')
+      window.open('https://www.ue.edu.pe/pregrado/', '_blank')
+    },
+    openRecursos() {
+      console.log('Opening link: https://biblioteca.uesan.edu.pe/')
+      window.open('https://biblioteca.uesan.edu.pe/', '_blank')
     },
   },
 })
