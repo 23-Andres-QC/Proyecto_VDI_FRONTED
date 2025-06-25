@@ -95,10 +95,10 @@ const repetirPassword = ref('')
 
 onMounted(async () => {
   try {
-    const res = await axios.get('http://localhost:5009/api/profesoresadmis')
+    const res = await axios.get('http://localhost:5009/api/ProfesoresAdmis')
     profesores.value = res.data.map((p) => ({
-      label: p.nombreCompleto,
-      value: p.id_Profesor_Admis,
+      label: p.nombreyApellido,
+      value: p.idProfesorAdmis,
     }))
   } catch (err) {
     console.error('Error al cargar profesores:', err)
@@ -126,7 +126,7 @@ async function registrarUsuario() {
 
   try {
     await axios.post('http://localhost:5009/api/usuarios', {
-      id_Profesor_Admis: selectedProfesor.value,
+      idProfesorAdmis: selectedProfesor.value,
       Id_Rol: selectedRol.value === 'Administrador' ? 1 : 2,
       Estado: estado.value === 'Activo' ? 1 : 0,
       Contraseña: password.value,

@@ -40,8 +40,14 @@ const columns = [
 
 onMounted(async () => {
   try {
-    const res = await axios.get('http://localhost:5009/api/usuarios')
-    usuarios.value = res.data
+    const res = await axios.get('http://localhost:5009/api/ProfesoresAdmis')
+    usuarios.value = res.data.map((prof) => ({
+      idUsuario: prof.idProfesorAdmis,
+      correo: prof.correo,
+      trabajador: prof.nombreyApellido,
+      documento: prof.dni,
+      categoria: prof.categoria,
+    }))
   } catch (err) {
     console.error('Error al cargar usuarios:', err)
   }
