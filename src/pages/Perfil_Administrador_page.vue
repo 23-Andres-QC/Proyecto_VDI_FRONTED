@@ -1,6 +1,6 @@
 <template>
   <q-page class="row justify-start items-start q-pa-md">
-    <!-- Contenedor delgado: componente de perfil del Administrador -->
+    <!-- Contenedor lateral: menú perfil -->
     <div
       class="rounded-borders shadow-2 q-mr-md"
       style="
@@ -12,14 +12,13 @@
         justify-content: flex-start;
       "
     >
-      <!-- Componente de perfil de Administrador -->
       <Perfil_Administrador
         style="width: 100%; height: 100%"
         @menu-button-clicked="handleMenuButtonClicked"
       />
     </div>
 
-    <!-- Contenedor ancho: componente varios -->
+    <!-- Contenedor principal -->
     <div
       class="rounded-borders shadow-2 admin-main-container"
       style="
@@ -30,10 +29,16 @@
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        background: transparent;
+        background: white;
         overflow-y: auto;
+        padding: 20px;
       "
     >
+      <!-- Contenido de Administración de Usuarios -->
+      <div v-if="mostrarComponente === 'usuario'" style="width: 100%">
+        <RegisterUserForm class="q-mb-md" />
+        <UserList />
+      </div>
       <!-- Administración de revistas -->
       <template v-if="mostrarComponente === 'adminRevistas'">
         <div class="admin-revistas-header admin-revistas-header-margen">
@@ -187,8 +192,9 @@ import { ref } from 'vue'
 import Perfil_Administrador from 'components/Perfil_Administrador.vue'
 import ListaProfesores from 'components/Lista_profesores.vue'
 import PreguntasFrecuentes from 'components/Preguntas_Frecuentes.vue'
+import RegisterUserForm from 'components/RegisterUserForm.vue'
+import UserList from 'components/UserList.vue'
 import TablaDinamicaReportes from 'components/Reportes/TablaDinamicaReportes.vue'
-
 import ImportarRevistas from 'components/Importaciones_excel/ImportarRevistas.vue'
 import VisualizacionSoloRevistas from 'components/VisualizacionSoloRevistas.vue'
 import ImportarListaCerrada from 'components/Importaciones_excel/ImportarListaCerrada.vue'
@@ -248,6 +254,10 @@ function filtrarTablaDocentes() {
 
 // Modificar handleMenuButtonClicked para mostrar la sección correcta
 function handleMenuButtonClicked(menuItem) {
+  if (menuItem.id === 1) {
+    mostrarComponente.value = 'usuario'
+  } else if (menuItem.id === 4) {
+    mostrarComponente.value = 'lista'
   if (menuItem.id === 2) {
     mostrarComponente.value = 'adminRevistas'
   } else if (menuItem.id === 3) {

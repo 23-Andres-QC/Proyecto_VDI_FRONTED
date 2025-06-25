@@ -14,6 +14,11 @@ const routes = [
       { path: '/chat', component: () => import('components/ChatBot.vue') },
     ],
   },
+  {path: '/rep', component: () => import('pages/ReportesPage.vue') },
+  {
+    path: '/:catchAll(.*)*',   component: () => import('pages/ErrorNotFound.vue'),  },
+  { path: '/casa', component: () => import('pages/HomePantalla.vue') },
+
 
   // {
   // path: '/:catchAll(.*)*',   component: () => import('pages/ErrorNotFound.vue'),  },
