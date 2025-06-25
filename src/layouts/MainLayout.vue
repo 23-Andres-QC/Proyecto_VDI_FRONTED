@@ -32,12 +32,9 @@
         </div>
       </div>
     </q-page-container>
-
-    <q-footer class="footer-container">
-      <div class="footer-content">
-        <p class="footer-text">© Universidad ESAN | Alonso de Molina 1652, Surco, Lima, Perú</p>
-      </div>
-    </q-footer>
+    <div class="chat">
+      <ChatBot />
+    </div>
   </q-layout>
 </template>
 
@@ -46,6 +43,7 @@
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
+import ChatBot from '../components/ChatBot.vue'
 
 const route = useRoute()
 const router = useRouter()

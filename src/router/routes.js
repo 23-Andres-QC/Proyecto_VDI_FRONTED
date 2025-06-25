@@ -11,6 +11,7 @@ const routes = [
       { path: '/perfil-p', component: () => import('pages/Perfil_profesor_page.vue') },
       { path: '/perfil-a', component: () => import('pages/Perfil_Administrador_page.vue') },
       { path: '/importar-docentes', component: () => import('pages/ImportarDocentesPage.vue') },
+      { path: '/chat', component: () => import('components/ChatBot.vue') },
     ],
   },
 
