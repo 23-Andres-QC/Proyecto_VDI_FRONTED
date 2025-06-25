@@ -176,7 +176,7 @@ watch(
 
 .content-area {
   min-height: calc(100vh - 120px);
-  background-color: #f5f5f5;
+  background-color: #f7f7f7;
 }
 
 /* Footer */
