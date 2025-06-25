@@ -102,6 +102,17 @@ onMounted(async () => {
     }))
   } catch (err) {
     console.error('Error al cargar profesores:', err)
+    if (err.response?.status === 404) {
+      console.warn('El endpoint de profesores no está disponible')
+    } else {
+      console.error('Error de conexión con el servidor')
+    }
+    // Agregar datos de ejemplo para desarrollo
+    profesores.value = [
+      { label: 'Dr. Juan Pérez García (Ejemplo)', value: 1 },
+      { label: 'Dra. María González López (Ejemplo)', value: 2 },
+      { label: 'Dr. Carlos Rodríguez Sánchez (Ejemplo)', value: 3 },
+    ]
   }
 })
 
@@ -140,7 +151,13 @@ async function registrarUsuario() {
     limpiarFormulario()
   } catch (err) {
     console.error('Error al registrar:', err)
-    alert('Error al registrar usuario')
+    if (err.response?.status === 404) {
+      alert(
+        'El endpoint para registrar usuarios no está disponible en el backend. Por favor, contacte al administrador del sistema.',
+      )
+    } else {
+      alert('Error al registrar usuario: ' + (err.message || 'Error desconocido'))
+    }
   }
 }
 </script>
