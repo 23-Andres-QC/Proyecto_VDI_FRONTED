@@ -8,9 +8,27 @@
         row-key="issn"
         dense
         flat
-        class="tabla-excel custom-table"
-        style="min-width: 1100px; margin-bottom: 40px"
-        :rows-per-page="20"
+        class="tabla-excel custom-table tabla-scrollable"
+        :pagination="pagination"
+        v-model:pagination="pagination"
+        :rows-per-page-options="[5, 10, 20, 50, 100, 200, 500, 1000]"
+        :wrap-cells="false"
+        :virtual-scroll="false"
+        :table-style="{
+          maxWidth: '100%',
+          maxHeight: '340px',
+          overflow: 'auto',
+          display: 'block',
+        }"
+        style="
+          width: 100%;
+          max-width: 100%;
+          margin-bottom: 10px;
+          margin-left: auto;
+          margin-right: auto;
+          border-radius: 8px;
+          overflow: hidden;
+        "
       />
       <div v-else class="no-data">No hay revistas registradas.</div>
     </div>
@@ -30,9 +48,15 @@ const revistas = ref([])
 const busquedaLocal = ref(props.busqueda)
 
 const columnasRevistas = [
-  { name: 'issn', label: 'ISSN', field: 'issn', align: 'left' },
-  { name: 'nombre', label: 'Nombre', field: 'nombre', align: 'left' },
-  { name: 'country', label: 'País', field: 'country', align: 'left' },
+  { name: 'issn', label: 'ISSN', field: 'issn', align: 'left', style: 'width: 80px' },
+  {
+    name: 'nombre',
+    label: 'Nombre',
+    field: 'nombre',
+    align: 'left',
+    style: 'width: 200px; min-width: 200px;',
+  },
+  { name: 'country', label: 'País', field: 'country', align: 'left', style: 'width: 80px' },
   { name: 'multiple', label: '¿Múltiple?', field: 'multiple', align: 'left' },
   { name: 'coautoriaEsan', label: 'Coautor ESAN', field: 'coautoriaEsan', align: 'left' },
   { name: 'posicionAutor', label: 'Posición autor', field: 'posicionAutor', align: 'left' },
@@ -136,6 +160,12 @@ watch(
   },
 )
 
+const pagination = ref({
+  page: 1,
+  rowsPerPage: 20,
+  rowsNumber: 0,
+})
+
 onMounted(() => {
   fetchRevistas()
 })
@@ -143,31 +173,32 @@ onMounted(() => {
 
 <style scoped>
 .tabla-margen-centrada {
-  max-width: 98vw;
-  width: 98vw;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 32px;
-  margin-bottom: 32px;
+  max-width: 90%;
+  width: 90%;
+  margin: 20px auto;
+  padding: 0 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 .sin-fondo {
   background: transparent !important;
   box-shadow: none !important;
 }
 .tabla-borde-centrada {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0 auto;
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  padding: 32px 48px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 16px;
-  margin-bottom: 16px;
-  max-width: 92%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 15px;
+  overflow: hidden;
 }
 .sin-fondo .tabla-borde-centrada {
   background: transparent !important;
@@ -175,12 +206,32 @@ onMounted(() => {
 }
 .tabla-scroll-wrapper {
   width: 100%;
-  max-width: 100vw;
+  max-width: 100%;
   overflow-x: auto;
   overflow-y: auto;
   max-height: 500px;
   margin-bottom: 1.5rem;
   background: transparent;
+}
+.tabla-scrollable {
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+  max-height: 340px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.custom-table {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.custom-table >>> .q-table__container {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+.custom-table >>> .q-table__middle {
+  overflow-x: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 .custom-table >>> thead tr th {
   background: #e53935 !important;
@@ -189,6 +240,16 @@ onMounted(() => {
   border-bottom: 2px solid #f5f5f5 !important;
   border-right: 1px solid #f5f5f5 !important;
   text-align: center;
+  padding: 8px 4px !important;
+  font-size: 0.8rem !important;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+/* Encabezado de la columna nombre */
+.custom-table >>> thead tr th:nth-child(2) {
+  text-align: left !important;
+  width: 200px !important;
+  min-width: 200px !important;
 }
 .custom-table >>> tbody tr {
   background: #fff;
@@ -197,6 +258,22 @@ onMounted(() => {
   border-right: 1px solid #f5f5f5 !important;
   border-bottom: 1px solid #f5f5f5 !important;
   text-align: center;
+  padding: 6px 4px !important;
+  font-size: 0.75rem !important;
+  white-space: normal;
+  overflow: visible;
+  word-wrap: break-word;
+  line-height: 1.2;
+  max-width: 150px;
+  vertical-align: top;
+}
+/* Columna de nombre específica para permitir más espacio */
+.custom-table >>> tbody tr td:nth-child(2) {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  max-width: 200px !important;
+  text-align: left !important;
+  padding: 8px 6px !important;
 }
 .custom-table >>> tbody tr:nth-child(even) {
   background: #fafafa;
@@ -205,5 +282,7 @@ onMounted(() => {
   color: #b71c1c;
   font-size: 1.2rem;
   margin: 2rem 0;
+  text-align: center;
+  padding: 20px;
 }
 </style>
