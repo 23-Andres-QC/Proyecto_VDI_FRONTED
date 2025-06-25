@@ -256,9 +256,7 @@ function filtrarTablaDocentes() {
 function handleMenuButtonClicked(menuItem) {
   if (menuItem.id === 1) {
     mostrarComponente.value = 'usuario'
-  } else if (menuItem.id === 4) {
-    mostrarComponente.value = 'lista'
-  if (menuItem.id === 2) {
+  } else if (menuItem.id === 2) {
     mostrarComponente.value = 'adminRevistas'
   } else if (menuItem.id === 3) {
     mostrarComponente.value = 'adminListaCerrada'
