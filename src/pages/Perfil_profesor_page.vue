@@ -25,7 +25,7 @@
       style="
         margin-top: 10px;
         width: 75%;
-        height: 600px;
+        min-height: 600px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -34,14 +34,27 @@
         overflow-y: auto;
       "
     >
-      <!-- Componente varios -->
-      <revista v-if="mostrarComponente === 'revista'" style="width: 100%; height: 100%" />
+      <VisualizacionSoloRevistas
+        v-if="mostrarComponente === 'revista'"
+        style="width: 100%; height: 100%"
+      />
+      <VisualizacionSoloListaCerrada
+        v-if="mostrarComponente === 'listaCerrada'"
+        style="width: 100%; height: 100%"
+      />
+      <!-- Otros componentes -->
       <ListaProfesores v-if="mostrarComponente === 'lista'" style="width: 100%; height: 100%" />
       <div
         v-if="mostrarComponente === 'preguntas'"
         style="width: 100%; display: flex; justify-content: center"
       >
         <varios style="width: 70%" />
+      </div>
+      <div v-if="mostrarComponente === 'consultarListaCerrada'" style="width: 100%; height: 100%">
+        <ConsultarListaCerrada />
+      </div>
+      <div v-if="mostrarComponente === 'consultarRevistas'" style="width: 100%; height: 100%">
+        <ConsultarRevistas />
       </div>
     </div>
   </q-page>
@@ -50,18 +63,21 @@
 <script setup>
 import { ref } from 'vue'
 import PerfilProfesor from 'components/Perfil_Profesor.vue'
-import revista from 'components/Revista_prueba.vue'
-
+import ConsultarListaCerrada from 'src/components/Reportes/ConsultarListaCerrada.vue'
+import ConsultarRevistas from 'src/components/Reportes/ConsultarRevistas.vue'
+//import VisualizacionSoloRevistas from 'components/VisualizacionSoloRevistas.vue'
+//import VisualizacionSoloListaCerrada from 'components/VisualizacionSoloListaCerrada.vue'
+//import ListaProfesores from 'components/Lista_profesores.vue'
 
 const mostrarComponente = ref('revista')
 
 function handleMenuButtonClicked(menuItem) {
   if (menuItem.id === 1) {
-    mostrarComponente.value = 'revista'
-  } else if (menuItem.id === 6) {
-    mostrarComponente.value = 'preguntas'
+    mostrarComponente.value = 'consultarListaCerrada'
+  } else if (menuItem.id === 2) {
+    mostrarComponente.value = 'consultarRevistas'
   } else {
-    mostrarComponente.value = 'lista'
+    mostrarComponente.value = 'consultarRevistas'
   }
 }
 </script>

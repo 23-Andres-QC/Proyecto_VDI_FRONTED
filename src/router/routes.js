@@ -10,6 +10,7 @@ const routes = [
       { path: '/usuarios', component: () => import('pages/RegisterPage.vue') },
       { path: '/perfil-p', component: () => import('pages/Perfil_profesor_page.vue') },
       { path: '/perfil-a', component: () => import('pages/Perfil_Administrador_page.vue') },
+      { path: '/importar-docentes', component: () => import('pages/ImportarDocentesPage.vue') },
     ],
   },
   {path: '/rep', component: () => import('pages/ReportesPage.vue') },
@@ -17,11 +18,20 @@ const routes = [
     path: '/:catchAll(.*)*',   component: () => import('pages/ErrorNotFound.vue'),  },
   { path: '/casa', component: () => import('pages/HomePantalla.vue') },
 
-  { path: '/loginn', component: () => import('pages/LoginPage.vue') },
+
+  // {
+  // path: '/:catchAll(.*)*',   component: () => import('pages/ErrorNotFound.vue'),  },
+  //{ path: '/casa', component: () => import('pages/HomePantalla.vue') },
+
+  /*
   // Rutas adicionales
   { path: '/chat', component: () => import('components/ChatBot.vue') },
   { path: '/Revista', component: () => import('pages/RevistaPage.vue') },
   { path: '/ListaCerrada', component: () => import('pages/ListaCerradaPage.vue') },
+  {
+    path: '/ListaCerradaCon',
+    component: () => import('src/components/Reportes/Tablas/TablaListCerradaCon.vue'),
+  },
   { path: '/p', component: () => import('components/Preguntas_Frecuentes.vue') },
   { path: '/TipoReporte', component: () => import('components/Reportes/ReportesTipo.vue') },
   { path: '/ExportarReporte', component: () => import('components/Reportes/ExportarReportes.vue') },
@@ -33,6 +43,20 @@ const routes = [
   { path: '/perfil-a', component: () => import('components/Perfil_Administrador.vue') },
   { path: '/perfil-p', component: () => import('components/Perfil_Profesor.vue') },
   { path: '/lst-p', component: () => import('components/Lista_profesores.vue') },
+  { path: '/conrev', component: () => import('src/components/Reportes/ConsultarRevistas.vue') },
+  {
+    path: '/conlist',
+    component: () => import('src/components/Reportes/ConsultarListaCerrada.vue'),
+  },
+  {
+    path: '/visualizacion-revistas',
+    component: () => import('components/VisualizacionSoloRevistas.vue'),
+  },
+  {
+    path: '/visualizacion-lista-cerrada',
+    component: () => import('components/VisualizacionSoloListaCerrada.vue'),
+  },
+  */
 ]
 
 export default routes

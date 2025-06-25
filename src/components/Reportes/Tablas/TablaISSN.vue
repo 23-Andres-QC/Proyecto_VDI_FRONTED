@@ -1,17 +1,27 @@
 <style src="./StylessTabla.css"></style>
 
 <template>
-  <div class="contenedor-reporte">
+  <div class="contenedor-reporte-issn">
     <div class="filtro-issn-contenedor filtro-reporte">
-      <select v-model="tipoCalificacion" class="filtro-issn-select">
+      <select v-model="tipoCalificacionIssn" class="filtro-issn-select">
         <option disabled value="">Tipo de calificación</option>
-        <option v-for="tipo in tiposCalificacion" :key="tipo" :value="tipo">{{ tipo }}</option>
+        <option v-for="tipo in tiposCalificacionIssn" :key="tipo" :value="tipo">{{ tipo }}</option>
       </select>
-      <select v-model="calificacion" class="filtro-issn-select" :disabled="!tipoCalificacion">
+      <select
+        v-model="calificacionIssn"
+        class="filtro-issn-select"
+        :disabled="!tipoCalificacionIssn"
+      >
         <option disabled value="">Calificación</option>
-        <option v-for="item in calificaciones" :key="item" :value="item">{{ item }}</option>
+        <option v-for="item in calificacionesIssn" :key="item" :value="item">{{ item }}</option>
       </select>
-      <input v-model="busqueda" type="text" class="filtro-profesores-input" placeholder="Buscar por ISSN o nombre..." />
+
+      <input
+        v-model="busquedaIssn"
+        type="text"
+        class="filtro-issn-input"
+        placeholder="Buscar por ISSN o nombre"
+      />
       <button class="filtro-issn-btn" @click="limpiarFiltros">Limpiar</button>
     </div>
     <div class="tabla-issn-contenedor">
@@ -121,77 +131,144 @@ export default {
   data() {
     return {
       revistas: [],
-      tipoCalificacion: '',
-      tiposCalificacion: [],
-      calificacion: '',
-      calificaciones: [],
-      busqueda: ''
+      tipoCalificacionIssn: '',
+      tiposCalificacionIssn: [],
+      calificacionIssn: '',
+      calificacionesIssn: [],
+      busquedaIssn: '',
+      datosFiltradosIssn: [],
     }
   },
   watch: {
-    tipoCalificacion(newVal) {
-      this.calificacion = '';
+    tipoCalificacionIssn(newVal) {
+      this.calificacionIssn = ''
       if (newVal) {
         fetch(`http://localhost:5009/api/Revista/distinct-metadatos/${encodeURIComponent(newVal)}`)
-          .then(response => response.json())
-          .then(data => {
-            this.calificaciones = data;
+          .then((response) => response.json())
+          .then((data) => {
+            this.calificacionesIssn = data
           })
-          .catch(error => {
-            this.calificaciones = [];
-            console.error('Error al obtener calificaciones:', error);
-          });
+          .catch((error) => {
+            this.calificacionesIssn = []
+            console.error('Error al obtener calificaciones:', error)
+          })
       } else {
-        this.calificaciones = [];
+        this.calificacionesIssn = []
       }
-    }
+    },
+    revistasFiltradas: {
+      handler() {
+        // Emitir los datos filtrados como array de arrays en el orden de las columnas del Excel
+        this.datosFiltradosIssn = this.revistasFiltradas.map((revista) => [
+          revista.issn,
+          revista.nombre,
+          revista.scopus,
+          revista.woSQ,
+          revista.woSS,
+          revista.woSEsci,
+          revista.esciQ,
+          revista.ajg4star,
+          revista.ajg,
+          revista.ajgS,
+          revista.cnrs,
+          revista.cnrsS,
+          revista.abdc,
+          revista.abdcS,
+          revista.alMenosUnaLista,
+          revista.soloUnaLista,
+          revista.scielo,
+          revista.woSLatam,
+          revista.top50,
+          revista.n,
+          revista.beallsList,
+          revista.mdpi,
+          revista.insights,
+          revista.ajgExiste,
+          revista.cnrsExiste,
+          revista.abdcExiste,
+          revista.woSTopExiste,
+          revista.woSEsciExiste,
+          revista.scopusExiste,
+          revista.soloScieloExiste,
+          revista.especial216b,
+          revista.latamSinEsciExiste,
+          revista.esciScieloSinScopus,
+          revista.multiple,
+          revista.multidisciplinaryWos,
+          revista.coautoriaEsan,
+          revista.posicionAutor,
+          revista.jif,
+          revista.country,
+          revista.multyAlMenosUnaLista,
+          revista.multidisciplinaryScopus,
+          revista.multidisciplinaryWosOScopys,
+        ])
+        this.emitirFiltrados()
+      },
+      deep: true,
+    },
   },
   computed: {
     revistasFiltradas() {
-      return this.revistas.filter(revista => {
-        let coincideColumna = true;
-        if (this.tipoCalificacion && this.calificacion) {
-          // Buscar la columna ignorando mayúsculas, minúsculas y guiones bajos
+      if (!this.tipoCalificacionIssn && !this.calificacionIssn && !this.busquedaIssn) {
+        return this.revistas // Mostrar todos los datos si no hay filtros
+      }
+
+      return this.revistas.filter((revista) => {
+        let coincideColumna = true
+        if (this.tipoCalificacionIssn && this.calificacionIssn) {
           const columna = Object.keys(revista).find(
-            key => key.replace(/[_\s]/g, '').toLowerCase() === this.tipoCalificacion.replace(/[_\s]/g, '').toLowerCase()
-          );
-          if (!columna) return false;
-          const valorColumna = revista[columna];
-          coincideColumna = String(valorColumna).trim().toLowerCase() === String(this.calificacion).trim().toLowerCase();
+            (key) =>
+              key.replace(/[_\s]/g, '').toLowerCase() ===
+              this.tipoCalificacionIssn.replace(/[_\s]/g, '').toLowerCase(),
+          )
+
+          if (!columna) return false
+          const valorColumna = revista[columna]
+          coincideColumna =
+            String(valorColumna).trim().toLowerCase() ===
+            String(this.calificacionIssn).trim().toLowerCase()
         }
-        // Buscar solo por ISSN o nombre
-        const texto = this.busqueda.toLowerCase();
-        const coincideBusqueda = this.busqueda
-          ? (String(revista.issn).toLowerCase().includes(texto) || String(revista.nombre).toLowerCase().includes(texto))
-          : true;
-        return coincideColumna && coincideBusqueda;
-      });
-    }
+
+        const texto = this.busquedaIssn.toLowerCase()
+        const coincideBusqueda = this.busquedaIssn
+          ? String(revista.issn).toLowerCase().includes(texto) ||
+            String(revista.nombre).toLowerCase().includes(texto)
+          : true
+
+        return coincideColumna && coincideBusqueda
+      })
+    },
   },
   methods: {
+    emitirFiltrados() {
+      const datosJSON = JSON.stringify(this.datosFiltradosIssn)
+      this.$emit('update:filtrados', datosJSON)
+    },
     limpiarFiltros() {
-      this.tipoCalificacion = '';
-      this.calificacion = '';
-      this.busqueda = '';
-    }
+      this.tipoCalificacionIssn = ''
+      this.calificacionIssn = ''
+      this.busquedaIssn = ''
+    },
   },
   mounted() {
     fetch('http://localhost:5009/api/Revista')
-      .then(response => response.json())
-      .then(data => {
-        this.revistas = data;
+      .then((response) => response.json())
+      .then((data) => {
+        this.revistas = data
       })
-      .catch(error => {
-        console.error('Error al obtener revistas:', error);
-      });
+      .catch((error) => {
+        console.error('Error al obtener revistas:', error)
+      })
+
     fetch('http://localhost:5009/api/Revista/columnas-metadatos')
-      .then(response => response.json())
-      .then(data => {
-        this.tiposCalificacion = data;
+      .then((response) => response.json())
+      .then((data) => {
+        this.tiposCalificacionIssn = data
       })
-      .catch(error => {
-        console.error('Error al obtener tipos de calificación:', error);
-      });
-  }
+      .catch((error) => {
+        console.error('Error al obtener tipos de calificación:', error)
+      })
+  },
 }
 </script>

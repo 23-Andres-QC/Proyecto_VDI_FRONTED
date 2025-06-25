@@ -1,10 +1,13 @@
 <template>
-  <div class="importar-revistas-bg">
-    <div class="importar-revistas-panel card-style">
+  <div class="importar-revistas-bg-flotante">
+    <div class="importar-revistas-panel card-style importar-revistas-flotante">
       <div class="importar-header">
-        <h2>Importar lista cerrada</h2>
+        <span class="importar-titulo">Importar lista cerrada</span>
+        <q-btn flat round dense icon="close" class="cerrar-x" @click="$emit('cancelar')" />
       </div>
-      <div class="importar-instruccion">Selecciona un archivo .xlsx para importar lista cerrada</div>
+      <div class="importar-instruccion">
+        Selecciona un archivo .xlsx para importar lista cerrada
+      </div>
       <div class="importar-form-row">
         <q-file
           filled
@@ -29,30 +32,30 @@
         <div class="visualizacion-header">
           <h3>Visualización de lista cerrada</h3>
         </div>
-        <div class="tabla-scroll zebra-table tabla-scroll-center">
-          <div style="min-width: 1100px;">
-            <q-table
-              :rows="tabla"
-              :columns="columnas"
-              row-key="ISSN"
-              dense
-              flat
-              :rows-per-page="20"
-              class="tabla-excel zebra-table"
-              style="min-width: 1100px; width: 1100px; display: block;"
-              v-model:pagination="pagination"
-              :separator="'cell'"
-              :wrap-cells="true"
-              :virtual-scroll="false"
-              :table-style="{ minWidth: '1100px', width: '1100px', display: 'block' }"
-              :table-colstyle="
-                (col) =>
-                  col.name === 'ISSN'
-                    ? 'position: sticky; left: 0; background: #bde3f7; z-index: 3;'
-                    : ''
-              "
-            />
-          </div>
+        <div class="tabla-scroll zebra-table">
+          <q-table
+            :rows="tabla"
+            :columns="columnas"
+            row-key="ISSN"
+            dense
+            flat
+            :pagination="pagination"
+            :rows-per-page-options="[5, 10, 20, 50, 100, 200, 500, 1000]"
+            class="tabla-excel zebra-table"
+            style="min-width: 1100px"
+            v-model:pagination="pagination"
+            :separator="'cell'"
+            :wrap-cells="true"
+            :virtual-scroll="true"
+            :virtual-scroll-sticky-size-start="48"
+            :table-style="{ minWidth: '1100px' }"
+            :table-colstyle="
+              (col) =>
+                col.name === 'ISSN'
+                  ? 'position: sticky; left: 0; background: #bde3f7; z-index: 3;'
+                  : ''
+            "
+          />
         </div>
         <div class="acciones-previa">
           <q-btn
@@ -85,7 +88,11 @@ import { Notify } from 'quasar'
 const archivo = ref(null)
 const tabla = ref([])
 const apiData = ref([])
-const pagination = ref({ rowsPerPage: 20 })
+const pagination = ref({
+  page: 1,
+  rowsPerPage: 20,
+  rowsNumber: 0,
+})
 
 const columnas = [
   { name: 'ISSN', label: 'ISSN', field: 'ISSN', align: 'left' },
@@ -123,11 +130,11 @@ function onFileChange(file) {
     )
     // Mapeo forzado de encabezados equivalentes
     const headerMapEquivalentes = {
-      'Categoria2': ['Categoria2', 'Categoría 2', 'Categoria 2', 'Categoría2'],
-      'IncentivoUSD': ['IncentivoUSD', 'Incentivo (USD)', 'Incentivo USD', 'Incentivo'],
-      'WoS_Q': ['WoS_Q', 'WoS (Q)', 'WoS Q', 'WOS Q', 'WOS_Q'],
-      'ESCI_Q': ['ESCI_Q', 'ESCI Q', 'ESCIQ'],
-      'WoS_LATAM': ['WoS_LATAM', 'WoS LATAM', 'WOS LATAM', 'WOS_LATAM'],
+      Categoria2: ['Categoria2', 'Categoría 2', 'Categoria 2', 'Categoría2'],
+      IncentivoUSD: ['IncentivoUSD', 'Incentivo (USD)', 'Incentivo USD', 'Incentivo'],
+      WoS_Q: ['WoS_Q', 'WoS (Q)', 'WoS Q', 'WOS Q', 'WOS_Q'],
+      ESCI_Q: ['ESCI_Q', 'ESCI Q', 'ESCIQ'],
+      WoS_LATAM: ['WoS_LATAM', 'WoS LATAM', 'WOS LATAM', 'WOS_LATAM'],
       // ...otros campos si es necesario...
     }
     // Generar un headerMap flexible
@@ -138,7 +145,9 @@ function onFileChange(file) {
         // Buscar equivalencia
         let found = false
         for (const apiField in headerMapEquivalentes) {
-          if (headerMapEquivalentes[apiField].some(eq => eq.toLowerCase() === key.toLowerCase())) {
+          if (
+            headerMapEquivalentes[apiField].some((eq) => eq.toLowerCase() === key.toLowerCase())
+          ) {
             headerMap[apiField] = idx
             found = true
             break
@@ -168,7 +177,12 @@ function onFileChange(file) {
     tabla.value = filteredRows.map((rowArr) => {
       const obj = {}
       columnasAdaptadas.forEach((col) => {
-        const idx = headerMap[col.name] !== undefined ? headerMap[col.name] : headerMap[col.label] !== undefined ? headerMap[col.label] : undefined
+        const idx =
+          headerMap[col.name] !== undefined
+            ? headerMap[col.name]
+            : headerMap[col.label] !== undefined
+              ? headerMap[col.label]
+              : undefined
         obj[col.name] = idx !== undefined ? rowArr[idx] : ''
       })
       return obj
@@ -193,9 +207,20 @@ function onFileChange(file) {
     apiData.value = filteredRows.map((rowArr) => {
       const obj = {}
       apiFields.forEach((apiField) => {
-        const idx = headerMap[apiField] !== undefined ? headerMap[apiField] : headerMap[columnasAdaptadas.find(c => c.name === apiField)?.label] !== undefined ? headerMap[columnasAdaptadas.find(c => c.name === apiField)?.label] : undefined
+        const idx =
+          headerMap[apiField] !== undefined
+            ? headerMap[apiField]
+            : headerMap[columnasAdaptadas.find((c) => c.name === apiField)?.label] !== undefined
+              ? headerMap[columnasAdaptadas.find((c) => c.name === apiField)?.label]
+              : undefined
         let val = idx !== undefined ? rowArr[idx] : ''
         if (val === '' || val === undefined) val = null
+
+        // Validación específica para AJG y CNRS
+        if (['AJG', 'CNRS'].includes(apiField) && val !== null) {
+          val = isNaN(Number(val)) ? val : String(val)
+        }
+
         if (apiField === 'Puntaje' && val !== null) {
           val = isNaN(Number(val)) ? null : Number(val)
         }
@@ -214,7 +239,7 @@ async function importarExcel() {
   if (!tabla.value.length) return
   try {
     await api.post(
-      '/api/Revista?idUsuario=3&tipoRevista=LCD',
+      '/api/Revista?idUsuario=5&tipoRevista=LCD',
       apiData.value.length ? apiData.value : tabla.value,
     )
     Notify.create({ type: 'positive', message: 'Importación completada' })
@@ -231,20 +256,25 @@ function cancelarImportacion() {
 </script>
 
 <style scoped>
-.importar-revistas-bg {
-  /* Fondo degradado más suave */
-  background: linear-gradient(135deg, #fbecec 0%, #e4b1ab 100%);
+.importar-revistas-bg-flotante {
+  background: rgba(0, 0, 0, 0.18);
   min-height: 100vh;
   width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Roboto', Arial, 'Open Sans', sans-serif;
 }
-.card-style {
+.importar-revistas-flotante {
   background: #fff;
   border-radius: 24px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), 0 1.5px 8px rgba(228, 177, 171, 0.10);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.18),
+    0 1.5px 8px rgba(228, 177, 171, 0.1);
   padding: 2.5rem 2.8rem 2.5rem 2.8rem;
   max-width: 1500px;
   width: 99vw;
@@ -254,219 +284,57 @@ function cancelarImportacion() {
   align-items: center;
   justify-content: center;
   text-align: center;
+  position: relative;
 }
-.importar-header,
-.visualizacion-header {
+.cerrar-x {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 10;
+}
+.importar-header {
   width: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
 }
-.importar-header h2,
-.visualizacion-header h3 {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
+.importar-titulo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #b71c1c;
 }
 .importar-instruccion {
-  color: #222;
-  font-size: 1.15rem;
-  margin-bottom: 2.2rem;
-  text-align: center;
-  width: 100%;
-  font-weight: 500;
+  margin-bottom: 1.2rem;
+  color: #444;
+  font-size: 1.1rem;
 }
 .importar-form-row {
   display: flex;
-  flex-direction: row;
   align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 1.2rem;
   justify-content: center;
-  width: 100%;
-  margin-bottom: 2.5rem;
-  gap: 1.7rem;
-}
-.importar-file {
-  background: #fff;
-  border-radius: 14px;
-  font-size: 1.1rem;
-  min-width: 320px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-  margin-top: 0.5rem;
-}
-.importar-btn-main,
-.importar-btn {
-  background: #111;
-  color: #fff;
-  font-size: 1.15rem;
-  font-weight: bold;
-  padding: 0.9rem 2.5rem;
-  border-radius: 14px;
-  min-width: 170px;
-  transition: background 0.2s, box-shadow 0.2s, filter 0.2s;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.7rem;
-}
-.importar-btn-main:hover,
-.importar-btn:hover {
-  background: #333;
-  filter: brightness(0.92);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
-}
-.visualizacion-header h3 {
-  background: #e53935;
-  color: #fff;
-  padding: 0.9rem 0.5rem 0.9rem 0.5rem;
-  text-align: center;
-  border-radius: 10px 10px 0 0;
-  margin-bottom: 1.1rem;
-  font-size: 1.45rem;
-  font-weight: bold;
-  width: 100%;
-  letter-spacing: 1px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  border-bottom: 3px solid #f5f5f5;
 }
 .tabla-container {
-  background: transparent;
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto 2.2rem auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  margin-top: 1.2rem;
+  margin-bottom: 1.2rem;
 }
 .tabla-scroll {
-  min-width: 1200px;
-  max-width: 1400px;
-  background: #fff;
-  border-radius: 14px;
-  padding: 1.2rem 1.2rem 1.2rem 1.2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow-x: auto;
   overflow-y: auto;
-  max-height: 900px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-}
-.tabla-scroll-center {
-  margin-left: auto;
-  margin-right: auto;
-  width: fit-content;
-  max-width: 100%;
-  display: flex;
-  justify-content: center;
-}
-.tabla-excel {
-  background: #e3f6ff;
-  border-radius: 8px;
-  font-size: 1.05rem;
-  font-weight: 500;
-  min-width: 1200px;
-  color: #222;
-  font-family: 'Roboto', Arial, 'Open Sans', sans-serif;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-}
-.tabla-excel thead tr {
-  background: #1565c0;
-  color: #fff;
-  font-weight: bold;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  font-size: 1.25rem;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  border-bottom: 5px solid #e53935;
-}
-.tabla-excel th {
-  background: #1565c0 !important;
-  color: #fff !important;
-  font-weight: 900 !important;
-  font-size: 1.25rem !important;
-  padding: 1.1rem 1.6rem !important;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.10);
-  border-bottom: 5px solid #e53935;
-  box-shadow: 0 2px 8px rgba(13,71,161,0.10);
-  letter-spacing: 1.5px;
-}
-.tabla-excel td {
-  padding: 1.1rem 1.6rem;
-  text-align: center !important;
-  min-width: 120px !important;
-}
-.tabla-excel tbody tr:nth-child(even) {
-  background: #e3f0fa;
-}
-.tabla-excel tbody tr:nth-child(odd) {
-  background: #e3f6ff;
+  max-height: 400px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 1rem;
 }
 .acciones-previa {
-  width: 100%;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 2.5rem;
-  margin-top: 3.5rem;
+  justify-content: flex-end;
+  gap: 1.2rem;
+  margin-top: 0.5rem;
   margin-bottom: 0.5rem;
-  padding-bottom: 0.5rem;
-  background: transparent;
-  position: relative;
-  z-index: 1;
-}
-.acciones-btn {
-  min-width: 170px;
-  max-width: 220px;
-  width: 100%;
-  font-size: 1.15rem;
-  font-weight: bold;
-  border-radius: 14px;
-  padding: 1rem 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.7rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
-}
-.cancelar-btn {
-  background: #b71c1c;
-  color: #fff;
-  border-radius: 14px;
-  transition: background 0.2s, box-shadow 0.2s, filter 0.2s;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
-}
-.cancelar-btn:hover {
-  background: #f44336;
-  filter: brightness(0.92);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
-}
-.tabla-excel th:nth-child(1), .tabla-excel td:nth-child(1) { min-width: 90px !important; }
-.tabla-excel th:nth-child(2), .tabla-excel td:nth-child(2) { min-width: 90px !important; }
-.tabla-excel th:nth-child(3), .tabla-excel td:nth-child(3) { min-width: 90px !important; }
-.tabla-excel th:nth-child(4), .tabla-excel td:nth-child(4) { min-width: 220px !important; }
-.tabla-excel th:nth-child(5), .tabla-excel td:nth-child(5) { min-width: 140px !important; }
-.tabla-excel th:nth-child(6), .tabla-excel td:nth-child(6) { min-width: 90px !important; }
-.tabla-excel th:nth-child(7), .tabla-excel td:nth-child(7) { min-width: 120px !important; }
-.tabla-excel th:nth-child(8), .tabla-excel td:nth-child(8) { min-width: 90px !important; }
-.tabla-excel th:nth-child(9), .tabla-excel td:nth-child(9) { min-width: 90px !important; }
-.tabla-excel th:nth-child(10), .tabla-excel td:nth-child(10) { min-width: 90px !important; }
-.tabla-excel th:nth-child(11), .tabla-excel td:nth-child(11) { min-width: 90px !important; }
-.tabla-excel th:nth-child(12), .tabla-excel td:nth-child(12) { min-width: 90px !important; }
-.tabla-excel th:nth-child(13), .tabla-excel td:nth-child(13) { min-width: 90px !important; }
-.tabla-excel th:nth-child(14), .tabla-excel td:nth-child(14) { min-width: 110px !important; }
-@media (max-width: 900px) {
-  .acciones-previa {
-    flex-direction: column;
-    gap: 1.2rem;
-    margin-top: 2.2rem;
-    width: 100%;
-  }
 }
 </style>
