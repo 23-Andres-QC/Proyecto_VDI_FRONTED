@@ -1,12 +1,19 @@
 const routes = [
-  // Rutas de la aplicación
+  // Ruta principal que usa el layout vacío
   {
     path: '/',
+    component: () => import('layouts/EmptyLayout.vue'),
+    children: [
+      { path: '/', component: () => import('pages/HomePantalla.vue') },
+    ],
+  },
+
+  // Rutas que usan MainLayout.vue como padre
+  {
+    path: '/Jehu',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '/login', component: () => import('pages/LoginPage.vue') },
       { path: '/reset-password', component: () => import('pages/ChangePasswordForm.vue') },
-      { path: '', component: () => import('pages/HomePantalla.vue') },
       { path: '/usuarios', component: () => import('pages/RegisterPage.vue') },
       { path: '/perfil-p', component: () => import('pages/Perfil_profesor_page.vue') },
       { path: '/perfil-a', component: () => import('pages/Perfil_Administrador_page.vue') },
@@ -61,3 +68,5 @@ const routes = [
 ]
 
 export default routes
+
+
