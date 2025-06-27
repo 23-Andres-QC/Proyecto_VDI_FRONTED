@@ -4,10 +4,14 @@
     {
       "type": "shell",
       "label": "Quasar Dev Server",
-      "command": "quasar dev",
+      "command": "npm",
+      "args": ["run", "dev"],
       "group": "build",
-      "isBackground": false,
-      "problemMatcher": ["$tsc"]
+      "isBackground": true,
+      "problemMatcher": [],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
     }
   ]
 }
