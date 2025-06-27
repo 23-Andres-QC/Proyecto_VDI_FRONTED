@@ -272,7 +272,7 @@ export async function exportarExcelPorTipo(
         const { tipoReporte = '', periodo = '', filtros = '' } = datosCorreo
         datosExtra = {
           tipo: tipoReporte,
-          nombreUsuario: 'usuario1',
+          nombreUsuario: localStorage.getItem('nombreyApellido'), // Toma el nombre del usuario logueado
           filtros,
         }
         const plantilla = getCorreoReporte({

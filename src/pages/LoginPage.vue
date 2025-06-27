@@ -73,6 +73,13 @@ async function handleLogin() {
 
     localStorage.setItem('user_token', response.data.token)
     localStorage.setItem('user_data', JSON.stringify(response.data))
+    // Aquí se guarda el idUsuario para usarlo en otras partes de la app
+    localStorage.setItem('idUsuario', response.data.idUsuario)
+    // Guardar el nombre y apellido del usuario
+    localStorage.setItem('nombreyApellido', response.data.nombreyApellido)
+
+    //aqui se guarda el estado del usuario
+    localStorage.setItem('estado', response.data.estado)
 
     if (response.data.idRol === 1) {
       router.push('/perfil-a')

@@ -413,7 +413,7 @@ async function importarExcel() {
   try {
     console.log('Datos enviados al backend:', apiData.value.length ? apiData.value : tabla.value)
     await api.post(
-      '/api/Revista?idUsuario=6&tipoRevista=SCI',
+      `/api/Revista?idUsuario=${localStorage.getItem('idUsuario')}&tipoRevista=SCI`,
       apiData.value.length ? apiData.value : tabla.value,
     )
     $q.notify({ type: 'positive', message: 'Importación completada' })

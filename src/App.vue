@@ -1,5 +1,8 @@
 <template>
   <router-view />
+  <InhabilitadoBanner />
 </template>
 
-<script setup></script>
+<script setup>
+import InhabilitadoBanner from 'components/InhabilitadoBanner.vue'
+</script>
