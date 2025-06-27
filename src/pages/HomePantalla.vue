@@ -459,7 +459,6 @@ import MisionImg from '../assets/Home_imagenes/mision.jpg'
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 import ChatBot from '../components/ChatBot.vue'
 
-const { getScrollTarget, setVerticalScrollPosition } = scroll
 export default defineComponent({
   name: 'HomePantalla',
   components: {
@@ -486,7 +485,14 @@ export default defineComponent({
       intervalId = setInterval(() => {
         idx = (idx + 1) % heroImages.length
         currentHeroImage.value = heroImages[idx]
-        console.log('Cambiando imagen a:', currentHeroImage.value, 'Índice:', idx + 1, 'de', heroImages.length) // Debug mejorado
+        console.log(
+          'Cambiando imagen a:',
+          currentHeroImage.value,
+          'Índice:',
+          idx + 1,
+          'de',
+          heroImages.length,
+        ) // Debug mejorado
       }, 4000) // Cambiar cada 4 segundos para dar más tiempo a ver cada imagen
     })
     onBeforeUnmount(() => {
