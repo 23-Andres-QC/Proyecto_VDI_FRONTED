@@ -27,34 +27,30 @@
           <q-btn flat label="Portal Académico" @click="openPortalAcademico" />
           <q-btn flat label="Nosotros" @click="scrollTo('nosotros')" />
           <q-btn flat label="Recursos" @click="openRecursos" />
-          <q-btn-dropdown
-            flat
-            label="Publicaciones"
-            @mouseover="showDropdown"
-            @mouseleave="hideDropdown"
-            :model="dropdownVisible"
-          >
-            <q-list>
-              <q-item clickable>
-                <q-item-section>Publicaciones 2020</q-item-section>
-              </q-item>
-              <q-item clickable>
-                <q-item-section>Publicaciones 2021</q-item-section>
-              </q-item>
-              <q-item clickable>
-                <q-item-section>Publicaciones 2022</q-item-section>
-              </q-item>
-              <q-item clickable>
-                <q-item-section>Publicaciones 2023</q-item-section>
-              </q-item>
-              <q-item clickable>
-                <q-item-section>Publicaciones 2024</q-item-section>
-              </q-item>
-              <q-item clickable>
-                <q-item-section>Publicaciones 2025</q-item-section>
-              </q-item>
-            </q-list>
-          </q-btn-dropdown>
+          <div class="dropdown-container" @mouseenter="showDropdown" @mouseleave="hideDropdown">
+            <q-btn-dropdown flat label="Publicaciones" v-model="dropdownVisible" auto-close>
+              <q-list>
+                <q-item clickable>
+                  <q-item-section>Publicaciones 2020</q-item-section>
+                </q-item>
+                <q-item clickable>
+                  <q-item-section>Publicaciones 2021</q-item-section>
+                </q-item>
+                <q-item clickable>
+                  <q-item-section>Publicaciones 2022</q-item-section>
+                </q-item>
+                <q-item clickable>
+                  <q-item-section>Publicaciones 2023</q-item-section>
+                </q-item>
+                <q-item clickable>
+                  <q-item-section>Publicaciones 2024</q-item-section>
+                </q-item>
+                <q-item clickable>
+                  <q-item-section>Publicaciones 2025</q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
+          </div>
           <q-btn class="login-btn" label="Inicio sesión" @click="goToLogin" />
         </div>
       </q-toolbar>
@@ -69,10 +65,20 @@
       <div class="hero-background">
         <img
           :src="currentHeroImage"
+          :key="currentHeroImage"
           alt="Estudiante investigando en biblioteca"
           class="hero-image"
         />
         <div class="hero-overlay"></div>
+
+        <!-- Indicadores de imagen activa -->
+        <div class="hero-indicators">
+          <div
+            v-for="(image, index) in heroImages"
+            :key="index"
+            :class="['indicator', { active: currentHeroImage === image }]"
+          ></div>
+        </div>
       </div>
 
       <!-- Contenido principal sobre la imagen -->
@@ -350,73 +356,80 @@
     <footer class="footer">
       <div class="footer-container">
         <div class="footer-content">
-          <!-- Primera columna: Logo y contacto -->
-          <div class="footer-section">
-            <div class="logo-section">
-              <div class="logo">
-                <div class="logo-icon">
-                  <q-icon name="warning" size="20px" />
+          <!-- Primera columna: Logo, redes sociales e información institucional -->
+          <div class="footer-section logo-info-section">
+            <div class="footer-logo-section">
+              <div class="footer-logo">
+                <div class="footer-logo-icon">
+                  <q-icon name="school" size="24px" color="white" />
                 </div>
-                <div>
-                  <div class="logo-text">esan</div>
+                <div class="footer-logo-text">
+                  <div class="university-name">ESAN</div>
+                  <div class="department-name">VICERRECTORADO DE INVESTIGACIÓN</div>
                 </div>
-              </div>
-              <div class="department">
-                VICERRECTORADO DE<br />
-                INVESTIGACIÓN
               </div>
             </div>
 
-            <div class="contact-info" @click="sendEmail">
-              <q-icon name="email" size="16px" />
-              <span>dinv@esan.edu.pe</span>
-            </div>
-
-            <div class="social-section">
-              <h3>Nuestras Redes Sociales</h3>
+            <!-- Sección de redes sociales movida aquí -->
+            <div class="social-section-integrated">
+              <h4 class="footer-subtitle">NUESTRAS REDES SOCIALES</h4>
+              <p class="social-description">Mantente conectado con nosotros</p>
               <div class="social-links">
                 <a href="#" class="social-link" aria-label="Facebook">
                   <i class="fa-brands fa-facebook-f"></i>
                 </a>
+                <a href="#" class="social-link" aria-label="Instagram">
+                  <i class="fa-brands fa-instagram"></i>
+                </a>
                 <a href="#" class="social-link" aria-label="LinkedIn">
                   <i class="fa-brands fa-linkedin-in"></i>
                 </a>
-                <a href="#" class="social-link" aria-label="x-Twitter">
+                <a href="#" class="social-link" aria-label="X Twitter">
                   <i class="fa-brands fa-x-twitter"></i>
-                </a>
-                <a href="#" class="social-link" aria-label="Instagram">
-                  <i class="fa-brands fa-instagram"></i>
                 </a>
               </div>
             </div>
           </div>
 
-          <!-- Segunda columna: Sobre ESAN VDI -->
-          <div class="footer-section">
-            <h3>Sobre ESAN VDI</h3>
-            <ul>
+          <!-- Segunda columna: Enlaces institucionales -->
+          <div class="footer-section links-section">
+            <h3 class="footer-title">Sobre ESAN VDI</h3>
+            <ul class="footer-links">
               <li><a href="#nosotros" @click="scrollTo('nosotros')">Nosotros</a></li>
+              <li>
+                <a href="#investigacion" @click="scrollTo('investigacion')"
+                  >Líneas de Investigación</a
+                >
+              </li>
               <li><a href="#gestion-investigacion">Gestión de la Investigación</a></li>
               <li><a href="#esan-ediciones" @click="openEsanEdiciones">ESAN Ediciones</a></li>
             </ul>
           </div>
 
-          <!-- Tercera columna: Información de interés -->
-          <div class="footer-section">
-            <h3>Información de Interés</h3>
-            <ul>
+          <!-- Tercera columna: Información legal y recursos -->
+          <div class="footer-section info-section">
+            <h3 class="footer-title">Información de Interés</h3>
+            <ul class="footer-links">
               <li><a href="#politica-privacidad">Política de Privacidad</a></li>
-              <li><a href="#libro-reclamaciones">Libro de reclamaciones</a></li>
+              <li><a href="#libro-reclamaciones">Libro de Reclamaciones</a></li>
+              <li><a href="#terminos-condiciones">Términos y Condiciones</a></li>
             </ul>
 
-            <div class="book-icon">
-              <q-icon name="menu_book" size="48px" />
+            <div class="footer-icon-section">
+              <q-icon name="menu_book" size="56px" color="rgba(255,255,255,0.3)" />
             </div>
           </div>
         </div>
 
+        <!-- Línea divisoria y copyright -->
         <div class="footer-bottom">
-          <!-- Copyright removido según solicitud -->
+          <div class="footer-divider"></div>
+          <div class="footer-copyright">
+            <p>
+              &copy; 2025 Universidad ESAN - Vicerrectorado de Investigación. Todos los derechos
+              reservados.
+            </p>
+          </div>
         </div>
       </div>
     </footer>
@@ -430,6 +443,14 @@
 import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue'
 import { scroll } from 'quasar'
 import { useRouter } from 'vue-router'
+
+// Importar las imágenes del hero
+import CampusEsanImg from '../assets/Home_imagenes/CampusEsan.jpg'
+import EstudianteImg from '../assets/Home_imagenes/Estudiante.jpg'
+import VicerrectoradoImg from '../assets/Home_imagenes/Vicerrectorado.jpg'
+import Vicerrectorado1Img from '../assets/Home_imagenes/Vicerrectorado1.jpg'
+import MisionImg from '../assets/Home_imagenes/mision.jpg'
+
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 
 export default defineComponent({
@@ -439,28 +460,39 @@ export default defineComponent({
     function goToLogin() {
       router.push('/login')
     }
-    // Imagen hero transicionable
+    // Imagen hero transicionable - usando imports de todas las imágenes disponibles
     const heroImages = [
-      'src/assets/Home_imagenes/CampusEsan.jpg',
-      'src/assets/Home_imagenes/Estudiante.jpg',
+      CampusEsanImg,
+      EstudianteImg,
+      VicerrectoradoImg,
+      Vicerrectorado1Img,
+      MisionImg,
     ]
     const currentHeroImage = ref(heroImages[0])
     let intervalId = null
+
     onMounted(() => {
       let idx = 0
       intervalId = setInterval(() => {
         idx = (idx + 1) % heroImages.length
         currentHeroImage.value = heroImages[idx]
-      }, 3000)
+        console.log('Cambiando imagen a:', currentHeroImage.value, 'Índice:', idx + 1, 'de', heroImages.length) // Debug mejorado
+      }, 4000) // Cambiar cada 4 segundos para dar más tiempo a ver cada imagen
     })
     onBeforeUnmount(() => {
       if (intervalId) clearInterval(intervalId)
     })
-    return { goToLogin, currentHeroImage }
+
+    return {
+      goToLogin,
+      currentHeroImage,
+      heroImages, // Exponer heroImages para los indicadores
+    }
   },
   data() {
     return {
       dropdownVisible: false,
+      dropdownTimer: null, // Timer para controlar el delay
     }
   },
   methods: {
@@ -495,29 +527,27 @@ export default defineComponent({
       window.open('https://biblioteca.uesan.edu.pe/', '_blank')
     },
     showDropdown() {
+      // Limpiar cualquier timer existente
+      if (this.dropdownTimer) {
+        clearTimeout(this.dropdownTimer)
+        this.dropdownTimer = null
+      }
       this.dropdownVisible = true
     },
     hideDropdown() {
-      this.dropdownVisible = false
+      // Agregar un pequeño delay antes de cerrar
+      this.dropdownTimer = setTimeout(() => {
+        this.dropdownVisible = false
+        this.dropdownTimer = null
+      }, 150) // 150ms de delay
     },
   },
-  openUeEsan() {
-    console.log('Opening link: https://www.ue.edu.pe/pregrado/')
-    window.open('https://www.ue.edu.pe/pregrado/', '_blank')
-  },
-  openRecursos() {
-    console.log('Opening link: https://biblioteca.uesan.edu.pe/')
-    window.open('https://biblioteca.uesan.edu.pe/', '_blank')
-  },
-  showDropdown() {
-    this.dropdownVisible = true
-  },
-  hideDropdown() {
-    this.dropdownVisible = false
-  },
-  // Función para enviar email
-  sendEmail() {
-    window.location.href = 'mailto:dinv@esan.edu.pe'
+  beforeUnmount() {
+    // Limpiar el timer del dropdown al desmontar el componente
+    if (this.dropdownTimer) {
+      clearTimeout(this.dropdownTimer)
+      this.dropdownTimer = null
+    }
   },
 })
 </script>
@@ -663,13 +693,30 @@ export default defineComponent({
 }
 
 .nav-menu .q-btn:hover {
-  color: #e53e3e !important;
+  color: white !important;
   background: rgba(229, 62, 62, 0.1) !important;
+  border: 2px solid #ff3333 !important;
+  border-radius: 6px;
 }
 
 .login-btn:hover {
   background: #c53030 !important;
   transform: translateY(-2px);
+}
+
+/* Estilos para el dropdown de publicaciones */
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-container .q-btn-dropdown {
+  transition: all 0.3s ease;
+}
+
+.dropdown-container:hover .q-btn-dropdown {
+  background: rgba(229, 62, 62, 0.1) !important;
+  color: #e53e3e !important;
 }
 
 /* ========================================= */
@@ -693,12 +740,63 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   z-index: 1;
+  overflow: hidden;
 }
 
 .hero-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: all 2s ease-in-out; /* Transición más larga para múltiples imágenes */
+  animation: fadeInScale 2s ease-in-out; /* Animación de entrada con escala */
+}
+
+/* Animación mejorada de fade in con escala para múltiples imágenes */
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(1.1);
+    filter: blur(2px);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Indicadores de imagen activa */
+.hero-indicators {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 3;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator.active {
+  background: #e53e3e;
+  transform: scale(1.2);
+}
+
+.indicator:hover {
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .hero-overlay {
@@ -740,7 +838,7 @@ export default defineComponent({
 
 .hero-card {
   background: linear-gradient(135deg, #e53e3e, #ff6b6b);
-  color: rgb(163, 160, 160);
+  color: white;
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 200px;
@@ -753,6 +851,7 @@ export default defineComponent({
   h3 {
     margin-top: 1rem;
     font-size: 1.1rem;
+    color: white;
   }
 }
 
@@ -912,20 +1011,28 @@ export default defineComponent({
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
   margin-top: 3rem;
+  perspective: 1000px; /* Agregar perspectiva para efectos 3D sutiles */
 }
 
 .research-card {
   background: #c1c0c0 !important; /* Forzar el color solicitado */
   box-shadow: none !important; /* Asegurar que no haya sombras que alteren la percepción del color */
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Transición suave con easing personalizado */
+  cursor: pointer; /* Indicar que es interactivo */
+  transform-origin: center; /* Punto de origen para la transformación */
+  border-radius: 8px; /* Bordes redondeados */
 
   &:hover {
     background: #f7c0c0 !important;
+    transform: scale(0.85) translateY(-5px); /* Contracción más pronunciada y elevar más */
+    box-shadow: 0 12px 35px rgba(229, 62, 62, 0.35) !important; /* Sombra más intensa */
   }
 
   &.full-width {
     grid-column: 1 / -1;
     max-width: 400px;
     margin: 0 auto;
+    justify-self: center; /* Centrar la tarjeta en el grid */
   }
 
   h3 {
@@ -933,23 +1040,35 @@ export default defineComponent({
     margin-top: 1rem;
     color: #333;
     font-weight: 600;
+    transition: all 0.3s ease; /* Transición suave para el color del texto */
+  }
+
+  &:hover h3 {
+    color: #e53e3e; /* Cambiar color del texto en hover */
+    transform: scale(1.08); /* Aumentar más el tamaño del texto */
   }
 }
 
 .research-icon {
   color: #e53e3e;
+  transition: all 0.3s ease; /* Transición suave para el ícono */
+}
+
+.research-card:hover .research-icon {
+  transform: scale(1.2) rotate(8deg); /* Aumentar más el tamaño y rotar más */
+  color: #c53030; /* Color más oscuro en hover */
 }
 
 /* ========================================= */
-/* ESTILOS DE LA SECCIÓN DE CONTACTO */
+/* ESTILOS DEL FOOTER MEJORADO */
 /* ========================================= */
 .footer {
-  background: #000000;
+  background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
   color: white;
-  padding: 40px 0 20px;
+  padding: 40px 0 15px;
   margin-top: auto;
   width: 100%;
-  min-height: 200px; /* Asegurar altura mínima */
+  min-height: 200px;
 }
 
 .footer-container {
@@ -960,131 +1079,287 @@ export default defineComponent({
 
 .footer-content {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 40px;
-  margin-bottom: 30px;
+  grid-template-columns: 1.8fr 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 25px;
 }
 
-.footer-section h3 {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-transform: uppercase;
+/* Sección del logo e información institucional */
+.logo-info-section {
+  padding-right: 20px;
 }
 
-.footer-section ul {
-  list-style: none;
-}
-
-.footer-section ul li {
-  margin-bottom: 12px;
-}
-
-.footer-section ul li a {
-  color: white;
-  text-decoration: none;
-  font-size: 14px;
-  transition: opacity 0.3s ease;
-}
-
-.footer-section ul li a:hover {
-  opacity: 0.8;
-  text-decoration: underline;
-}
-
-.logo-section {
+.footer-logo-section {
   margin-bottom: 20px;
 }
 
-.logo {
+.footer-logo {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.footer-logo-icon {
+  background: rgba(229, 62, 62, 0.2);
+  border-radius: 50%;
+  padding: 12px;
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  justify-content: center;
+  min-width: 48px;
+  height: 48px;
 }
 
-.logo-icon {
+.footer-logo-text .university-name {
+  font-size: 28px;
+  font-weight: bold;
+  color: #e53e3e;
+  margin-bottom: 5px;
+}
+
+.footer-logo-text .department-name {
+  font-size: 14px;
+  opacity: 0.9;
+  line-height: 1.4;
+  color: #ffffff;
+}
+
+/* Sección de redes sociales integrada */
+.social-section-integrated {
+  margin: 15px 0;
+  padding: 15px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.social-section-integrated .footer-subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #e53e3e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.social-section-integrated .social-description {
+  font-size: 13px;
+  opacity: 0.8;
+  margin-bottom: 15px;
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+.social-section-integrated .social-links {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.social-section-integrated .social-link {
   width: 40px;
   height: 40px;
-  background: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 15px;
+  color: white;
+  text-decoration: none;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.logo-icon i {
-  color: #000000;
-  font-size: 20px;
+.social-section-integrated .social-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #e53e3e, #ff6b6b);
+  transition: all 0.4s ease;
+  z-index: 0;
 }
 
-.logo-text {
-  font-size: 24px;
+.social-section-integrated .social-link:hover::before {
+  left: 0;
+}
+
+.social-section-integrated .social-link:hover {
+  border-color: #e53e3e;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 15px rgba(229, 62, 62, 0.3);
+}
+
+.social-section-integrated .social-link i {
+  font-size: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-subtitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #e53e3e;
+  text-transform: uppercase;
+}
+
+/* Secciones de enlaces */
+.links-section,
+.info-section {
+  padding-top: 10px;
+}
+
+.footer-title {
+  font-size: 18px;
   font-weight: bold;
-}
-
-.department {
-  font-size: 14px;
-  opacity: 0.9;
   margin-bottom: 15px;
+  color: #e53e3e;
+  text-transform: uppercase;
+  position: relative;
 }
 
-.contact-info {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+.footer-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: #e53e3e;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 8px;
+}
+
+.footer-links li a {
+  color: #ffffff;
+  text-decoration: none;
   font-size: 14px;
+  transition: all 0.3s ease;
+  position: relative;
+  padding-left: 0;
 }
 
-.contact-info i {
-  margin-right: 10px;
-  width: 16px;
+.footer-links li a:hover {
+  color: #e53e3e;
+  padding-left: 10px;
 }
 
-.social-section h3 {
-  margin-bottom: 15px;
+.footer-links li a::before {
+  content: '→';
+  position: absolute;
+  left: -15px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.footer-links li a:hover::before {
+  opacity: 1;
+  left: -10px;
+}
+
+/* Sección del icono decorativo */
+.footer-icon-section {
+  text-align: center;
+  margin-top: 30px;
+  opacity: 0.3;
+}
+
+/* Sección de redes sociales */
+.social-section {
+  text-align: center;
+  padding-top: 10px;
+}
+
+.social-description {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 25px;
+  line-height: 1.5;
 }
 
 .social-links {
   display: flex;
+  justify-content: center;
   gap: 15px;
+  flex-wrap: wrap;
 }
 
 .social-link {
-  width: 40px;
-  height: 40px;
-  border: 2px solid white;
+  width: 45px;
+  height: 45px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #e53e3e, #ff6b6b);
+  transition: all 0.4s ease;
+  z-index: 0;
+}
+
+.social-link:hover::before {
+  left: 0;
 }
 
 .social-link:hover {
-  background: white;
-  color: #000000;
-  transform: translateY(-2px);
+  border-color: #e53e3e;
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 0 8px 20px rgba(229, 62, 62, 0.3);
 }
 
-.book-icon {
-  text-align: center;
-  margin-top: 20px;
+.social-link i {
+  font-size: 18px;
+  position: relative;
+  z-index: 1;
 }
 
-.book-icon i {
-  font-size: 48px;
-  opacity: 0.8;
-}
-
+/* Footer bottom */
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-  padding-top: 20px;
+  margin-top: 15px;
+}
+
+.footer-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  margin-bottom: 20px;
+}
+
+.footer-copyright {
   text-align: center;
+  padding: 10px 0;
+}
+
+.footer-copyright p {
   font-size: 12px;
-  opacity: 0.8;
+  opacity: 0.7;
+  margin: 0;
 }
 
 @media (max-width: 768px) {
@@ -1136,10 +1411,6 @@ export default defineComponent({
   margin-bottom: 1rem; // Reducir el margen inferior del título
 }
 
-.contact-item {
-  margin-bottom: 1rem; // Reducir el margen entre elementos de contacto
-}
-
 .social-links {
   margin-top: 1rem; // Reducir el margen superior de los enlaces sociales
 }
@@ -1165,6 +1436,22 @@ export default defineComponent({
   .mission-image-container {
     height: 300px;
     margin-top: 1rem;
+  }
+
+  /* Footer responsive para tablets */
+  .footer-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .logo-info-section {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding-right: 0;
+  }
+
+  .social-section-integrated .social-links {
+    justify-content: center;
   }
 }
 
@@ -1201,22 +1488,31 @@ export default defineComponent({
     text-align: left;
   }
 
-  /* Footer responsivo */
-  .contact-section .row {
-    flex-direction: column;
+  /* Footer responsivo para móviles */
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    text-align: center;
   }
 
-  .contact-info {
-    margin-bottom: 2rem;
+  .footer-logo {
+    justify-content: center;
   }
 
-  .site-map .row {
-    flex-direction: column;
+  .footer-links li a::before {
+    display: none;
   }
 
-  .site-map .col-6 {
-    width: 100%;
-    margin-bottom: 1rem;
+  .footer-links li a:hover {
+    padding-left: 0;
+  }
+
+  .social-section-integrated .social-links {
+    justify-content: center;
+  }
+
+  .social-links {
+    justify-content: center;
   }
 }
 
@@ -1234,6 +1530,41 @@ export default defineComponent({
   .contact-title,
   .map-title {
     font-size: 1.5rem;
+  }
+
+  /* Footer para dispositivos muy pequeños */
+  .footer {
+    padding: 25px 0 10px;
+  }
+
+  .footer-container {
+    padding: 0 15px;
+  }
+
+  .footer-content {
+    gap: 20px;
+  }
+
+  .footer-logo-text .university-name {
+    font-size: 24px;
+  }
+
+  .footer-logo-text .department-name {
+    font-size: 12px;
+  }
+
+  .social-link {
+    width: 40px;
+    height: 40px;
+  }
+
+  .social-section-integrated .social-link {
+    width: 35px;
+    height: 35px;
+  }
+
+  .social-section-integrated .social-link i {
+    font-size: 14px;
   }
 }
 </style>
