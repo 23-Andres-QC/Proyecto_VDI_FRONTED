@@ -51,6 +51,12 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     } else if (to.path.startsWith('/log')) {
       if (!isAuthenticated()) {
         next('/login')
+      } else if (localStorage.getItem('estado') !== '1') {
+        // Mostrar banner negro flotante si el usuario está inhabilitado
+        window.showInhabilitadoBanner && window.showInhabilitadoBanner()
+        setTimeout(() => {
+          next('/')
+        }, 3000)
       } else {
         next()
       }

@@ -216,7 +216,18 @@ function onFileChange(file) {
         let val = idx !== undefined ? rowArr[idx] : ''
         // --- Conversión automática según tipo de campo en la base de datos ---
         const stringFields = [
-          'ISSN', 'ISSN2', 'ISSN3', 'Nombre', 'Categoria2', 'SCOPUS', 'WoS_Q', 'ESCI_Q', 'AJG', 'CNRS', 'ABDC', 'WoS_LATAM'
+          'ISSN',
+          'ISSN2',
+          'ISSN3',
+          'Nombre',
+          'Categoria2',
+          'SCOPUS',
+          'WoS_Q',
+          'ESCI_Q',
+          'AJG',
+          'CNRS',
+          'ABDC',
+          'WoS_LATAM',
         ]
         const floatFields = ['Puntaje']
         const intFields = ['IncentivoUSD']
@@ -242,7 +253,7 @@ async function importarExcel() {
   if (!tabla.value.length) return
   try {
     await api.post(
-      '/api/Revista?idUsuario=5&tipoRevista=LCD',
+      `/api/Revista?idUsuario=${localStorage.getItem('idUsuario')}&tipoRevista=LCD`,
       apiData.value.length ? apiData.value : tabla.value,
     )
     Notify.create({ type: 'positive', message: 'Importación completada' })
