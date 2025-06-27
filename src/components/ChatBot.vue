@@ -48,7 +48,7 @@
         min-height: 38rem;
         height: 38rem;
         max-height: 38rem;
-        background: url('/src/components/chat_components/image/fondo_chat.jpg') center center/cover
+        background: url('/src/components/chat_components/image/pino.jpg') center center/cover
           no-repeat;
       "
     >
