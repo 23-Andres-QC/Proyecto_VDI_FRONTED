@@ -3,10 +3,14 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/EmptyLayout.vue'),
-    children: [
-      { path: '/', component: () => import('pages/HomePantalla.vue') },
-    ],
+    children: [{ path: '/', component: () => import('pages/HomePantalla.vue') }],
   },
+
+  // Ruta de login independiente
+  { path: '/login', component: () => import('pages/LoginPage.vue') },
+
+  // Ruta de chat independiente
+  { path: '/chat', component: () => import('components/ChatBot.vue') },
 
   // Rutas que usan MainLayout.vue como padre
   {
@@ -18,7 +22,6 @@ const routes = [
       { path: '/perfil-p', component: () => import('pages/Perfil_profesor_page.vue') },
       { path: '/perfil-a', component: () => import('pages/Perfil_Administrador_page.vue') },
       { path: '/importar-docentes', component: () => import('pages/ImportarDocentesPage.vue') },
-      { path: '/chat', component: () => import('components/ChatBot.vue') },
     ],
   },
   {
@@ -68,5 +71,3 @@ const routes = [
 ]
 
 export default routes
-
-
