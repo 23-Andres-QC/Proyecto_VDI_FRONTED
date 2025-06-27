@@ -1,6 +1,13 @@
 const routes = [
   // Ruta principal que usa el layout vacío
   {
+  path: '/',
+  component: () => import('layouts/HomeLayout.vue'),
+  children: [
+    { path: '', component: () => import('pages/HomePantalla.vue') }
+  ]
+},
+  {
     path: '/',
     component: () => import('layouts/EmptyLayout.vue'),
     children: [
