@@ -191,6 +191,21 @@
     <section class="research-section" id="investigacion">
       <div class="container">
         <h2 class="research-title">Líneas de Investigación</h2>
+
+        <!-- Barra de navegación de facultades -->
+        <div class="faculty-navigation">
+          <div class="faculty-tabs">
+            <button
+              v-for="faculty in faculties"
+              :key="faculty.id"
+              @click="selectFaculty(faculty.id)"
+              :class="['faculty-tab', { active: selectedFaculty === faculty.id }]"
+            >
+              {{ faculty.name }}
+            </button>
+          </div>
+        </div>
+
         <div class="research-carousel-container">
           <!-- Botones de navegación -->
           <button
@@ -221,28 +236,27 @@
           >
             <div
               class="research-track"
-              :style="{ transform: `translateX(-${currentSlide * slideWidth}px)` }"
+              :style="{ transform: `translateX(-${currentSlide * (cardWidth + 48)}px)` }"
             >
-              <div class="research-slide" v-for="(slide, index) in researchSlides" :key="index">
-                <q-card
-                  v-for="item in slide"
-                  :key="item.id"
-                  class="research-card"
-                  :class="{ 'full-width': item.fullWidth }"
-                >
-                  <q-card-section class="text-center">
-                    <q-icon :name="item.icon" size="48px" class="research-icon" />
-                    <h3>{{ item.title }}</h3>
-                  </q-card-section>
-                </q-card>
-              </div>
+              <q-card
+                v-for="item in filteredResearchSlides"
+                :key="item.id"
+                class="research-card"
+                :class="{ 'full-width': item.fullWidth }"
+                :style="{ minWidth: cardWidth + 'px', width: cardWidth + 'px' }"
+              >
+                <q-card-section class="text-center">
+                  <q-icon :name="item.icon" size="48px" class="research-icon" />
+                  <h3>{{ item.title }}</h3>
+                </q-card-section>
+              </q-card>
             </div>
           </div>
 
           <!-- Indicadores de página -->
           <div class="carousel-indicators">
             <button
-              v-for="(slide, index) in researchSlides"
+              v-for="(slide, index) in filteredResearchSlides"
               :key="index"
               class="indicator-dot"
               :class="{ active: currentSlide === index }"
@@ -417,74 +431,133 @@ export default defineComponent({
       currentSlide: 0,
       slideWidth: 0,
       autoplayInterval: null,
+      visibleCards: 4, // Número de tarjetas visibles al mismo tiempo
+      cardWidth: 0, // Ancho de cada tarjeta individual
+      // Navegación por facultades
+      selectedFaculty: 'todas', // Facultad actualmente seleccionada
+      faculties: [
+        { id: 'todas', name: 'Todas las Facultades' },
+        { id: 'economicas', name: 'Facultad de Ciencias Económicas y Administrativas' },
+        { id: 'ingenieria', name: 'Facultad de Ingeniería' },
+        { id: 'derecho', name: 'Facultad de Derecho y Ciencias Sociales' },
+      ],
       researchSlides: [
         // Slide 1
-        [
-          { id: 1, icon: 'groups', title: 'ADMINISTRACIÓN' },
-          { id: 2, icon: 'gavel', title: 'DERECHO' },
-          { id: 3, icon: 'account_balance', title: 'CONTABILIDAD, COSTOS Y/O TRIBUTACIÓN' },
-          { id: 4, icon: 'hotel', title: 'TURISMO, HOTELERÍA Y GASTRONOMÍA' },
-        ],
+        { id: 1, icon: 'groups', title: 'ADMINISTRACIÓN', faculty: 'economicas' },
         // Slide 2
-        [
-          {
-            id: 5,
-            icon: 'precision_manufacturing',
-            title: 'DISEÑO INDUSTRIAL, AUTOMATIZACIÓN Y/O ROBÓTICA',
-          },
-          { id: 6, icon: 'trending_up', title: 'ECONOMÍA Y FINANZAS' },
-          { id: 7, icon: 'school', title: 'EDUCACIÓN Y GESTIÓN DEL CONOCIMIENTO' },
-          { id: 8, icon: 'lightbulb', title: 'EMPRENDIMIENTO E INNOVACIÓN' },
-        ],
+        { id: 2, icon: 'gavel', title: 'DERECHO', faculty: 'derecho' },
         // Slide 3
-        [
-          { id: 9, icon: 'handshake', title: 'ÉTICA, COMPLIANCE Y GOBERNANZA' },
-          { id: 10, icon: 'account_balance_wallet', title: 'GESTIÓN PÚBLICA Y POLÍTICAS PÚBLICAS' },
-          { id: 11, icon: 'public', title: 'GLOBALIZACIÓN Y NEGOCIOS INTERNACIONALES' },
-          {
-            id: 12,
-            icon: 'factory',
-            title: 'INDUSTRIAS EXTRACTIVAS AGROINDUSTRIA, PESCA Y ENERGÍA',
-          },
-        ],
+        {
+          id: 3,
+          icon: 'account_balance',
+          title: 'CONTABILIDAD, COSTOS Y/O TRIBUTACIÓN',
+          faculty: 'economicas',
+        },
         // Slide 4
-        [
-          {
-            id: 13,
-            icon: 'psychology',
-            title: 'LIDERAZGO, COMPORTAMIENTO ORGANIZACIONAL DEL GRUPO',
-          },
-          { id: 14, icon: 'campaign', title: 'MARKETING' },
-          { id: 15, icon: 'eco', title: 'MEDIO AMBIENTE' },
-          { id: 16, icon: 'settings', title: 'PRODUCCIÓN, PROCESOS Y/O GESTIÓN DE LA CALIDAD' },
-        ],
+        { id: 4, icon: 'hotel', title: 'TURISMO, HOTELERÍA Y GASTRONOMÍA', faculty: 'economicas' },
         // Slide 5
-        [
-          { id: 17, icon: 'psychology_alt', title: 'PSICOLOGÍA' },
-          {
-            id: 18,
-            icon: 'health_and_safety',
-            title: 'EDUCACIÓN, INDUSTRIAL, SALUD OCUPACIONAL Y/O SERVICIOS DE SALUD',
-          },
-          { id: 19, icon: 'computer', title: 'SISTEMAS Y TECNOLOGÍAS DE INFORMACIÓN' },
-          { id: 20, icon: 'local_shipping', title: 'SUPPLY CHAIN Y GESTIÓN LOGÍSTICA INTEGRAL' },
-        ],
-        // Slide 6 - Tarjeta destacada
-        [
-          {
-            id: 21,
-            icon: 'recycling',
-            title:
-              'DESARROLLO SOSTENIBLE, RESPONSABILIDAD SOCIAL EMPRESARIAL (RSE) Y/O CRECIMIENTO COMUNITARIO',
-            fullWidth: true,
-          },
-        ],
+        {
+          id: 5,
+          icon: 'precision_manufacturing',
+          title: 'DISEÑO INDUSTRIAL, AUTOMATIZACIÓN Y/O ROBÓTICA',
+          faculty: 'ingenieria',
+        },
+        // Slide 6
+        { id: 6, icon: 'trending_up', title: 'ECONOMÍA Y FINANZAS', faculty: 'economicas' },
+        // Slide 7
+        {
+          id: 7,
+          icon: 'school',
+          title: 'EDUCACIÓN Y GESTIÓN DEL CONOCIMIENTO',
+          faculty: 'derecho',
+        },
+        // Slide 8
+        { id: 8, icon: 'lightbulb', title: 'EMPRENDIMIENTO E INNOVACIÓN', faculty: 'economicas' },
+        // Slide 9
+        { id: 9, icon: 'handshake', title: 'ÉTICA, COMPLIANCE Y GOBERNANZA', faculty: 'derecho' },
+        // Slide 10
+        {
+          id: 10,
+          icon: 'account_balance_wallet',
+          title: 'GESTIÓN PÚBLICA Y POLÍTICAS PÚBLICAS',
+          faculty: 'derecho',
+        },
+        // Slide 11
+        {
+          id: 11,
+          icon: 'public',
+          title: 'GLOBALIZACIÓN Y NEGOCIOS INTERNACIONALES',
+          faculty: 'economicas',
+        },
+        // Slide 12
+        {
+          id: 12,
+          icon: 'factory',
+          title: 'INDUSTRIAS EXTRACTIVAS AGROINDUSTRIA, PESCA Y ENERGÍA',
+          faculty: 'ingenieria',
+        },
+        // Slide 13
+        {
+          id: 13,
+          icon: 'psychology',
+          title: 'LIDERAZGO, COMPORTAMIENTO ORGANIZACIONAL DEL GRUPO',
+          faculty: 'economicas',
+        },
+        // Slide 14
+        { id: 14, icon: 'campaign', title: 'MARKETING', faculty: 'economicas' },
+        // Slide 15
+        { id: 15, icon: 'eco', title: 'MEDIO AMBIENTE', faculty: 'ingenieria' },
+        // Slide 16
+        {
+          id: 16,
+          icon: 'settings',
+          title: 'PRODUCCIÓN, PROCESOS Y/O GESTIÓN DE LA CALIDAD',
+          faculty: 'ingenieria',
+        },
+        // Slide 17
+        { id: 17, icon: 'psychology_alt', title: 'PSICOLOGÍA', faculty: 'derecho' },
+        // Slide 18
+        {
+          id: 18,
+          icon: 'health_and_safety',
+          title: 'EDUCACIÓN, INDUSTRIAL, SALUD OCUPACIONAL Y/O SERVICIOS DE SALUD',
+          faculty: 'ingenieria',
+        },
+        // Slide 19
+        {
+          id: 19,
+          icon: 'computer',
+          title: 'SISTEMAS Y TECNOLOGÍAS DE INFORMACIÓN',
+          faculty: 'ingenieria',
+        },
+        // Slide 20
+        {
+          id: 20,
+          icon: 'local_shipping',
+          title: 'SUPPLY CHAIN Y GESTIÓN LOGÍSTICA INTEGRAL',
+          faculty: 'economicas',
+        },
+        // Slide 21 - Tarjeta destacada
+        {
+          id: 21,
+          icon: 'recycling',
+          title:
+            'DESARROLLO SOSTENIBLE, RESPONSABILIDAD SOCIAL EMPRESARIAL (RSE) Y/O CRECIMIENTO COMUNITARIO',
+          fullWidth: true,
+          faculty: 'economicas',
+        },
       ],
     }
   },
   computed: {
     totalSlides() {
-      return this.researchSlides.length
+      return this.filteredResearchSlides.length
+    },
+    filteredResearchSlides() {
+      if (this.selectedFaculty === 'todas') {
+        return this.researchSlides
+      }
+      return this.researchSlides.filter((slide) => slide.faculty === this.selectedFaculty)
     },
   },
   mounted() {
@@ -553,21 +626,27 @@ export default defineComponent({
         const carousel = this.$refs.carousel
         if (carousel) {
           this.slideWidth = carousel.offsetWidth
+          // Calcular el ancho de cada tarjeta considerando gaps
+          const gap = 48 // 3rem = 48px (aumentado para mayor separación)
+          this.cardWidth = (this.slideWidth - gap * (this.visibleCards - 1)) / this.visibleCards
         }
       })
     },
     nextSlide() {
-      if (this.currentSlide < this.totalSlides - 1) {
+      // Navegar hasta que la última tarjeta visible sea la última tarjeta del array
+      const maxSlide = this.filteredResearchSlides.length - this.visibleCards
+      if (this.currentSlide < maxSlide) {
         this.currentSlide++
       } else {
         this.currentSlide = 0 // Volver al inicio
       }
     },
     previousSlide() {
+      const maxSlide = this.filteredResearchSlides.length - this.visibleCards
       if (this.currentSlide > 0) {
         this.currentSlide--
       } else {
-        this.currentSlide = this.totalSlides - 1 // Ir al final
+        this.currentSlide = maxSlide // Ir al final
       }
     },
     goToSlide(index) {
@@ -588,6 +667,13 @@ export default defineComponent({
       this.stopAutoplay()
     },
     resumeAutoplay() {
+      this.startAutoplay()
+    },
+    // Método para cambiar la facultad seleccionada
+    selectFaculty(facultyId) {
+      this.selectedFaculty = facultyId
+      this.currentSlide = 0 // Reiniciar el carrusel al inicio
+      this.stopAutoplay()
       this.startAutoplay()
     },
   },
@@ -1048,6 +1134,78 @@ export default defineComponent({
   font-weight: bold;
 }
 
+/* Estilos de la barra de navegación de facultades */
+.faculty-navigation {
+  margin-bottom: 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.faculty-tabs {
+  display: flex;
+  gap: 1rem;
+  background: #000000;
+  padding: 8px;
+  border-radius: 50px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.faculty-tab {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  background: transparent;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  min-width: fit-content;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    transform: translateY(-2px);
+  }
+
+  &.active {
+    background: #e53e3e;
+    color: white;
+    transform: translateY(-2px);
+  }
+}
+
+/* Responsive para tablets */
+@media (max-width: 768px) {
+  .faculty-tabs {
+    padding: 6px;
+    gap: 0.5rem;
+  }
+
+  .faculty-tab {
+    padding: 10px 16px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Responsive para móviles */
+@media (max-width: 480px) {
+  .faculty-tabs {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+    gap: 0.5rem;
+  }
+
+  .faculty-tab {
+    width: 100%;
+    text-align: center;
+    padding: 12px 16px;
+  }
+}
+
 /* Estilos del carrusel de investigación */
 .research-carousel-container {
   position: relative;
@@ -1072,7 +1230,7 @@ export default defineComponent({
   min-width: 100%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
+  gap: 3rem; /* Aumentado de 2rem a 3rem para mayor separación */
   padding: 1rem;
 }
 
@@ -1088,7 +1246,10 @@ export default defineComponent({
   cursor: pointer;
   transform-origin: center;
   border-radius: 8px;
-  height: fit-content;
+  height: 150px; /* Altura fija para todas las tarjetas */
+  display: flex;
+  flex-direction: column;
+  min-height: 150px; /* Altura mínima garantizada */
 
   &:hover {
     background: #f7c0c0 !important;
@@ -1099,6 +1260,17 @@ export default defineComponent({
   &.full-width {
     max-width: 400px;
     width: 100%;
+    height: 150px; /* Misma altura para la tarjeta destacada */
+  }
+
+  .q-card-section {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    text-align: center;
   }
 
   h3 {
@@ -1108,6 +1280,17 @@ export default defineComponent({
     font-weight: 600;
     transition: all 0.3s ease;
     line-height: 1.4;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Limitar a 3 líneas máximo */
+    line-clamp: 3; /* Propiedad estándar para compatibilidad */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &:hover h3 {
@@ -1196,7 +1379,7 @@ export default defineComponent({
 @media (max-width: 768px) {
   .research-slide {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    gap: 1.5rem; /* Aumentado de 1rem a 1.5rem para mayor separación */
   }
 
   .research-carousel-container {
@@ -1207,6 +1390,15 @@ export default defineComponent({
     width: 40px;
     height: 40px;
   }
+
+  .research-card {
+    height: 180px; /* Altura ligeramente menor en tablets */
+    min-height: 180px;
+  }
+
+  .research-card h3 {
+    font-size: 0.9rem; /* Texto ligeramente más pequeño */
+  }
 }
 
 @media (max-width: 480px) {
@@ -1216,6 +1408,17 @@ export default defineComponent({
 
   .research-carousel-container {
     padding: 0 45px;
+  }
+
+  .research-card {
+    height: 160px; /* Altura más compacta en móviles */
+    min-height: 160px;
+  }
+
+  .research-card h3 {
+    font-size: 0.85rem; /* Texto más pequeño para móviles */
+    -webkit-line-clamp: 4; /* Permitir 4 líneas en móviles */
+    line-clamp: 4;
   }
 }
 
