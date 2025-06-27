@@ -13,11 +13,14 @@ const routes = [
   { path: '/chat', component: () => import('components/ChatBot.vue') },
 
   // Rutas que usan MainLayout.vue como padre
+
   {
-    path: '/Jehu',
+    path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
+      { path: '/login', component: () => import('pages/LoginPage.vue') },
       { path: '/reset-password', component: () => import('pages/ChangePasswordForm.vue') },
+
       { path: '/usuarios', component: () => import('pages/RegisterPage.vue') },
       { path: '/perfil-p', component: () => import('pages/Perfil_profesor_page.vue') },
       { path: '/perfil-a', component: () => import('pages/Perfil_Administrador_page.vue') },

@@ -191,162 +191,66 @@
     <section class="research-section" id="investigacion">
       <div class="container">
         <h2 class="research-title">Líneas de Investigación</h2>
-        <div class="research-grid">
-          <!-- PRIMERA FILA DE LÍNEAS DE INVESTIGACIÓN -->
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="groups" size="48px" class="research-icon" />
-              <h3>ADMINISTRACIÓN</h3>
-            </q-card-section>
-          </q-card>
+        <div class="research-carousel-container">
+          <!-- Botones de navegación -->
+          <button
+            class="carousel-btn carousel-btn-prev"
+            @click="previousSlide"
+            @mouseenter="pauseAutoplay"
+            @mouseleave="resumeAutoplay"
+            :disabled="currentSlide === 0"
+          >
+            <q-icon name="chevron_left" size="24px" />
+          </button>
+          <button
+            class="carousel-btn carousel-btn-next"
+            @click="nextSlide"
+            @mouseenter="pauseAutoplay"
+            @mouseleave="resumeAutoplay"
+            :disabled="currentSlide >= totalSlides - 1"
+          >
+            <q-icon name="chevron_right" size="24px" />
+          </button>
 
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="gavel" size="48px" class="research-icon" />
-              <h3>DERECHO</h3>
-            </q-card-section>
-          </q-card>
+          <!-- Contenedor del carrusel -->
+          <div
+            class="research-carousel"
+            ref="carousel"
+            @mouseenter="pauseAutoplay"
+            @mouseleave="resumeAutoplay"
+          >
+            <div
+              class="research-track"
+              :style="{ transform: `translateX(-${currentSlide * slideWidth}px)` }"
+            >
+              <div class="research-slide" v-for="(slide, index) in researchSlides" :key="index">
+                <q-card
+                  v-for="item in slide"
+                  :key="item.id"
+                  class="research-card"
+                  :class="{ 'full-width': item.fullWidth }"
+                >
+                  <q-card-section class="text-center">
+                    <q-icon :name="item.icon" size="48px" class="research-icon" />
+                    <h3>{{ item.title }}</h3>
+                  </q-card-section>
+                </q-card>
+              </div>
+            </div>
+          </div>
 
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="account_balance" size="48px" class="research-icon" />
-              <h3>CONTABILIDAD, COSTOS Y/O TRIBUTACIÓN</h3>
-            </q-card-section>
-          </q-card>
-
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="hotel" size="48px" class="research-icon" />
-              <h3>TURISMO, HOTELERÍA Y GASTRONOMÍA</h3>
-            </q-card-section>
-          </q-card>
-
-          <!-- SEGUNDA FILA DE LÍNEAS DE INVESTIGACIÓN -->
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="precision_manufacturing" size="48px" class="research-icon" />
-              <h3>DISEÑO INDUSTRIAL, AUTOMATIZACIÓN Y/O ROBÓTICA</h3>
-            </q-card-section>
-          </q-card>
-
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="trending_up" size="48px" class="research-icon" />
-              <h3>ECONOMÍA Y FINANZAS</h3>
-            </q-card-section>
-          </q-card>
-
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="school" size="48px" class="research-icon" />
-              <h3>EDUCACIÓN Y GESTIÓN DEL CONOCIMIENTO</h3>
-            </q-card-section>
-          </q-card>
-
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="lightbulb" size="48px" class="research-icon" />
-              <h3>EMPRENDIMIENTO E INNOVACIÓN</h3>
-            </q-card-section>
-          </q-card>
-
-          <!-- TERCERA FILA DE LÍNEAS DE INVESTIGACIÓN -->
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="handshake" size="48px" class="research-icon" />
-              <h3>ÉTICA, COMPLIANCE Y GOBERNANZA</h3>
-            </q-card-section>
-          </q-card>
-
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="account_balance_wallet" size="48px" class="research-icon" />
-              <h3>GESTIÓN PÚBLICA Y POLÍTICAS PÚBLICAS</h3>
-            </q-card-section>
-          </q-card>
-
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="public" size="48px" class="research-icon" />
-              <h3>GLOBALIZACIÓN Y NEGOCIOS INTERNACIONALES</h3>
-            </q-card-section>
-          </q-card>
-
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="factory" size="48px" class="research-icon" />
-              <h3>INDUSTRIAS EXTRACTIVAS AGROINDUSTRIA, PESCA Y ENERGÍA</h3>
-            </q-card-section>
-          </q-card>
-
-          <!-- CUARTA FILA DE LÍNEAS DE INVESTIGACIÓN -->
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="psychology" size="48px" class="research-icon" />
-              <h3>LIDERAZGO, COMPORTAMIENTO ORGANIZACIONAL DEL GRUPO</h3>
-            </q-card-section>
-          </q-card>
-
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="campaign" size="48px" class="research-icon" />
-              <h3>MARKETING</h3>
-            </q-card-section>
-          </q-card>
-
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="eco" size="48px" class="research-icon" />
-              <h3>MEDIO AMBIENTE</h3>
-            </q-card-section>
-          </q-card>
-
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="settings" size="48px" class="research-icon" />
-              <h3>PRODUCCIÓN, PROCESOS Y/O GESTIÓN DE LA CALIDAD</h3>
-            </q-card-section>
-          </q-card>
-
-          <!-- QUINTA FILA DE LÍNEAS DE INVESTIGACIÓN -->
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="psychology_alt" size="48px" class="research-icon" />
-              <h3>PSICOLOGÍA</h3>
-            </q-card-section>
-          </q-card>
-
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="health_and_safety" size="48px" class="research-icon" />
-              <h3>EDUCACIÓN, INDUSTRIAL, SALUD OCUPACIONAL Y/O SERVICIOS DE SALUD</h3>
-            </q-card-section>
-          </q-card>
-
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="computer" size="48px" class="research-icon" />
-              <h3>SISTEMAS Y TECNOLOGÍAS DE INFORMACIÓN</h3>
-            </q-card-section>
-          </q-card>
-
-          <q-card class="research-card">
-            <q-card-section class="text-center">
-              <q-icon name="local_shipping" size="48px" class="research-icon" />
-              <h3>SUPPLY CHAIN Y GESTIÓN LOGÍSTICA INTEGRAL</h3>
-            </q-card-section>
-          </q-card>
-
-          <!-- LÍNEA DE INVESTIGACIÓN DESTACADA (ancho completo) -->
-          <q-card class="research-card full-width">
-            <q-card-section class="text-center">
-              <q-icon name="recycling" size="48px" class="research-icon" />
-              <h3>
-                DESARROLLO SOSTENIBLE, RESPONSABILIDAD SOCIAL EMPRESARIAL (RSE) Y/O CRECIMIENTO
-                COMUNITARIO
-              </h3>
-            </q-card-section>
-          </q-card>
+          <!-- Indicadores de página -->
+          <div class="carousel-indicators">
+            <button
+              v-for="(slide, index) in researchSlides"
+              :key="index"
+              class="indicator-dot"
+              :class="{ active: currentSlide === index }"
+              @click="goToSlide(index)"
+              @mouseenter="pauseAutoplay"
+              @mouseleave="resumeAutoplay"
+            ></button>
+          </div>
         </div>
       </div>
     </section>
@@ -486,7 +390,14 @@ export default defineComponent({
       intervalId = setInterval(() => {
         idx = (idx + 1) % heroImages.length
         currentHeroImage.value = heroImages[idx]
-        console.log('Cambiando imagen a:', currentHeroImage.value, 'Índice:', idx + 1, 'de', heroImages.length) // Debug mejorado
+        console.log(
+          'Cambiando imagen a:',
+          currentHeroImage.value,
+          'Índice:',
+          idx + 1,
+          'de',
+          heroImages.length,
+        ) // Debug mejorado
       }, 4000) // Cambiar cada 4 segundos para dar más tiempo a ver cada imagen
     })
     onBeforeUnmount(() => {
@@ -503,6 +414,92 @@ export default defineComponent({
     return {
       dropdownVisible: false,
       dropdownTimer: null, // Timer para controlar el delay
+      // Carrusel de investigación
+      currentSlide: 0,
+      slideWidth: 0,
+      autoplayInterval: null,
+      researchSlides: [
+        // Slide 1
+        [
+          { id: 1, icon: 'groups', title: 'ADMINISTRACIÓN' },
+          { id: 2, icon: 'gavel', title: 'DERECHO' },
+          { id: 3, icon: 'account_balance', title: 'CONTABILIDAD, COSTOS Y/O TRIBUTACIÓN' },
+          { id: 4, icon: 'hotel', title: 'TURISMO, HOTELERÍA Y GASTRONOMÍA' },
+        ],
+        // Slide 2
+        [
+          {
+            id: 5,
+            icon: 'precision_manufacturing',
+            title: 'DISEÑO INDUSTRIAL, AUTOMATIZACIÓN Y/O ROBÓTICA',
+          },
+          { id: 6, icon: 'trending_up', title: 'ECONOMÍA Y FINANZAS' },
+          { id: 7, icon: 'school', title: 'EDUCACIÓN Y GESTIÓN DEL CONOCIMIENTO' },
+          { id: 8, icon: 'lightbulb', title: 'EMPRENDIMIENTO E INNOVACIÓN' },
+        ],
+        // Slide 3
+        [
+          { id: 9, icon: 'handshake', title: 'ÉTICA, COMPLIANCE Y GOBERNANZA' },
+          { id: 10, icon: 'account_balance_wallet', title: 'GESTIÓN PÚBLICA Y POLÍTICAS PÚBLICAS' },
+          { id: 11, icon: 'public', title: 'GLOBALIZACIÓN Y NEGOCIOS INTERNACIONALES' },
+          {
+            id: 12,
+            icon: 'factory',
+            title: 'INDUSTRIAS EXTRACTIVAS AGROINDUSTRIA, PESCA Y ENERGÍA',
+          },
+        ],
+        // Slide 4
+        [
+          {
+            id: 13,
+            icon: 'psychology',
+            title: 'LIDERAZGO, COMPORTAMIENTO ORGANIZACIONAL DEL GRUPO',
+          },
+          { id: 14, icon: 'campaign', title: 'MARKETING' },
+          { id: 15, icon: 'eco', title: 'MEDIO AMBIENTE' },
+          { id: 16, icon: 'settings', title: 'PRODUCCIÓN, PROCESOS Y/O GESTIÓN DE LA CALIDAD' },
+        ],
+        // Slide 5
+        [
+          { id: 17, icon: 'psychology_alt', title: 'PSICOLOGÍA' },
+          {
+            id: 18,
+            icon: 'health_and_safety',
+            title: 'EDUCACIÓN, INDUSTRIAL, SALUD OCUPACIONAL Y/O SERVICIOS DE SALUD',
+          },
+          { id: 19, icon: 'computer', title: 'SISTEMAS Y TECNOLOGÍAS DE INFORMACIÓN' },
+          { id: 20, icon: 'local_shipping', title: 'SUPPLY CHAIN Y GESTIÓN LOGÍSTICA INTEGRAL' },
+        ],
+        // Slide 6 - Tarjeta destacada
+        [
+          {
+            id: 21,
+            icon: 'recycling',
+            title:
+              'DESARROLLO SOSTENIBLE, RESPONSABILIDAD SOCIAL EMPRESARIAL (RSE) Y/O CRECIMIENTO COMUNITARIO',
+            fullWidth: true,
+          },
+        ],
+      ],
+    }
+  },
+  computed: {
+    totalSlides() {
+      return this.researchSlides.length
+    },
+  },
+  mounted() {
+    this.calculateSlideWidth()
+    this.startAutoplay()
+    window.addEventListener('resize', this.calculateSlideWidth)
+  },
+  beforeUnmount() {
+    this.stopAutoplay()
+    window.removeEventListener('resize', this.calculateSlideWidth)
+    // Limpiar el timer del dropdown al desmontar el componente
+    if (this.dropdownTimer) {
+      clearTimeout(this.dropdownTimer)
+      this.dropdownTimer = null
     }
   },
   methods: {
@@ -551,13 +548,49 @@ export default defineComponent({
         this.dropdownTimer = null
       }, 150) // 150ms de delay
     },
-  },
-  beforeUnmount() {
-    // Limpiar el timer del dropdown al desmontar el componente
-    if (this.dropdownTimer) {
-      clearTimeout(this.dropdownTimer)
-      this.dropdownTimer = null
-    }
+    // Métodos del carrusel de investigación
+    calculateSlideWidth() {
+      this.$nextTick(() => {
+        const carousel = this.$refs.carousel
+        if (carousel) {
+          this.slideWidth = carousel.offsetWidth
+        }
+      })
+    },
+    nextSlide() {
+      if (this.currentSlide < this.totalSlides - 1) {
+        this.currentSlide++
+      } else {
+        this.currentSlide = 0 // Volver al inicio
+      }
+    },
+    previousSlide() {
+      if (this.currentSlide > 0) {
+        this.currentSlide--
+      } else {
+        this.currentSlide = this.totalSlides - 1 // Ir al final
+      }
+    },
+    goToSlide(index) {
+      this.currentSlide = index
+    },
+    startAutoplay() {
+      this.autoplayInterval = setInterval(() => {
+        this.nextSlide()
+      }, 5000) // Cambiar cada 5 segundos
+    },
+    stopAutoplay() {
+      if (this.autoplayInterval) {
+        clearInterval(this.autoplayInterval)
+        this.autoplayInterval = null
+      }
+    },
+    pauseAutoplay() {
+      this.stopAutoplay()
+    },
+    resumeAutoplay() {
+      this.startAutoplay()
+    },
   },
 })
 </script>
@@ -1016,33 +1049,57 @@ export default defineComponent({
   font-weight: bold;
 }
 
-.research-grid {
+/* Estilos del carrusel de investigación */
+.research-carousel-container {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 60px; /* Espacio para los botones */
+}
+
+.research-carousel {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.research-track {
+  display: flex;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.research-slide {
+  min-width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
-  margin-top: 3rem;
-  perspective: 1000px; /* Agregar perspectiva para efectos 3D sutiles */
+  padding: 1rem;
+}
+
+.research-slide:has(.research-card.full-width) {
+  grid-template-columns: 1fr;
+  place-items: center;
 }
 
 .research-card {
-  background: #c1c0c0 !important; /* Forzar el color solicitado */
-  box-shadow: none !important; /* Asegurar que no haya sombras que alteren la percepción del color */
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Transición suave con easing personalizado */
-  cursor: pointer; /* Indicar que es interactivo */
-  transform-origin: center; /* Punto de origen para la transformación */
-  border-radius: 8px; /* Bordes redondeados */
+  background: #c1c0c0 !important;
+  box-shadow: none !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  transform-origin: center;
+  border-radius: 8px;
+  height: fit-content;
 
   &:hover {
     background: #f7c0c0 !important;
-    transform: scale(0.85) translateY(-5px); /* Contracción más pronunciada y elevar más */
-    box-shadow: 0 12px 35px rgba(229, 62, 62, 0.35) !important; /* Sombra más intensa */
+    transform: scale(0.85) translateY(-5px);
+    box-shadow: 0 12px 35px rgba(229, 62, 62, 0.35) !important;
   }
 
   &.full-width {
-    grid-column: 1 / -1;
     max-width: 400px;
-    margin: 0 auto;
-    justify-self: center; /* Centrar la tarjeta en el grid */
+    width: 100%;
   }
 
   h3 {
@@ -1050,23 +1107,117 @@ export default defineComponent({
     margin-top: 1rem;
     color: #333;
     font-weight: 600;
-    transition: all 0.3s ease; /* Transición suave para el color del texto */
+    transition: all 0.3s ease;
+    line-height: 1.4;
   }
 
   &:hover h3 {
-    color: #e53e3e; /* Cambiar color del texto en hover */
-    transform: scale(1.08); /* Aumentar más el tamaño del texto */
+    color: #e53e3e;
+    transform: scale(1.08);
   }
 }
 
 .research-icon {
   color: #e53e3e;
-  transition: all 0.3s ease; /* Transición suave para el ícono */
+  transition: all 0.3s ease;
 }
 
 .research-card:hover .research-icon {
-  transform: scale(1.2) rotate(8deg); /* Aumentar más el tamaño y rotar más */
-  color: #c53030; /* Color más oscuro en hover */
+  transform: scale(1.2) rotate(8deg);
+  color: #c53030;
+}
+
+/* Botones de navegación del carrusel */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(229, 62, 62, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  color: white;
+
+  &:hover {
+    background: rgba(229, 62, 62, 1);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 4px 15px rgba(229, 62, 62, 0.4);
+  }
+
+  &:disabled {
+    background: rgba(150, 150, 150, 0.5);
+    cursor: not-allowed;
+    transform: translateY(-50%);
+  }
+}
+
+.carousel-btn-prev {
+  left: 10px;
+}
+
+.carousel-btn-next {
+  right: 10px;
+}
+
+/* Indicadores del carrusel */
+.carousel-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 2rem;
+}
+
+.indicator-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(150, 150, 150, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &.active {
+    background: #e53e3e;
+    transform: scale(1.2);
+  }
+
+  &:hover {
+    background: rgba(229, 62, 62, 0.7);
+  }
+}
+
+/* Responsive para el carrusel */
+@media (max-width: 768px) {
+  .research-slide {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .research-carousel-container {
+    padding: 0 50px;
+  }
+
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .research-slide {
+    grid-template-columns: 1fr;
+  }
+
+  .research-carousel-container {
+    padding: 0 45px;
+  }
 }
 
 /* ========================================= */
