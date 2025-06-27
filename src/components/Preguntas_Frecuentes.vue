@@ -108,7 +108,7 @@
 
 <script>
 import { defineComponent, ref, onMounted, nextTick } from 'vue'
-import { api } from 'src/boot/axios.js'
+import { api } from 'boot/axios'
 import ConfirmModal from './ConfirmModal.vue'
 
 export default defineComponent({
