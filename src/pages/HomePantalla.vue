@@ -6,7 +6,7 @@
     <!-- Barra de navegación fija en la parte superior con logo y menú principal -->
     <q-header elevated class="header-custom">
       <q-toolbar class="nav-container">
-        <!-- Sección del logo y título institucional -->
+        <!-- Sección del logo y título institucional (movido a la izquierda) -->
         <div class="logo-section">
           <div class="logo-placeholder">
             <img
@@ -15,10 +15,13 @@
               class="logo-img"
             />
           </div>
-          <div class="nav-title">Vicerrectorrado<br />de Investigación</div>
+          <div class="nav-title">
+            <div class="title-line-1">VICERRECTORADO</div>
+            <div class="title-line-2">DE INVESTIGACIÓN</div>
+          </div>
         </div>
 
-        <!-- Menú de navegación principal -->
+        <!-- Menú de navegación principal (movido a la derecha) -->
         <div class="nav-menu">
           <q-btn flat label="UE Esan" @click="openUeEsan" />
           <q-btn flat label="Portal Académico" @click="openPortalAcademico" />
@@ -65,7 +68,7 @@
       <!-- Contenedor de imagen de fondo con overlay oscuro -->
       <div class="hero-background">
         <img
-          src="src/assets/Home_imagenes/CampusEsan.jpg"
+          :src="currentHeroImage"
           alt="Estudiante investigando en biblioteca"
           class="hero-image"
         />
@@ -424,7 +427,7 @@
 <!-- BLOQUE 7: LÓGICA JAVASCRIPT DEL COMPONENTE -->
 <!-- ========================================= -->
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue'
 import { scroll } from 'quasar'
 import { useRouter } from 'vue-router'
 const { getScrollTarget, setVerticalScrollPosition } = scroll
@@ -436,7 +439,24 @@ export default defineComponent({
     function goToLogin() {
       router.push('/login')
     }
-    return { goToLogin }
+    // Imagen hero transicionable
+    const heroImages = [
+      'src/assets/Home_imagenes/CampusEsan.jpg',
+      'src/assets/Home_imagenes/Estudiante.jpg',
+    ]
+    const currentHeroImage = ref(heroImages[0])
+    let intervalId = null
+    onMounted(() => {
+      let idx = 0
+      intervalId = setInterval(() => {
+        idx = (idx + 1) % heroImages.length
+        currentHeroImage.value = heroImages[idx]
+      }, 3000)
+    })
+    onBeforeUnmount(() => {
+      if (intervalId) clearInterval(intervalId)
+    })
+    return { goToLogin, currentHeroImage }
   },
   data() {
     return {
@@ -509,26 +529,82 @@ export default defineComponent({
 /* ESTILOS GENERALES DE LA PÁGINA */
 .home-page {
   padding-top: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ocultar barra de scroll completamente */
+:global(html) {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+:global(html::-webkit-scrollbar) {
+  display: none; /* Safari and Chrome */
+}
+
+:global(body) {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+:global(body::-webkit-scrollbar) {
+  display: none; /* Safari and Chrome */
+}
+
+:global(*) {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+:global(*::-webkit-scrollbar) {
+  display: none; /* Safari and Chrome */
+}
+
+/* Asegurar que no haya espacios en blanco */
+:global(html, body) {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #000000;
 }
 
 /* ========================================= */
 /* ESTILOS DEL HEADER/NAVEGACIÓN */
 /* ========================================= */
 .header-custom {
-  background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+  background: #000000;
   color: white;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden; /* Eliminar scroll horizontal */
 }
 
 .nav-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
+  max-width: 100%;
+  margin: 0;
+  padding: 5px 3px; /* Reducir padding vertical para header más corto */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden; /* Eliminar scroll horizontal */
+  min-height: 60px; /* Reducir altura mínima del header */
 }
 
 .logo-section {
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  align-items: center; /* Centrado vertical dentro de la sección */
+  gap: 0.5rem;
+  order: 1;
+  margin-right: auto;
+  padding-left: 0;
+  flex-shrink: 0; /* Evitar que se comprima */
+  height: 100%; /* Ocupar toda la altura del contenedor */
 }
 
 .logo-placeholder {
@@ -537,6 +613,7 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .logo-img {
@@ -545,20 +622,54 @@ export default defineComponent({
 }
 
 .nav-title {
-  font-size: 1.5rem;
+  font-size: 1.6rem; /* Aumentar tamaño de fuente */
   font-weight: bold;
-  line-height: 1.2;
+  line-height: 1.1;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.title-line-1 {
+  color: #cc3333; /* Rojo medio oscuro */
+  margin-bottom: 2px;
+}
+
+.title-line-2 {
+  color: #ff6666; /* Rojo más claro */
 }
 
 .nav-menu {
   display: flex;
-  gap: 1rem;
+  gap: 0.8rem;
   align-items: center;
+  order: 2;
+  margin-left: auto;
+  padding-right: 0;
+  flex-shrink: 0; /* Evitar que se comprima */
 }
 
 .login-btn {
-  background: #666;
+  background: #e53e3e !important;
+  color: white !important;
   border-radius: 25px;
+}
+
+/* Efectos hover para los botones del menú */
+.nav-menu .q-btn {
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.nav-menu .q-btn:hover {
+  color: #e53e3e !important;
+  background: rgba(229, 62, 62, 0.1) !important;
+}
+
+.login-btn:hover {
+  background: #c53030 !important;
+  transform: translateY(-2px);
 }
 
 /* ========================================= */
@@ -837,6 +948,8 @@ export default defineComponent({
   color: white;
   padding: 40px 0 20px;
   margin-top: auto;
+  width: 100%;
+  min-height: 200px; /* Asegurar altura mínima */
 }
 
 .footer-container {
