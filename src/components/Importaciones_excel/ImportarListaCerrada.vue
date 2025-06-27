@@ -214,17 +214,20 @@ function onFileChange(file) {
               ? headerMap[columnasAdaptadas.find((c) => c.name === apiField)?.label]
               : undefined
         let val = idx !== undefined ? rowArr[idx] : ''
+        // --- Conversión automática según tipo de campo en la base de datos ---
+        const stringFields = [
+          'ISSN', 'ISSN2', 'ISSN3', 'Nombre', 'Categoria2', 'SCOPUS', 'WoS_Q', 'ESCI_Q', 'AJG', 'CNRS', 'ABDC', 'WoS_LATAM'
+        ]
+        const floatFields = ['Puntaje']
+        const intFields = ['IncentivoUSD']
         if (val === '' || val === undefined) val = null
-
-        // Validación específica para AJG y CNRS
-        if (['AJG', 'CNRS'].includes(apiField) && val !== null) {
-          val = isNaN(Number(val)) ? val : String(val)
+        if (stringFields.includes(apiField) && val !== null) {
+          val = String(val)
         }
-
-        if (apiField === 'Puntaje' && val !== null) {
+        if (floatFields.includes(apiField) && val !== null) {
           val = isNaN(Number(val)) ? null : Number(val)
         }
-        if (apiField === 'IncentivoUSD' && val !== null) {
+        if (intFields.includes(apiField) && val !== null) {
           val = isNaN(Number(val)) ? null : Number(val)
         }
         obj[apiField] = val

@@ -334,10 +334,64 @@ function onFileChange(file) {
         const key = apiField.toLowerCase().replace(/\s+/g, '')
         const idx = headerMap[key]
         let val = idx !== undefined ? rowArr[idx] : ''
+        // --- Conversión automática según tipo de campo en la base de datos ---
+        const stringFields = [
+          'WoSQ',
+          'WoSEsci',
+          'EsciQ',
+          'Ajg4star',
+          'Ajg',
+          'Cnrs',
+          'Abdc',
+          'AlMenosUnaLista',
+          'SoloUnaLista',
+          'Scielo',
+          'WoSLatam',
+          'Top50',
+          'BeallsList',
+          'Mdpi',
+          'Insights',
+          'CoautoriaEsan',
+          'PosicionAutor',
+          'Country',
+          'Nombre',
+          'ISSN',
+        ]
+        const floatFields = ['Jif']
+        const intFields = [
+          'WoSS',
+          'AjgS',
+          'CnrsS',
+          'AbdcS',
+          'N',
+          'AjgExiste',
+          'CnrsExiste',
+          'AbdcExiste',
+          'WoSTopExiste',
+          'WoSEsciExiste',
+          'ScopusExiste',
+          'SoloScieloExiste',
+          'Especial216b',
+          'LatamSinEsciExiste',
+          'EsciScieloSinScopus',
+          'MultyAlMenosUnaLista',
+          'MultidisciplinaryWos',
+          'MultidisciplinaryScopus',
+          'MultidisciplinaryWosOScopys',
+          'Multiple',
+        ]
         // Convertir todos los campos vacíos a null
         if (val === '' || val === undefined) val = null
-        // Si es Jif, convertir a número o null
-        if (apiField === 'Jif' && val !== null) {
+        // Si es campo string, forzar a string si no es null
+        if (stringFields.includes(apiField) && val !== null) {
+          val = String(val)
+        }
+        // Si es campo float, forzar a number (o null)
+        if (floatFields.includes(apiField) && val !== null) {
+          val = isNaN(Number(val)) ? null : Number(val)
+        }
+        // Si es campo int, forzar a number si es posible, si no null
+        if (intFields.includes(apiField) && val !== null) {
           val = isNaN(Number(val)) ? null : Number(val)
         }
         obj[apiField] = val
