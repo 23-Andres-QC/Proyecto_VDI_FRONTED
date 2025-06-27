@@ -420,6 +420,11 @@
         </div>
       </div>
     </footer>
+
+    <!-- ChatBot flotante en la esquina inferior derecha -->
+    <div class="chat-floating">
+      <ChatBot />
+    </div>
   </q-page>
 </template>
 
@@ -430,10 +435,14 @@
 import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue'
 import { scroll } from 'quasar'
 import { useRouter } from 'vue-router'
-const { getScrollTarget, setVerticalScrollPosition } = scroll
+import ChatBot from '../components/ChatBot.vue'
 
+const { getScrollTarget, setVerticalScrollPosition } = scroll
 export default defineComponent({
   name: 'HomePantalla',
+  components: {
+    ChatBot,
+  },
   setup() {
     const router = useRouter()
     function goToLogin() {
@@ -950,6 +959,18 @@ export default defineComponent({
   margin-top: auto;
   width: 100%;
   min-height: 200px; /* Asegurar altura mínima */
+}
+
+/* ========================================= */
+/* ESTILOS DEL CHAT FLOTANTE */
+/* ========================================= */
+.chat-floating {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .footer-container {
