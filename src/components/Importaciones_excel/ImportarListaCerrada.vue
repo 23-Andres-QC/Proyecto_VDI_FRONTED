@@ -19,14 +19,16 @@
           :prepend-icon="'insert_drive_file'"
           color="primary"
           text-color="dark"
+          :disable="loadingExcel || loadingImport"
         />
         <q-btn
           class="importar-btn importar-btn-main acciones-btn"
           label="IMPORTAR"
           icon="cloud_upload"
           @click="importarExcel"
-          :disable="!archivo"
+          :disable="!archivo || loadingExcel || loadingImport"
         />
+        <q-spinner-dots v-if="loadingExcel" color="primary" size="32px" class="q-ml-md" />
       </div>
       <div v-if="tabla && tabla.length > 0" class="tabla-container">
         <div class="visualizacion-header">
@@ -64,6 +66,7 @@
             icon="close"
             @click="cancelarImportacion"
             class="cancelar-btn acciones-btn"
+            :disable="loadingImport"
           />
           <q-btn
             class="importar-btn importar-btn-main acciones-btn"
@@ -71,8 +74,9 @@
             color="primary"
             icon="check_circle"
             @click="importarExcel"
-            :disable="!tabla || !tabla.length"
+            :disable="!tabla || !tabla.length || loadingImport"
           />
+          <q-spinner-dots v-if="loadingImport" color="primary" size="32px" class="q-ml-md" />
         </div>
       </div>
     </div>
@@ -80,7 +84,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, defineEmits } from 'vue'
 import * as XLSX from 'xlsx'
 import { api } from 'src/boot/axios'
 import { Notify } from 'quasar'
@@ -93,6 +97,9 @@ const pagination = ref({
   rowsPerPage: 20,
   rowsNumber: 0,
 })
+
+const loadingExcel = ref(false)
+const loadingImport = ref(false)
 
 const columnas = [
   { name: 'ISSN', label: 'ISSN', field: 'ISSN', align: 'left' },
@@ -111,8 +118,11 @@ const columnas = [
   { name: 'WoS_LATAM', label: 'WoS LATAM', field: 'WoS_LATAM', align: 'left' },
 ]
 
+const emit = defineEmits(['cancelar'])
+
 function onFileChange(file) {
   if (!file) return
+  loadingExcel.value = true
   const reader = new FileReader()
   reader.onload = (e) => {
     const data = new Uint8Array(e.target.result)
@@ -216,7 +226,18 @@ function onFileChange(file) {
         let val = idx !== undefined ? rowArr[idx] : ''
         // --- Conversión automática según tipo de campo en la base de datos ---
         const stringFields = [
-          'ISSN', 'ISSN2', 'ISSN3', 'Nombre', 'Categoria2', 'SCOPUS', 'WoS_Q', 'ESCI_Q', 'AJG', 'CNRS', 'ABDC', 'WoS_LATAM'
+          'ISSN',
+          'ISSN2',
+          'ISSN3',
+          'Nombre',
+          'Categoria2',
+          'SCOPUS',
+          'WoS_Q',
+          'ESCI_Q',
+          'AJG',
+          'CNRS',
+          'ABDC',
+          'WoS_LATAM',
         ]
         const floatFields = ['Puntaje']
         const intFields = ['IncentivoUSD']
@@ -234,21 +255,39 @@ function onFileChange(file) {
       })
       return obj
     })
+    loadingExcel.value = false
+  }
+  reader.onerror = () => {
+    loadingExcel.value = false
+    Notify.create({ type: 'negative', message: 'Error leyendo el archivo' })
   }
   reader.readAsArrayBuffer(file)
 }
 
 async function importarExcel() {
   if (!tabla.value.length) return
+  loadingImport.value = true
   try {
     await api.post(
       '/api/Revista?idUsuario=5&tipoRevista=LCD',
       apiData.value.length ? apiData.value : tabla.value,
     )
     Notify.create({ type: 'positive', message: 'Importación completada' })
+    setTimeout(() => {
+      archivo.value = null
+      tabla.value = []
+      apiData.value = []
+      // Emitir evento para cerrar el modal flotante
+      // (el padre debe escuchar @cancelar)
+      // Si el modal se controla internamente, puedes ocultarlo aquí
+      // Si no, el padre debe ocultarlo
+      emit('cancelar')
+    }, 1000)
   } catch (e) {
     console.error('Error importando lista cerrada:', e)
     Notify.create({ type: 'negative', message: 'Error en la importación' })
+  } finally {
+    loadingImport.value = false
   }
 }
 
