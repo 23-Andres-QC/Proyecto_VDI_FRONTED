@@ -293,17 +293,37 @@
               <h4 class="footer-subtitle">NUESTRAS REDES SOCIALES</h4>
               <p class="social-description">Mantente conectado con nosotros</p>
               <div class="social-links">
-                <a href="#" class="social-link" aria-label="Facebook">
-                  <i class="fa-brands fa-facebook-f"></i>
+                <a
+                  href="https://www.facebook.com/uesan/"
+                  class="social-link"
+                  aria-label="Facebook"
+                  target="_blank"
+                >
+                  <q-icon name="facebook" size="16px" />
                 </a>
-                <a href="#" class="social-link" aria-label="Instagram">
-                  <i class="fa-brands fa-instagram"></i>
+                <a
+                  href="https://www.instagram.com/uesan_oficial/"
+                  class="social-link"
+                  aria-label="Instagram"
+                  target="_blank"
+                >
+                  <q-icon name="camera_alt" size="16px" />
                 </a>
-                <a href="#" class="social-link" aria-label="LinkedIn">
-                  <i class="fa-brands fa-linkedin-in"></i>
+                <a
+                  href="https://www.linkedin.com/school/esan/?originalSubdomain=pe"
+                  class="social-link"
+                  aria-label="LinkedIn"
+                  target="_blank"
+                >
+                  <q-icon name="business" size="16px" />
                 </a>
-                <a href="#" class="social-link" aria-label="X Twitter">
-                  <i class="fa-brands fa-x-twitter"></i>
+                <a
+                  href="https://www.tiktok.com/@somosesan"
+                  class="social-link"
+                  aria-label="TikTok"
+                  target="_blank"
+                >
+                  <q-icon name="videocam" size="16px" />
                 </a>
               </div>
             </div>
@@ -1562,7 +1582,8 @@ export default defineComponent({
   box-shadow: 0 6px 15px rgba(229, 62, 62, 0.3);
 }
 
-.social-section-integrated .social-link i {
+.social-section-integrated .social-link i,
+.social-section-integrated .social-link .q-icon {
   font-size: 16px;
   position: relative;
   z-index: 1;
@@ -1702,7 +1723,8 @@ export default defineComponent({
   box-shadow: 0 8px 20px rgba(229, 62, 62, 0.3);
 }
 
-.social-link i {
+.social-link i,
+.social-link .q-icon {
   font-size: 18px;
   position: relative;
   z-index: 1;
@@ -1931,7 +1953,8 @@ export default defineComponent({
     height: 35px;
   }
 
-  .social-section-integrated .social-link i {
+  .social-section-integrated .social-link i,
+  .social-section-integrated .social-link .q-icon {
     font-size: 14px;
   }
 }
