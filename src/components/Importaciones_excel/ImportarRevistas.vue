@@ -80,7 +80,7 @@
 <script setup>
 import { ref } from 'vue'
 import * as XLSX from 'xlsx'
-import { api } from 'src/boot/axios'
+import { api } from 'boot/axios'
 import { useQuasar } from 'quasar'
 
 const $q = useQuasar()

@@ -73,6 +73,8 @@
 </template>
 
 <script>
+import { api } from 'boot/axios'
+
 export default {
   name: 'TablaListCerradaCon',
   data() {
@@ -92,16 +94,17 @@ export default {
     tipoCaracteristica(newVal) {
       this.calificacion = ''
       if (newVal) {
-        fetch(
-          `http://localhost:5009/api/Revista/distinct-listacerrada/${encodeURIComponent(newVal)}`,
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            this.calificaciones = data
+        api
+          .get(`/api/Revista/distinct-listacerrada/${encodeURIComponent(newVal)}`)
+          .then((response) => {
+            this.calificaciones = response.data
           })
           .catch((error) => {
             this.calificaciones = []
             console.error('Error al obtener calificaciones:', error)
+            if (error.response?.status === 401) {
+              console.error('Sesión expirada. Por favor, inicia sesión nuevamente.')
+            }
           })
       } else {
         this.calificaciones = []
@@ -187,29 +190,38 @@ export default {
     },
   },
   mounted() {
-    fetch('http://localhost:5009/api/Revista/lcd')
-      .then((response) => response.json())
-      .then((data) => {
-        this.revistas = data
+    api
+      .get('/api/Revista/lcd')
+      .then((response) => {
+        this.revistas = response.data
       })
       .catch((error) => {
         console.error('Error al obtener lista cerrada:', error)
+        if (error.response?.status === 401) {
+          console.error('Sesión expirada. Por favor, inicia sesión nuevamente.')
+        }
       })
-    fetch('http://localhost:5009/api/Revista/columnas-listacerrada')
-      .then((response) => response.json())
-      .then((data) => {
-        this.tiposCaracteristica = data
+    api
+      .get('/api/Revista/columnas-listacerrada')
+      .then((response) => {
+        this.tiposCaracteristica = response.data
       })
       .catch((error) => {
         console.error('Error al obtener tipos de característica:', error)
+        if (error.response?.status === 401) {
+          console.error('Sesión expirada. Por favor, inicia sesión nuevamente.')
+        }
       })
-    fetch('http://localhost:5009/api/Revista/categorias-listacerrada')
-      .then((response) => response.json())
-      .then((data) => {
-        this.categorias = data
+    api
+      .get('/api/Revista/categorias-listacerrada')
+      .then((response) => {
+        this.categorias = response.data
       })
       .catch((error) => {
         console.error('Error al obtener categorías:', error)
+        if (error.response?.status === 401) {
+          console.error('Sesión expirada. Por favor, inicia sesión nuevamente.')
+        }
       })
   },
 }

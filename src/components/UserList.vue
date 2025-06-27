@@ -26,7 +26,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import axios from 'axios'
+import { api } from 'boot/axios'
 
 const search = ref('')
 const usuarios = ref([])
@@ -40,7 +40,7 @@ const columns = [
 
 onMounted(async () => {
   try {
-    const res = await axios.get('http://localhost:5009/api/ProfesoresAdmis')
+    const res = await api.get('/api/ProfesoresAdmis')
     usuarios.value = res.data.map((prof) => ({
       idUsuario: prof.idProfesorAdmis,
       correo: prof.correo,
@@ -50,6 +50,9 @@ onMounted(async () => {
     }))
   } catch (err) {
     console.error('Error al cargar usuarios:', err)
+    if (err.response?.status === 401) {
+      console.error('Sesión expirada. Por favor, inicia sesión nuevamente.')
+    }
   }
 })
 

@@ -82,7 +82,7 @@
 <script setup>
 import { ref } from 'vue'
 import * as XLSX from 'xlsx'
-import { api } from 'src/boot/axios'
+import { api } from 'boot/axios'
 import { Notify } from 'quasar'
 
 const archivo = ref(null)

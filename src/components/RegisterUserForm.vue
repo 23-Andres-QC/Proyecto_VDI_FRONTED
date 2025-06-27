@@ -78,7 +78,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import { api } from 'boot/axios'
 
 const dialog = ref(false)
 const showPassword = ref(false)
@@ -95,7 +95,7 @@ const repetirPassword = ref('')
 
 onMounted(async () => {
   try {
-    const res = await axios.get('http://localhost:5009/api/ProfesoresAdmis')
+    const res = await api.get('/api/ProfesoresAdmis')
     profesores.value = res.data.map((p) => ({
       label: p.nombreyApellido,
       value: p.idProfesorAdmis,
@@ -104,6 +104,8 @@ onMounted(async () => {
     console.error('Error al cargar profesores:', err)
     if (err.response?.status === 404) {
       console.warn('El endpoint de profesores no está disponible')
+    } else if (err.response?.status === 401) {
+      console.error('Sesión expirada. Por favor, inicia sesión nuevamente.')
     } else {
       console.error('Error de conexión con el servidor')
     }
@@ -136,7 +138,7 @@ async function registrarUsuario() {
   }
 
   try {
-    await axios.post('http://localhost:5009/api/usuarios', {
+    await api.post('/api/usuarios', {
       idProfesorAdmis: selectedProfesor.value,
       Id_Rol: selectedRol.value === 'Administrador' ? 1 : 2,
       Estado: estado.value === 'Activo' ? 1 : 0,

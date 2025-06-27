@@ -124,7 +124,7 @@
 
 <script>
 import { defineComponent, ref, computed, onMounted } from 'vue'
-import { api } from 'src/boot/axios.js'
+import { api } from 'boot/axios'
 
 export default defineComponent({
   name: 'UsersTable',

@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import { api } from 'boot/axios'
+
 export default {
   name: 'TablaUsuarios',
   data() {
@@ -118,15 +120,17 @@ export default {
     busqueda: 'emitirFiltrados',
   },
   mounted() {
-    // Ejemplo usando fetch (puedes cambiar por axios si quieres)
-    fetch('http://localhost:5009/api/usuario') // <-- pon aquí tu endpoint real
-      .then((response) => response.json())
-      .then((data) => {
-        this.usuarios = data
+    api
+      .get('/api/usuario')
+      .then((response) => {
+        this.usuarios = response.data
         this.emitirFiltrados()
       })
       .catch((error) => {
         console.error('Error al obtener usuarios:', error)
+        if (error.response?.status === 401) {
+          console.error('Sesión expirada. Por favor, inicia sesión nuevamente.')
+        }
       })
   },
   methods: {

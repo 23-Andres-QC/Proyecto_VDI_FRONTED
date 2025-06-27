@@ -37,7 +37,7 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
-import { api } from 'src/boot/axios'
+import { api } from 'boot/axios'
 
 const props = defineProps({
   busqueda: { type: String, default: '' },

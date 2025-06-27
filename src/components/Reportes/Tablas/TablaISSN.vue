@@ -126,6 +126,8 @@
 </template>
 
 <script>
+import { api } from 'boot/axios'
+
 export default {
   name: 'TablaISSN',
   data() {
@@ -143,10 +145,16 @@ export default {
     tipoCalificacionIssn(newVal) {
       this.calificacionIssn = ''
       if (newVal) {
-        fetch(`http://localhost:5009/api/Revista/distinct-metadatos/${encodeURIComponent(newVal)}`)
-          .then((response) => response.json())
-          .then((data) => {
-            this.calificacionesIssn = data
+        api
+          .get(`/api/Revista/distinct-metadatos/${encodeURIComponent(newVal)}`)
+          .then((response) => {
+            this.calificacionesIssn = response.data
+          })
+          .catch((error) => {
+            console.error('Error al obtener calificaciones:', error)
+            if (error.response?.status === 401) {
+              console.error('Sesión expirada. Por favor, inicia sesión nuevamente.')
+            }
           })
           .catch((error) => {
             this.calificacionesIssn = []
@@ -252,22 +260,28 @@ export default {
     },
   },
   mounted() {
-    fetch('http://localhost:5009/api/Revista')
-      .then((response) => response.json())
-      .then((data) => {
-        this.revistas = data
+    api
+      .get('/api/Revista')
+      .then((response) => {
+        this.revistas = response.data
       })
       .catch((error) => {
         console.error('Error al obtener revistas:', error)
+        if (error.response?.status === 401) {
+          console.error('Sesión expirada. Por favor, inicia sesión nuevamente.')
+        }
       })
 
-    fetch('http://localhost:5009/api/Revista/columnas-metadatos')
-      .then((response) => response.json())
-      .then((data) => {
-        this.tiposCalificacionIssn = data
+    api
+      .get('/api/Revista/columnas-metadatos')
+      .then((response) => {
+        this.tiposCalificacionIssn = response.data
       })
       .catch((error) => {
         console.error('Error al obtener tipos de calificación:', error)
+        if (error.response?.status === 401) {
+          console.error('Sesión expirada. Por favor, inicia sesión nuevamente.')
+        }
       })
   },
 }

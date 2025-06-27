@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import { api } from 'boot/axios'
+
 export default {
   name: 'TablaProfesores',
   data() {
@@ -94,21 +96,27 @@ export default {
     },
   },
   mounted() {
-    fetch('http://localhost:5009/api/ProfesoresAdmis')
-      .then((response) => response.json())
-      .then((data) => {
-        this.profesores = data
+    api
+      .get('/api/ProfesoresAdmis')
+      .then((response) => {
+        this.profesores = response.data
       })
       .catch((error) => {
         console.error('Error al obtener profesores:', error)
+        if (error.response?.status === 401) {
+          console.error('Sesión expirada. Por favor, inicia sesión nuevamente.')
+        }
       })
-    fetch('http://localhost:5009/api/categorias/descripciones')
-      .then((response) => response.json())
-      .then((data) => {
-        this.tiposProfesor = data
+    api
+      .get('/api/categorias/descripciones')
+      .then((response) => {
+        this.tiposProfesor = response.data
       })
       .catch((error) => {
         console.error('Error al obtener tipos de profesor:', error)
+        if (error.response?.status === 401) {
+          console.error('Sesión expirada. Por favor, inicia sesión nuevamente.')
+        }
       })
   },
 }
