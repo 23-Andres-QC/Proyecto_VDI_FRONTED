@@ -1,6 +1,6 @@
 <template>
   <q-page class="row justify-start items-start q-pa-md">
-    <!-- Contenedor delgado: componente de perfil del Administrador -->
+    <!-- Contenedor lateral: menú perfil -->
     <div
       class="rounded-borders shadow-2 q-mr-md"
       style="
@@ -12,14 +12,13 @@
         justify-content: flex-start;
       "
     >
-      <!-- Componente de perfil de Administrador -->
       <Perfil_Administrador
         style="width: 100%; height: 100%"
         @menu-button-clicked="handleMenuButtonClicked"
       />
     </div>
 
-    <!-- Contenedor ancho: componente varios -->
+    <!-- Contenedor principal -->
     <div
       class="rounded-borders shadow-2 admin-main-container"
       style="
@@ -30,10 +29,16 @@
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        background: transparent;
+        background: white;
         overflow-y: auto;
+        padding: 20px;
       "
     >
+      <!-- Contenido de Administración de Usuarios -->
+      <div v-if="mostrarComponente === 'usuario'" style="width: 100%">
+        <RegisterUserForm class="q-mb-md" />
+        <UserList />
+      </div>
       <!-- Administración de revistas -->
       <template v-if="mostrarComponente === 'adminRevistas'">
         <div class="admin-revistas-header admin-revistas-header-margen">
@@ -187,8 +192,9 @@ import { ref } from 'vue'
 import Perfil_Administrador from 'components/Perfil_Administrador.vue'
 import ListaProfesores from 'components/Lista_profesores.vue'
 import PreguntasFrecuentes from 'components/Preguntas_Frecuentes.vue'
+import RegisterUserForm from 'components/RegisterUserForm.vue'
+import UserList from 'components/UserList.vue'
 import TablaDinamicaReportes from 'components/Reportes/TablaDinamicaReportes.vue'
-
 import ImportarRevistas from 'components/Importaciones_excel/ImportarRevistas.vue'
 import VisualizacionSoloRevistas from 'components/VisualizacionSoloRevistas.vue'
 import ImportarListaCerrada from 'components/Importaciones_excel/ImportarListaCerrada.vue'
@@ -248,7 +254,9 @@ function filtrarTablaDocentes() {
 
 // Modificar handleMenuButtonClicked para mostrar la sección correcta
 function handleMenuButtonClicked(menuItem) {
-  if (menuItem.id === 2) {
+  if (menuItem.id === 1) {
+    mostrarComponente.value = 'usuario'
+  } else if (menuItem.id === 2) {
     mostrarComponente.value = 'adminRevistas'
   } else if (menuItem.id === 3) {
     mostrarComponente.value = 'adminListaCerrada'
@@ -269,47 +277,56 @@ function handleMenuButtonClicked(menuItem) {
   border-radius: 20px;
 }
 .admin-revistas-header {
-  width: 100%;
+  width: 95%;
+  margin: 0 auto 20px auto;
+  padding: 16px 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 0.5rem;
+  gap: 12px;
   margin-bottom: 1.5rem;
 }
 .admin-revistas-header-margen {
-  margin-top: 2.5rem;
+  margin-top: 20px;
 }
 .busqueda-input {
-  flex: none;
-  max-width: 450px;
-  width: 350px;
-  margin-right: 0.5rem;
+  flex: 1;
+  max-width: 400px;
+  min-width: 280px;
+  margin-right: 8px;
 }
 .buscar-btn {
   min-width: 110px;
   margin-left: 0;
+  height: 40px;
 }
 .botones-col {
   display: flex;
-  gap: 1rem;
+  gap: 12px;
   align-items: center;
-  margin-left: 2rem;
+  margin-left: auto;
 }
 .importar-btn {
   min-width: 160px;
+  height: 40px;
 }
 .actualizar-btn {
   min-width: 120px;
+  height: 40px;
 }
 
 /* Ajuste para centrar la tabla y reducir el margen para que sea más escroleable */
 .tabla-admin-wrapper {
-  width: 100%;
+  width: 95%;
+  max-width: 95%;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  margin: 0 auto;
-  max-width: 950px;
+  padding: 0 10px;
 }
 
 /* Ajuste para centrar la tabla y evitar que esté de borde a borde */

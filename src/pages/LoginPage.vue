@@ -55,7 +55,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-//import { api } from 'boot/axios'
+import { api } from 'boot/axios'
 import ChangePasswordForm from './ChangePasswordForm.vue'
 
 const username = ref('')
@@ -66,56 +66,32 @@ const router = useRouter()
 
 async function handleLogin() {
   try {
-    // 🧪 MODO PRUEBA ACTIVO: solo se usa el correo ingresado para definir el rol
-    const correoPrueba = username.value
-
-
-    // Guardar token y datos simulados en localStorage
-    localStorage.setItem('user_token', 'token_prueba_simulado');
-    localStorage.setItem('user_data', JSON.stringify({
-      correo: correoPrueba,
-
-    }));
-
-    // Redirigir según rol simulado
-    if (correoPrueba=== '1') {
-      router.push('/perfil-a');
-    } else if (correoPrueba === '2') {
-      router.push('/perfil-p');
-    } else {
-      router.push('/home');
-    }
-
-  } catch  {
-    alert('Error inesperado en la simulación');
-  }
-
-  // -----------------------------
-  // 🔒 MODO REAL CON API (comentado para pruebas)
-  /*
-  try {
     const response = await api.post('/api/usuario/signin', {
       correo: username.value,
       contraseña: password.value,
-    });
+    })
 
-    localStorage.setItem('user_token', response.data.token);
-    localStorage.setItem('user_data', JSON.stringify(response.data));
+    localStorage.setItem('user_token', response.data.token)
+    localStorage.setItem('user_data', JSON.stringify(response.data))
 
     if (response.data.idRol === 1) {
-      router.push('/perfil-a');
+      router.push('/perfil-a')
     } else if (response.data.idRol === 2) {
-      router.push('/perfil-p');
+      router.push('/perfil-p')
     } else {
-      router.push('/home');
+      router.push('/home')
     }
   } catch (error) {
-    alert('Usuario o contraseña incorrectos');
+    console.error('Error al iniciar sesión:', error)
+    if (error.response && error.response.status === 401) {
+      alert('Credenciales incorrectas. Por favor, inténtelo de nuevo.')
+    } else {
+      alert('Ocurrió un error al iniciar sesión. Por favor, inténtelo más tarde.')
+    }
   }
-  */
+
   // -----------------------------
 }
-
 </script>
 
 <style scoped>
