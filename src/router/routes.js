@@ -1,41 +1,28 @@
 const routes = [
-  // Ruta principal que usa el layout vacío
+  // Ruta principal que usa el layout vacío para la página de inicio
   {
     path: '/',
-    component: () => import('layouts/EmptyLayout.vue'),
-    children: [{ path: '/', component: () => import('pages/HomePantalla.vue') }],
+    component: () => import('layouts/HomeLayout..vue'),
+    children: [{ path: '', component: () => import('pages/HomePantalla.vue') }],
   },
-
-  // Ruta de login independiente
-  { path: '/login', component: () => import('pages/LoginPage.vue') },
-
-  // Ruta de chat independiente
-  { path: '/chat', component: () => import('components/ChatBot.vue') },
-
-  // Rutas que usan MainLayout.vue como padre
-
+  // Rutas que usan MainLayout (con header/navbar)
   {
-    path: '/',
+    path: '/log',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '/login', component: () => import('pages/LoginPage.vue') },
       { path: '/reset-password', component: () => import('pages/ChangePasswordForm.vue') },
-
       { path: '/usuarios', component: () => import('pages/RegisterPage.vue') },
       { path: '/perfil-p', component: () => import('pages/Perfil_profesor_page.vue') },
       { path: '/perfil-a', component: () => import('pages/Perfil_Administrador_page.vue') },
       { path: '/importar-docentes', component: () => import('pages/ImportarDocentesPage.vue') },
     ],
   },
+  // Ruta de fallback para páginas no encontradas
   {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),
   },
-  { path: '/casa', component: () => import('pages/HomePantalla.vue') },
-
-  // {
-  // path: '/:catchAll(.*)*',   component: () => import('pages/ErrorNotFound.vue'),  },
-  //{ path: '/casa', component: () => import('pages/HomePantalla.vue') },
 
   /*
   // Rutas adicionales

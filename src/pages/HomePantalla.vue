@@ -363,7 +363,6 @@ import MisionImg from '../assets/Home_imagenes/mision.jpg'
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 import ChatBot from '../components/ChatBot.vue'
 
-const { getScrollTarget, setVerticalScrollPosition } = scroll
 export default defineComponent({
   name: 'HomePantalla',
   components: {
