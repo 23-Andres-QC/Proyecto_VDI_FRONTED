@@ -31,8 +31,7 @@ export default defineComponent({
   emits: ['menu-selected', 'menu-button-clicked'],
   setup(props, { emit }) {
     const userProfile = ref({
-      name: 'Eduardo Vergara',
-      //D:\FRONTED\proyecto VID\original\Proyecto_VDI_FRONTED\src\assets\Logo_Universidad.png
+      name: localStorage.getItem('nombreyApellido'),
       avatar: '/src/assets/Logo_Universidad.png',
     })
 
