@@ -371,7 +371,6 @@ import { useRouter } from 'vue-router'
 import CampusEsanImg from '../assets/Home_imagenes/CampusEsan.jpg'
 import EstudianteImg from '../assets/Home_imagenes/Estudiante.jpg'
 import VicerrectoradoImg from '../assets/Home_imagenes/Vicerrectorado.jpg'
-import Vicerrectorado1Img from '../assets/Home_imagenes/Vicerrectorado1.jpg'
 import MisionImg from '../assets/Home_imagenes/mision.jpg'
 
 const { getScrollTarget, setVerticalScrollPosition } = scroll
@@ -388,13 +387,7 @@ export default defineComponent({
       router.push('/login')
     }
     // Imagen hero transicionable - usando imports de todas las imágenes disponibles
-    const heroImages = [
-      CampusEsanImg,
-      EstudianteImg,
-      VicerrectoradoImg,
-      Vicerrectorado1Img,
-      MisionImg,
-    ]
+    const heroImages = [CampusEsanImg, EstudianteImg, VicerrectoradoImg, MisionImg]
     const currentHeroImage = ref(heroImages[0])
     let intervalId = null
 
