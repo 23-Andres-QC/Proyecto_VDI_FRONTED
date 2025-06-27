@@ -57,17 +57,6 @@
               @click="handleLogin"
             />
 
-            <div class="text-center">
-              <q-btn
-                flat
-                label="¿Ha olvidado la contraseña?"
-                @click="showChangePassword = true"
-                size="sm"
-                class="forgot-password-btn"
-                color="red"
-              />
-            </div>
-
             <!-- Modal para cambiar contraseña -->
             <q-dialog v-model="showChangePassword">
               <ChangePasswordForm @close="showChangePassword = false" />
