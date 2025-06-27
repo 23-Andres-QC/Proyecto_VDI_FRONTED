@@ -7,51 +7,62 @@
     <q-header elevated class="header-custom">
       <q-toolbar class="nav-container">
         <!-- Sección del logo y título institucional (movido a la izquierda) -->
-        <div class="logo-section">
+        <div class="logo-section animate-slide-in-left">
           <div class="logo-placeholder">
             <img
-              src="src/assets/Home_imagenes/LogoNegro.jpg"
+              :src="LogoNegroImg"
               alt="Universidad Esan"
-              class="logo-img"
+              class="logo-img animate-bounce-subtle"
             />
           </div>
           <div class="nav-title">
-            <div class="title-line-1">VICERRECTORADO</div>
-            <div class="title-line-2">DE INVESTIGACIÓN</div>
+            <div class="title-line-1 animate-text-glow">VICERRECTORADO</div>
+            <div class="title-line-2 animate-text-glow">DE INVESTIGACIÓN</div>
           </div>
         </div>
 
         <!-- Menú de navegación principal (movido a la derecha) -->
-        <div class="nav-menu">
-          <q-btn flat label="UE Esan" @click="openUeEsan" />
-          <q-btn flat label="Portal Académico" @click="openPortalAcademico" />
-          <q-btn flat label="Nosotros" @click="scrollTo('nosotros')" />
-          <q-btn flat label="Recursos" @click="openRecursos" />
+        <div class="nav-menu animate-slide-in-right">
+          <q-btn flat label="UE Esan" @click="openUeEsan" class="nav-btn-enhanced" />
+          <q-btn
+            flat
+            label="Portal Académico"
+            @click="openPortalAcademico"
+            class="nav-btn-enhanced"
+          />
+          <q-btn flat label="Nosotros" @click="scrollTo('nosotros')" class="nav-btn-enhanced" />
+          <q-btn flat label="Recursos" @click="openRecursos" class="nav-btn-enhanced" />
           <div class="dropdown-container" @mouseenter="showDropdown" @mouseleave="hideDropdown">
-            <q-btn-dropdown flat label="Publicaciones" v-model="dropdownVisible" auto-close>
-              <q-list>
-                <q-item clickable>
+            <q-btn-dropdown
+              flat
+              label="Publicaciones"
+              v-model="dropdownVisible"
+              auto-close
+              class="nav-btn-enhanced"
+            >
+              <q-list class="dropdown-list-enhanced">
+                <q-item clickable class="dropdown-item-enhanced">
                   <q-item-section>Publicaciones 2020</q-item-section>
                 </q-item>
-                <q-item clickable>
+                <q-item clickable class="dropdown-item-enhanced">
                   <q-item-section>Publicaciones 2021</q-item-section>
                 </q-item>
-                <q-item clickable>
+                <q-item clickable class="dropdown-item-enhanced">
                   <q-item-section>Publicaciones 2022</q-item-section>
                 </q-item>
-                <q-item clickable>
+                <q-item clickable class="dropdown-item-enhanced">
                   <q-item-section>Publicaciones 2023</q-item-section>
                 </q-item>
-                <q-item clickable>
+                <q-item clickable class="dropdown-item-enhanced">
                   <q-item-section>Publicaciones 2024</q-item-section>
                 </q-item>
-                <q-item clickable>
+                <q-item clickable class="dropdown-item-enhanced">
                   <q-item-section>Publicaciones 2025</q-item-section>
                 </q-item>
               </q-list>
             </q-btn-dropdown>
           </div>
-          <q-btn class="login-btn" label="Inicio sesión" @click="goToLogin" />
+          <q-btn class="login-btn login-btn-enhanced" label="Inicio sesión" @click="goToLogin" />
         </div>
       </q-toolbar>
     </q-header>
@@ -82,23 +93,23 @@
       </div>
 
       <!-- Contenido principal sobre la imagen -->
-      <div class="hero-content">
-        <h1 class="hero-title">Vicerrectorrado de Investigación</h1>
-        <p class="hero-subtitle">
+      <div class="hero-content animate-fade-in-up">
+        <h1 class="hero-title animate-type-writer">Vicerrectorrado de Investigación</h1>
+        <p class="hero-subtitle animate-fade-in-delay">
           Fomentamos una cultura de investigación e innovación en la comunidad universitaria
         </p>
 
         <!-- Tarjetas de acceso rápido a secciones principales -->
-        <div class="hero-cards">
-          <q-card class="hero-card" @click="scrollTo('nosotros')">
+        <div class="hero-cards animate-cards-entrance">
+          <q-card class="hero-card card-float-effect" @click="scrollTo('nosotros')">
             <q-card-section class="text-center">
-              <q-icon name="assessment" size="48px" class="hero-card-icon" />
+              <q-icon name="assessment" size="48px" class="hero-card-icon animate-pulse" />
               <h3>Dirección de Investigación</h3>
             </q-card-section>
           </q-card>
-          <q-card class="hero-card" @click="openEsanEdiciones">
+          <q-card class="hero-card card-float-effect" @click="openEsanEdiciones">
             <q-card-section class="text-center">
-              <q-icon name="menu_book" size="48px" class="hero-card-icon" />
+              <q-icon name="menu_book" size="48px" class="hero-card-icon animate-pulse" />
               <h3>Esan ediciones</h3>
             </q-card-section>
           </q-card>
@@ -110,39 +121,79 @@
     <!-- BLOQUE 3: SECCIÓN "¿QUÉ HACE?" -->
     <!-- ========================================= -->
     <!-- Información institucional con layout de texto e imagen lado a lado -->
-    <section class="about-section" id="nosotros">
+    <section class="about-section animate-section-reveal" id="nosotros">
       <div class="container">
         <div class="row q-gutter-xl items-center no-wrap">
           <!-- Columna de contenido textual -->
-          <div class="col-md-6 col-12 text-content">
-            <q-card class="queHace-content">
-              <q-card-section>
-                <h2 class="section-title">¿QUE HACE?</h2>
-                <p class="about-text">
-                  El Vicerrectorado de Investigación se encarga de promover, coordinar y supervisar
-                  las actividades de investigación científica, tecnológica e innovación dentro de la
-                  universidad.
-                </p>
-                <p class="about-text">
-                  Facilita el desarrollo de proyectos de investigación, apoya a los docentes
-                  investigadores y gestiona fondos y convenios con entidades nacionales e
-                  internacionales.
-                </p>
-                <p class="about-text">
-                  Además, impulsa la formación académica a través de programas de posgrado y
-                  publicaciones científicas.
-                </p>
+          <div class="col-md-6 col-12 text-content animate-slide-in-left">
+            <q-card class="queHace-content card-enhanced">
+              <q-card-section class="content-section-enhanced">
+                <div class="title-container">
+                  <h2 class="section-title title-enhanced animate-title-reveal">¿QUÉ HACE?</h2>
+                  <div class="title-decoration"></div>
+                </div>
+
+                <div class="text-content-wrapper">
+                  <div class="text-block animate-text-slide-up" style="animation-delay: 0.2s">
+                    <div class="text-number">01</div>
+                    <p class="about-text text-enhanced highlight-text">
+                      <span class="text-highlight">Promover, coordinar y supervisar</span> las
+                      actividades de
+                      <span class="keyword-highlight">investigación científica</span>,
+                      <span class="keyword-highlight">tecnológica e innovación</span> dentro de la
+                      universidad, estableciendo estándares de excelencia académica.
+                    </p>
+                  </div>
+
+                  <div class="text-block animate-text-slide-up" style="animation-delay: 0.4s">
+                    <div class="text-number">02</div>
+                    <p class="about-text text-enhanced highlight-text">
+                      <span class="text-highlight">Facilitar el desarrollo</span> de proyectos de
+                      investigación de <span class="keyword-highlight">alto impacto</span>,
+                      brindando apoyo integral a los
+                      <span class="keyword-highlight">docentes investigadores</span> y gestionando
+                      fondos y convenios estratégicos con entidades
+                      <span class="emphasis-text">nacionales e internacionales</span>.
+                    </p>
+                  </div>
+
+                  <div class="text-block animate-text-slide-up" style="animation-delay: 0.6s">
+                    <div class="text-number">03</div>
+                    <p class="about-text text-enhanced highlight-text">
+                      <span class="text-highlight">Impulsar la formación académica</span> de
+                      <span class="keyword-highlight">excelencia</span> a través de programas de
+                      <span class="keyword-highlight">posgrado especializados</span> y la promoción
+                      de <span class="emphasis-text">publicaciones científicas</span> de
+                      reconocimiento internacional.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="stats-container animate-fade-in" style="animation-delay: 0.8s">
+                  <div class="stat-item">
+                    <div class="stat-icon">
+                      <q-icon name="trending_up" size="24px" />
+                    </div>
+                    <div class="stat-text">Investigación de Alto Impacto</div>
+                  </div>
+                  <div class="stat-item">
+                    <div class="stat-icon">
+                      <q-icon name="groups" size="24px" />
+                    </div>
+                    <div class="stat-text">Colaboración Internacional</div>
+                  </div>
+                </div>
               </q-card-section>
             </q-card>
           </div>
 
           <!-- Columna de imagen ilustrativa -->
-          <div class="col-md-6 col-12 image-content">
-            <div class="about-image-container">
+          <div class="col-md-6 col-12 image-content animate-slide-in-right">
+            <div class="about-image-container image-enhanced">
               <img
-                src="src/assets/Home_imagenes/Vicerrectorado1.jpg"
+                :src="Vicerrectorado1Img"
                 alt="Director del Vicerrectorado"
-                class="about-img"
+                class="about-img image-hover-effect"
               />
             </div>
           </div>
@@ -154,30 +205,81 @@
     <!-- BLOQUE 4: SECCIÓN MISIÓN -->
     <!-- ========================================= -->
     <!-- Declaración de la misión institucional con imagen y tarjeta destacada -->
-    <section class="mission-section">
+    <section class="mission-section animate-section-reveal">
       <div class="container">
         <div class="row q-gutter-xl items-center no-wrap">
           <!-- Columna de imagen (orden invertido respecto a la sección anterior) -->
-          <div class="col-md-6 col-12">
-            <div class="mission-image-container">
+          <div class="col-md-6 col-12 animate-slide-in-left">
+            <div class="mission-image-container image-enhanced">
               <img
-                src="src/assets/Home_imagenes/mision.jpg"
+                :src="MisionImg"
                 alt="Imagen de Innovación"
-                class="mission-img"
+                class="mission-img image-hover-effect"
               />
             </div>
           </div>
 
           <!-- Columna de contenido de misión en tarjeta estilizada -->
-          <div class="col-md-6 col-12">
-            <q-card class="mission-content">
-              <q-card-section>
-                <h2 class="mission-title">Misión</h2>
-                <p class="mission-text">
-                  Fomentar una cultura de investigación e innovación en la comunidad universitaria,
-                  contribuyendo al desarrollo científico, tecnológico y social del país mediante la
-                  generación de conocimiento de calidad y con impacto positivo en la sociedad.
-                </p>
+          <div class="col-md-6 col-12 animate-slide-in-right">
+            <q-card class="mission-content card-enhanced">
+              <q-card-section class="mission-section-enhanced">
+                <div class="mission-header">
+                  <div class="mission-icon-container">
+                    <q-icon name="rocket_launch" size="48px" class="mission-icon-large" />
+                  </div>
+                  <h2 class="mission-title title-enhanced animate-title-reveal">Misión</h2>
+                  <div class="mission-subtitle">
+                    Transformando el Futuro a Través de la Investigación
+                  </div>
+                </div>
+
+                <div class="mission-content-wrapper">
+                  <div
+                    class="mission-text-block animate-text-slide-up"
+                    style="animation-delay: 0.3s"
+                  >
+                    <div class="mission-quote-mark">"</div>
+                    <p class="mission-text text-enhanced mission-highlight">
+                      <span class="mission-emphasis"
+                        >Fomentar una cultura de investigación e innovación</span
+                      >
+                      en la <span class="keyword-highlight">comunidad universitaria</span>,
+                      contribuyendo al
+                      <span class="impact-text">desarrollo científico, tecnológico y social</span>
+                      del país mediante la
+                      <span class="excellence-text">generación de conocimiento de calidad</span> y
+                      con <span class="impact-highlight">impacto positivo transformador</span> en la
+                      sociedad.
+                    </p>
+                    <div class="mission-quote-mark closing">"</div>
+                  </div>
+
+                  <div class="mission-pillars animate-fade-in" style="animation-delay: 0.6s">
+                    <div class="pillar-item">
+                      <div class="pillar-icon">
+                        <q-icon name="science" size="20px" />
+                      </div>
+                      <span>Excelencia Científica</span>
+                    </div>
+                    <div class="pillar-item">
+                      <div class="pillar-icon">
+                        <q-icon name="innovation" size="20px" />
+                      </div>
+                      <span>Innovación Tecnológica</span>
+                    </div>
+                    <div class="pillar-item">
+                      <div class="pillar-icon">
+                        <q-icon name="public" size="20px" />
+                      </div>
+                      <span>Impacto Social</span>
+                    </div>
+                  </div>
+
+                  <div class="mission-cta animate-slide-up" style="animation-delay: 0.9s">
+                    <div class="cta-text">Construyendo el futuro del conocimiento</div>
+                    <div class="cta-underline"></div>
+                  </div>
+                </div>
               </q-card-section>
             </q-card>
           </div>
@@ -188,159 +290,167 @@
     <!-- BLOQUE 5: LÍNEAS DE INVESTIGACIÓN -->
     <!-- ========================================= -->
     <!-- Grid de tarjetas mostrando todas las áreas de investigación disponibles -->
-    <section class="research-section" id="investigacion">
+    <section class="research-section animate-section-reveal" id="investigacion">
       <div class="container">
-        <h2 class="research-title">Líneas de Investigación</h2>
-        <div class="research-grid">
+        <h2 class="research-title title-enhanced animate-fade-in">Líneas de Investigación</h2>
+        <div class="research-grid animate-stagger-cards">
           <!-- PRIMERA FILA DE LÍNEAS DE INVESTIGACIÓN -->
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="groups" size="48px" class="research-icon" />
+              <q-icon name="groups" size="48px" class="research-icon icon-enhanced" />
               <h3>ADMINISTRACIÓN</h3>
             </q-card-section>
           </q-card>
 
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="gavel" size="48px" class="research-icon" />
+              <q-icon name="gavel" size="48px" class="research-icon icon-enhanced" />
               <h3>DERECHO</h3>
             </q-card-section>
           </q-card>
 
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="account_balance" size="48px" class="research-icon" />
+              <q-icon name="account_balance" size="48px" class="research-icon icon-enhanced" />
               <h3>CONTABILIDAD, COSTOS Y/O TRIBUTACIÓN</h3>
             </q-card-section>
           </q-card>
 
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="hotel" size="48px" class="research-icon" />
+              <q-icon name="hotel" size="48px" class="research-icon icon-enhanced" />
               <h3>TURISMO, HOTELERÍA Y GASTRONOMÍA</h3>
             </q-card-section>
           </q-card>
 
           <!-- SEGUNDA FILA DE LÍNEAS DE INVESTIGACIÓN -->
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="precision_manufacturing" size="48px" class="research-icon" />
+              <q-icon
+                name="precision_manufacturing"
+                size="48px"
+                class="research-icon icon-enhanced"
+              />
               <h3>DISEÑO INDUSTRIAL, AUTOMATIZACIÓN Y/O ROBÓTICA</h3>
             </q-card-section>
           </q-card>
 
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="trending_up" size="48px" class="research-icon" />
+              <q-icon name="trending_up" size="48px" class="research-icon icon-enhanced" />
               <h3>ECONOMÍA Y FINANZAS</h3>
             </q-card-section>
           </q-card>
 
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="school" size="48px" class="research-icon" />
+              <q-icon name="school" size="48px" class="research-icon icon-enhanced" />
               <h3>EDUCACIÓN Y GESTIÓN DEL CONOCIMIENTO</h3>
             </q-card-section>
           </q-card>
 
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="lightbulb" size="48px" class="research-icon" />
+              <q-icon name="lightbulb" size="48px" class="research-icon icon-enhanced" />
               <h3>EMPRENDIMIENTO E INNOVACIÓN</h3>
             </q-card-section>
           </q-card>
 
           <!-- TERCERA FILA DE LÍNEAS DE INVESTIGACIÓN -->
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="handshake" size="48px" class="research-icon" />
+              <q-icon name="handshake" size="48px" class="research-icon icon-enhanced" />
               <h3>ÉTICA, COMPLIANCE Y GOBERNANZA</h3>
             </q-card-section>
           </q-card>
 
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="account_balance_wallet" size="48px" class="research-icon" />
+              <q-icon
+                name="account_balance_wallet"
+                size="48px"
+                class="research-icon icon-enhanced"
+              />
               <h3>GESTIÓN PÚBLICA Y POLÍTICAS PÚBLICAS</h3>
             </q-card-section>
           </q-card>
 
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="public" size="48px" class="research-icon" />
+              <q-icon name="public" size="48px" class="research-icon icon-enhanced" />
               <h3>GLOBALIZACIÓN Y NEGOCIOS INTERNACIONALES</h3>
             </q-card-section>
           </q-card>
 
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="factory" size="48px" class="research-icon" />
+              <q-icon name="factory" size="48px" class="research-icon icon-enhanced" />
               <h3>INDUSTRIAS EXTRACTIVAS AGROINDUSTRIA, PESCA Y ENERGÍA</h3>
             </q-card-section>
           </q-card>
 
           <!-- CUARTA FILA DE LÍNEAS DE INVESTIGACIÓN -->
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="psychology" size="48px" class="research-icon" />
+              <q-icon name="psychology" size="48px" class="research-icon icon-enhanced" />
               <h3>LIDERAZGO, COMPORTAMIENTO ORGANIZACIONAL DEL GRUPO</h3>
             </q-card-section>
           </q-card>
 
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="campaign" size="48px" class="research-icon" />
+              <q-icon name="campaign" size="48px" class="research-icon icon-enhanced" />
               <h3>MARKETING</h3>
             </q-card-section>
           </q-card>
 
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="eco" size="48px" class="research-icon" />
+              <q-icon name="eco" size="48px" class="research-icon icon-enhanced" />
               <h3>MEDIO AMBIENTE</h3>
             </q-card-section>
           </q-card>
 
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="settings" size="48px" class="research-icon" />
+              <q-icon name="settings" size="48px" class="research-icon icon-enhanced" />
               <h3>PRODUCCIÓN, PROCESOS Y/O GESTIÓN DE LA CALIDAD</h3>
             </q-card-section>
           </q-card>
 
           <!-- QUINTA FILA DE LÍNEAS DE INVESTIGACIÓN -->
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="psychology_alt" size="48px" class="research-icon" />
+              <q-icon name="psychology_alt" size="48px" class="research-icon icon-enhanced" />
               <h3>PSICOLOGÍA</h3>
             </q-card-section>
           </q-card>
 
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="health_and_safety" size="48px" class="research-icon" />
+              <q-icon name="health_and_safety" size="48px" class="research-icon icon-enhanced" />
               <h3>EDUCACIÓN, INDUSTRIAL, SALUD OCUPACIONAL Y/O SERVICIOS DE SALUD</h3>
             </q-card-section>
           </q-card>
 
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="computer" size="48px" class="research-icon" />
+              <q-icon name="computer" size="48px" class="research-icon icon-enhanced" />
               <h3>SISTEMAS Y TECNOLOGÍAS DE INFORMACIÓN</h3>
             </q-card-section>
           </q-card>
 
-          <q-card class="research-card">
+          <q-card class="research-card research-card-enhanced">
             <q-card-section class="text-center">
-              <q-icon name="local_shipping" size="48px" class="research-icon" />
+              <q-icon name="local_shipping" size="48px" class="research-icon icon-enhanced" />
               <h3>SUPPLY CHAIN Y GESTIÓN LOGÍSTICA INTEGRAL</h3>
             </q-card-section>
           </q-card>
 
           <!-- LÍNEA DE INVESTIGACIÓN DESTACADA (ancho completo) -->
-          <q-card class="research-card full-width">
+          <q-card class="research-card research-card-enhanced full-width">
             <q-card-section class="text-center">
-              <q-icon name="recycling" size="48px" class="research-icon" />
+              <q-icon name="recycling" size="48px" class="research-icon icon-enhanced" />
               <h3>
                 DESARROLLO SOSTENIBLE, RESPONSABILIDAD SOCIAL EMPRESARIAL (RSE) Y/O CRECIMIENTO
                 COMUNITARIO
@@ -455,11 +565,10 @@ import EstudianteImg from '../assets/Home_imagenes/Estudiante.jpg'
 import VicerrectoradoImg from '../assets/Home_imagenes/Vicerrectorado.jpg'
 import Vicerrectorado1Img from '../assets/Home_imagenes/Vicerrectorado1.jpg'
 import MisionImg from '../assets/Home_imagenes/mision.jpg'
+import LogoNegroImg from '../assets/Home_imagenes/LogoNegro.jpg'
 
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 import ChatBot from '../components/ChatBot.vue'
-
-const { getScrollTarget, setVerticalScrollPosition } = scroll
 export default defineComponent({
   name: 'HomePantalla',
   components: {
@@ -486,17 +595,66 @@ export default defineComponent({
       intervalId = setInterval(() => {
         idx = (idx + 1) % heroImages.length
         currentHeroImage.value = heroImages[idx]
-        console.log('Cambiando imagen a:', currentHeroImage.value, 'Índice:', idx + 1, 'de', heroImages.length) // Debug mejorado
-      }, 4000) // Cambiar cada 4 segundos para dar más tiempo a ver cada imagen
+        console.log(
+          'Cambiando imagen a:',
+          currentHeroImage.value,
+          'Índice:',
+          idx + 1,
+          'de',
+          heroImages.length,
+        ) // Debug mejorado
+      }, 5000) // Cambiar cada 4 segundos para dar más tiempo a ver cada imagen
+
+      // Configurar el Intersection Observer para animaciones de scroll
+      setupScrollAnimations()
     })
+
     onBeforeUnmount(() => {
       if (intervalId) clearInterval(intervalId)
     })
+
+    // Función para configurar las animaciones al hacer scroll
+    const setupScrollAnimations = () => {
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px',
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view')
+            // Para tarjetas de investigación, agregar delay escalonado
+            if (entry.target.classList.contains('research-grid')) {
+              const cards = entry.target.querySelectorAll('.research-card')
+              cards.forEach((card, index) => {
+                setTimeout(() => {
+                  card.style.opacity = '1'
+                  card.style.transform = 'translateY(0)'
+                }, index * 100)
+              })
+            }
+          }
+        })
+      }, observerOptions)
+
+      // Observar secciones
+      const sections = document.querySelectorAll('.animate-section-reveal')
+      sections.forEach((section) => observer.observe(section))
+
+      // Observar grid de investigación
+      const researchGrid = document.querySelector('.research-grid')
+      if (researchGrid) observer.observe(researchGrid)
+    }
 
     return {
       goToLogin,
       currentHeroImage,
       heroImages, // Exponer heroImages para los indicadores
+      // Exponer las imágenes importadas para el template
+      Vicerrectorado1Img,
+      MisionImg,
+      LogoNegroImg,
     }
   },
   data() {
@@ -563,15 +721,408 @@ export default defineComponent({
 </script>
 
 <!-- ========================================= -->
-<!-- BLOQUE 8: ESTILOS CSS/SCSS -->
+<!-- BLOQUE 8: ESTILOS CSS/SCSS MEJORADOS -->
 <!-- ========================================= -->
 <style lang="scss" scoped>
-/* ESTILOS GENERALES DE LA PÁGINA */
+/* IMPORTACIÓN DE GOOGLE FONTS PARA TIPOGRAFÍAS PROFESIONALES */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+/* VARIABLES CSS PARA COLORES PASTELES MODERNOS */
+:root {
+  /* Colores principales pasteles suaves */
+  --primary-color: #e8a5a5;
+  --primary-dark: #d49494;
+  --primary-light: #f2c2c2;
+  --secondary-color: #a8b8d8;
+  --accent-color: #f8f9fa;
+
+  /* Colores de texto suaves */
+  --text-dark: #4a5568;
+  --text-light: #6b7280;
+  --text-medium: #374151;
+
+  /* Colores base */
+  --white: #ffffff;
+  --off-white: #fefefe;
+  --soft-gray: #f7f8fc;
+  --light-gray: #e2e8f0;
+
+  /* Gradientes pasteles modernos */
+  --gradient-primary: linear-gradient(135deg, #e8a5a5 0%, #f2c2c2 100%);
+  --gradient-secondary: linear-gradient(135deg, #a8b8d8 0%, #c8d5f0 100%);
+  --gradient-accent: linear-gradient(135deg, #e0f2e0 0%, #f0f8f0 100%);
+  --gradient-hero: linear-gradient(
+    135deg,
+    rgba(232, 165, 165, 0.1) 0%,
+    rgba(168, 184, 216, 0.1) 100%
+  );
+
+  /* Sombras suaves */
+  --shadow-soft: 0 2px 8px rgba(74, 85, 104, 0.06);
+  --shadow-medium: 0 4px 16px rgba(74, 85, 104, 0.08);
+  --shadow-heavy: 0 8px 32px rgba(74, 85, 104, 0.12);
+
+  /* Border radius moderno */
+  --border-radius: 16px;
+  --border-radius-large: 24px;
+  --border-radius-small: 8px;
+
+  /* Transiciones suaves */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-medium: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Colores pasteles adicionales */
+  --pastel-mint: #e0f7e7;
+  --pastel-blue: #e8f4f8;
+  --pastel-lavender: #f0e8f8;
+  --pastel-peach: #ffeee8;
+  --pastel-yellow: #fff8e1;
+}
+
+/* ========================================= */
+/* ANIMACIONES Y EFECTOS DE MOVIMIENTO */
+/* ========================================= */
+
+/* Animación de entrada desde la izquierda */
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Animación de entrada desde la derecha */
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Animación de aparición desde abajo */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animación de aparición gradual */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Animación de máquina de escribir */
+@keyframes typeWriter {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+/* Animación de pulso sutil */
+@keyframes pulseSubtle {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Animación de rebote sutil */
+@keyframes bounceSubtle {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-5px);
+  }
+  60% {
+    transform: translateY(-2px);
+  }
+}
+
+/* Animación de brillo en texto */
+@keyframes textGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 5px rgba(229, 62, 62, 0.3);
+  }
+  50% {
+    text-shadow:
+      0 0 20px rgba(229, 62, 62, 0.6),
+      0 0 30px rgba(229, 62, 62, 0.4);
+  }
+}
+
+/* Animación de flotación */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Nuevas animaciones para texto mejorado */
+@keyframes textSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes titleReveal {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+    letter-spacing: 10px;
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    letter-spacing: -0.02em;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes numberCounter {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(-180deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes highlightSweep {
+  0% {
+    background-size: 0 100%;
+  }
+  100% {
+    background-size: 100% 100%;
+  }
+}
+
+/* CLASES DE ANIMACIÓN */
+.animate-slide-in-left {
+  animation: slideInLeft 0.8s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.8s ease-out;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+.animate-fade-in-delay {
+  animation: fadeIn 1.2s ease-out 0.3s both;
+}
+
+.animate-type-writer {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid var(--primary-color);
+  animation:
+    typeWriter 2s steps(40) 0.5s both,
+    blink 1s infinite;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    border-color: transparent;
+  }
+  51%,
+  100% {
+    border-color: var(--primary-color);
+  }
+}
+
+.animate-bounce-subtle {
+  animation: bounceSubtle 2s infinite;
+}
+
+.animate-text-glow {
+  animation: textGlow 3s ease-in-out infinite;
+}
+
+.animate-pulse {
+  animation: pulseSubtle 2s ease-in-out infinite;
+}
+
+.animate-cards-entrance {
+  animation: fadeInUp 1s ease-out 0.8s both;
+}
+
+.animate-stagger-cards {
+  .research-card {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+
+    &:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+    &:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    &:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+    &:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+    &:nth-child(5) {
+      animation-delay: 0.5s;
+    }
+    &:nth-child(6) {
+      animation-delay: 0.6s;
+    }
+    &:nth-child(7) {
+      animation-delay: 0.7s;
+    }
+    &:nth-child(8) {
+      animation-delay: 0.8s;
+    }
+    &:nth-child(9) {
+      animation-delay: 0.9s;
+    }
+    &:nth-child(10) {
+      animation-delay: 1s;
+    }
+    &:nth-child(11) {
+      animation-delay: 1.1s;
+    }
+    &:nth-child(12) {
+      animation-delay: 1.2s;
+    }
+    &:nth-child(13) {
+      animation-delay: 1.3s;
+    }
+    &:nth-child(14) {
+      animation-delay: 1.4s;
+    }
+    &:nth-child(15) {
+      animation-delay: 1.5s;
+    }
+    &:nth-child(16) {
+      animation-delay: 1.6s;
+    }
+    &:nth-child(17) {
+      animation-delay: 1.7s;
+    }
+    &:nth-child(18) {
+      animation-delay: 1.8s;
+    }
+    &:nth-child(19) {
+      animation-delay: 1.9s;
+    }
+    &:nth-child(20) {
+      animation-delay: 2s;
+    }
+    &:nth-child(21) {
+      animation-delay: 2.1s;
+    }
+  }
+}
+
+.animate-section-reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  animation: fadeInUp 1s ease-out forwards;
+
+  &.in-view {
+    animation-delay: 0.2s;
+  }
+}
+
+.card-float-effect {
+  animation: float 3s ease-in-out infinite;
+
+  &:nth-child(2) {
+    animation-delay: 1.5s;
+  }
+}
+
+/* Nuevas clases de animación para texto mejorado */
+.animate-text-slide-up {
+  opacity: 0;
+  animation: textSlideUp 0.8s ease-out forwards;
+}
+
+.animate-title-reveal {
+  animation: titleReveal 1s ease-out forwards;
+}
+
+.animate-slide-up {
+  opacity: 0;
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+/* ESTILOS GENERALES MEJORADOS */
 .home-page {
   padding-top: 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  line-height: 1.6;
+  color: var(--text-dark);
 }
 
 /* Ocultar barra de scroll completamente */
@@ -607,130 +1158,207 @@ export default defineComponent({
   margin: 0;
   padding: 0;
   height: 100%;
-  background: #000000;
+  background: #ffffff;
 }
 
 /* ========================================= */
-/* ESTILOS DEL HEADER/NAVEGACIÓN */
+/* ESTILOS DEL HEADER/NAVEGACIÓN MODERNOS */
 /* ========================================= */
 .header-custom {
-  background: #000000;
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
   color: white;
   width: 100vw;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  overflow-x: hidden; /* Eliminar scroll horizontal */
+  overflow-x: hidden;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(232, 165, 165, 0.3);
+  box-shadow: var(--shadow-soft);
 }
 
 .nav-container {
   max-width: 100%;
   margin: 0;
-  padding: 5px 3px; /* Reducir padding vertical para header más corto */
+  padding: 8px 3rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   box-sizing: border-box;
-  overflow-x: hidden; /* Eliminar scroll horizontal */
-  min-height: 60px; /* Reducir altura mínima del header */
+  overflow-x: hidden;
+  min-height: 70px;
+  position: relative;
 }
 
 .logo-section {
   display: flex;
-  align-items: center; /* Centrado vertical dentro de la sección */
-  gap: 0.5rem;
+  align-items: center;
+  gap: 1rem;
   order: 1;
   margin-right: auto;
   padding-left: 0;
-  flex-shrink: 0; /* Evitar que se comprima */
-  height: 100%; /* Ocupar toda la altura del contenedor */
+  flex-shrink: 0;
+  height: 100%;
+  position: relative;
 }
 
 .logo-placeholder {
-  width: 120px;
-  height: 40px;
+  width: 130px;
+  height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  transition: var(--transition-medium);
 }
 
 .logo-img {
-  height: 40px;
+  height: 45px;
   width: auto;
+  filter: brightness(1.1) contrast(1.2);
+  transition: var(--transition-medium);
+
+  &:hover {
+    transform: scale(1.05);
+    filter: brightness(1.3) contrast(1.3);
+  }
 }
 
 .nav-title {
-  font-size: 1.6rem; /* Aumentar tamaño de fuente */
-  font-weight: bold;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
   line-height: 1.1;
   text-transform: uppercase;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  letter-spacing: 0.5px;
 }
 
 .title-line-1 {
-  color: #cc3333; /* Rojo medio oscuro */
+  color: #dc2626;
   margin-bottom: 2px;
+  text-shadow: 0 2px 4px rgba(220, 38, 38, 0.6);
+  font-weight: 800;
 }
 
 .title-line-2 {
-  color: #ff6666; /* Rojo más claro */
+  color: #dc2626;
+  text-shadow: 0 2px 4px rgba(220, 38, 38, 0.6);
+  font-weight: 600;
 }
 
 .nav-menu {
   display: flex;
-  gap: 0.8rem;
+  gap: 1rem;
   align-items: center;
   order: 2;
   margin-left: auto;
   padding-right: 0;
-  flex-shrink: 0; /* Evitar que se comprima */
+  flex-shrink: 0;
 }
 
-.login-btn {
-  background: #e53e3e !important;
+.nav-btn-enhanced {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
   color: white !important;
-  border-radius: 25px;
+  transition: all var(--transition-medium);
+  border-radius: var(--border-radius-small);
+  padding: 10px 18px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-primary);
+    transition: var(--transition-medium);
+    z-index: 0;
+  }
+
+  &:hover {
+    color: white !important;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-medium);
+
+    &::before {
+      left: 0;
+    }
+  }
+
+  .q-btn__content {
+    position: relative;
+    z-index: 1;
+  }
 }
 
-/* Efectos hover para los botones del menú */
-.nav-menu .q-btn {
-  color: white;
-  transition: all 0.3s ease;
-}
-
-.nav-menu .q-btn:hover {
+.login-btn-enhanced {
+  background: var(--gradient-primary) !important;
   color: white !important;
-  background: rgba(229, 62, 62, 0.1) !important;
-  border: 2px solid #ff3333 !important;
-  border-radius: 6px;
+  border-radius: 30px !important;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 12px 28px !important;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--transition-medium);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+    opacity: 0;
+    transition: var(--transition-medium);
+  }
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--shadow-medium);
+
+    &::before {
+      opacity: 1;
+    }
+  }
 }
 
-.login-btn:hover {
-  background: #c53030 !important;
-  transform: translateY(-2px);
-}
-
-/* Estilos para el dropdown de publicaciones */
 .dropdown-container {
   position: relative;
   display: inline-block;
 }
 
-.dropdown-container .q-btn-dropdown {
-  transition: all 0.3s ease;
+.dropdown-list-enhanced {
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(232, 165, 165, 0.3);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-heavy);
 }
 
-.dropdown-container:hover .q-btn-dropdown {
-  background: rgba(229, 62, 62, 0.1) !important;
-  color: #e53e3e !important;
+.dropdown-item-enhanced {
+  color: white;
+  transition: var(--transition-fast);
+
+  &:hover {
+    background: rgba(232, 165, 165, 0.2);
+    color: var(--primary-light);
+  }
 }
 
 /* ========================================= */
-/* ESTILOS DE LA SECCIÓN HERO */
+/* ESTILOS DE LA SECCIÓN HERO MEJORADOS */
 /* ========================================= */
 .hero {
   height: 100vh;
@@ -757,56 +1385,74 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: all 2s ease-in-out; /* Transición más larga para múltiples imágenes */
-  animation: fadeInScale 2s ease-in-out; /* Animación de entrada con escala */
+  transition: all 3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: heroImageEntrance 3s ease-in-out;
+  filter: brightness(0.8) contrast(1.1);
 }
 
-/* Animación mejorada de fade in con escala para múltiples imágenes */
-@keyframes fadeInScale {
+@keyframes heroImageEntrance {
   0% {
     opacity: 0;
-    transform: scale(1.1);
-    filter: blur(2px);
+    transform: scale(1.1) rotate(0.5deg);
+    filter: blur(3px) brightness(0.6);
   }
   50% {
     opacity: 0.7;
-    transform: scale(1.05);
-    filter: blur(1px);
+    transform: scale(1.05) rotate(0deg);
+    filter: blur(1px) brightness(0.7);
   }
   100% {
     opacity: 1;
-    transform: scale(1);
-    filter: blur(0);
+    transform: scale(1) rotate(0deg);
+    filter: blur(0) brightness(0.8);
   }
 }
 
-/* Indicadores de imagen activa */
 .hero-indicators {
   position: absolute;
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 10px;
+  gap: 12px;
   z-index: 3;
 }
 
 .indicator {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.4);
   cursor: pointer;
-  transition: all 0.3s ease;
-}
+  transition: all var(--transition-medium);
+  position: relative;
 
-.indicator.active {
-  background: #e53e3e;
-  transform: scale(1.2);
-}
+  &::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    transition: all var(--transition-medium);
+  }
 
-.indicator:hover {
-  background: rgba(255, 255, 255, 0.8);
+  &.active {
+    background: var(--primary-color);
+    transform: scale(1.3);
+    box-shadow: 0 0 15px rgba(229, 62, 62, 0.6);
+
+    &::before {
+      border-color: rgba(229, 62, 62, 0.3);
+    }
+  }
+
+  &:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.8);
+    transform: scale(1.1);
+  }
 }
 
 .hero-overlay {
@@ -815,62 +1461,175 @@ export default defineComponent({
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: linear-gradient(
+    135deg,
+    rgba(248, 249, 250, 0.4) 0%,
+    rgba(232, 165, 165, 0.2) 50%,
+    rgba(168, 184, 216, 0.3) 100%
+  );
+  backdrop-filter: blur(1px);
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 800px;
-  padding: 2rem;
+  max-width: 900px;
+  padding: 3rem;
 }
 
 .hero-title {
-  font-size: 3.5rem;
-  margin-bottom: 1rem;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 800;
+  text-shadow: 3px 6px 12px rgba(0, 0, 0, 0.6);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #cc0000;
+  background-color: red !important;
+  border: #000000;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 4px 8px rgba(204, 0, 0, 0.6));
+  width: 100%;
+  text-align: center;
+  white-space: normal;
+  overflow: visible;
 }
 
 .hero-subtitle {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  opacity: 0.9;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  font-family: 'Inter', sans-serif;
+  font-size: 1.3rem;
+  margin-bottom: 3rem;
+  opacity: 1;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  font-weight: 500;
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #ffffff;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 240, 0.9) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.3));
+  letter-spacing: 0.3px;
 }
 
 .hero-cards {
   display: flex;
-  gap: 2rem;
+  gap: 2.5rem;
   justify-content: center;
-  margin-top: 3rem;
+  margin-top: 4rem;
+  perspective: 1000px;
 }
 
 .hero-card {
-  background: linear-gradient(135deg, #e53e3e, #ff6b6b);
-  color: white;
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.8) 0%, rgba(185, 28, 28, 0.9) 100%);
+  color: #000000;
   cursor: pointer;
-  transition: all 0.3s ease;
-  min-width: 200px;
+  transition: all var(--transition-medium);
+  min-width: 220px;
+  border-radius: var(--border-radius);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    0 4px 12px rgba(229, 62, 62, 0.1);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(229, 62, 62, 0.6);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-primary);
+    transition: var(--transition-slow);
+    opacity: 0.1;
+  }
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(229, 62, 62, 0.3);
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: var(--shadow-heavy);
+    color: #ffffff;
+    background: linear-gradient(135deg, rgba(185, 28, 28, 0.95) 0%, rgba(153, 27, 27, 1) 100%);
+
+    h3 {
+      color: #ffffff;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    &::before {
+      left: 0;
+      opacity: 0.9;
+    }
   }
 
   h3 {
-    margin-top: 1rem;
-    font-size: 1.1rem;
-    color: white;
+    margin-top: 1.5rem;
+    font-size: 1.2rem;
+    color: #000000;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    line-height: 1.4;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+    transition: var(--transition-medium);
   }
 }
 
 .hero-card-icon {
-  color: white;
+  color: #e53e3e;
+  transition: all var(--transition-medium);
+  filter: drop-shadow(0 4px 8px rgba(229, 62, 62, 0.4));
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
+  border-radius: 50%;
+  padding: 15px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(229, 62, 62, 0.6);
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.3),
+    inset 0 1px 2px rgba(255, 255, 255, 0.1);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #e53e3e, transparent, #e53e3e);
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0;
+    transition: all var(--transition-medium);
+  }
+}
+
+.hero-card:hover .hero-card-icon {
+  transform: scale(1.2);
+  color: #ff6b6b;
+  filter: drop-shadow(0 6px 12px rgba(255, 107, 107, 0.6));
+  border-color: #ff6b6b;
+  background: linear-gradient(135deg, rgba(30, 30, 30, 0.9) 0%, rgba(50, 50, 50, 0.95) 100%);
+  box-shadow:
+    0 8px 25px rgba(255, 107, 107, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+
+  &::before {
+    opacity: 1;
+    animation: rotate 3s linear infinite;
+  }
 }
 
 /* ========================================= */
-/* ESTILOS GENERALES DE SECCIONES */
+/* ESTILOS GENERALES DE SECCIONES MEJORADOS */
 /* ========================================= */
 .container {
   max-width: 1200px;
@@ -878,18 +1637,103 @@ export default defineComponent({
   padding: 0 2rem;
 }
 
+/* CLASES MEJORADAS PARA ELEMENTOS */
+.title-enhanced {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+  }
+}
+
+.text-enhanced {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.8;
+  font-weight: 400;
+  color: var(--text-dark);
+}
+
+.card-enhanced {
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-medium);
+  transition: all var(--transition-medium);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-heavy);
+  }
+}
+
+.image-enhanced {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(229, 62, 62, 0.1) 70%);
+    opacity: 0;
+    transition: var(--transition-medium);
+    z-index: 1;
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
+}
+
+.image-hover-effect {
+  transition: all var(--transition-slow);
+
+  &:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1) contrast(1.1);
+  }
+}
+
 /* ========================================= */
-/* ESTILOS DE LA SECCIÓN "¿QUÉ HACE?" */
+/* ESTILOS DE LA SECCIÓN "¿QUÉ HACE?" MODERNOS */
 /* ========================================= */
 .about-section {
-  padding: 5rem 0;
-  background: #fbfbfb;
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="0.5" fill="%23e8a5a5" opacity="0.1"/><circle cx="75" cy="75" r="0.5" fill="%23a8b8d8" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.2;
+  }
 }
 
 .about-section .row {
   display: flex;
   align-items: center;
   min-height: 500px;
+  position: relative;
+  z-index: 1;
 }
 
 .text-content {
@@ -906,38 +1750,266 @@ export default defineComponent({
 }
 
 .section-title {
-  color: #e53e3e;
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
-  font-weight: bold;
+  color: var(--primary-light);
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  font-weight: 800;
+  text-shadow: 0 4px 8px rgba(242, 194, 194, 0.4);
 }
 
 .about-text {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   line-height: 1.8;
-  margin-bottom: 1rem;
-  color: #333;
+  margin-bottom: 1.5rem;
+  color: #e2e8f0;
   text-align: justify;
+  position: relative;
+  padding-left: 20px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 4px;
+    height: 20px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+  }
 }
+
 .queHace-content {
-  background: linear-gradient(135deg, #9b9898, #ebe7e7);
-  color: white;
+  background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(0, 0, 0, 0.95) 100%);
+  color: #e2e8f0;
   height: 100%;
   display: flex;
   align-items: center;
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(232, 165, 165, 0.3);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(232, 165, 165, 0.08) 0%, transparent 70%);
+    animation: rotate 30s linear infinite;
+  }
+}
+
+/* Estilos mejorados para el contenido de "¿QUÉ HACE?" */
+.content-section-enhanced {
+  padding: 3rem 2.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.title-container {
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.title-decoration {
+  width: 80px;
+  height: 4px;
+  background: var(--gradient-primary);
+  border-radius: 2px;
+  margin-top: 1rem;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(229, 62, 62, 0.5);
+  }
+}
+
+.text-content-wrapper {
+  margin-bottom: 2rem;
+}
+
+.text-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 45px;
+    top: 50px;
+    width: 2px;
+    height: calc(100% - 30px);
+    background: linear-gradient(to bottom, rgba(229, 62, 62, 0.3), transparent);
+  }
+
+  &:last-child::before {
+    display: none;
+  }
+}
+
+.text-number {
+  background: var(--gradient-primary);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  font-family: 'Inter', sans-serif;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(229, 62, 62, 0.3);
+  animation: numberCounter 0.6s ease-out forwards;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, transparent, rgba(229, 62, 62, 0.4), transparent);
+    animation: rotate 3s linear infinite;
+    z-index: -1;
+  }
+}
+
+.highlight-text {
+  position: relative;
+}
+
+.text-highlight {
+  background: linear-gradient(120deg, rgba(232, 165, 165, 0.2) 0%, rgba(232, 165, 165, 0.2) 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 40%;
+  background-position: 0 85%;
+  font-weight: 600;
+  color: #e2e8f0;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.keyword-highlight {
+  color: var(--secondary-color);
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(168, 184, 216, 0.3);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-secondary);
+    border-radius: 1px;
+    transform: scaleX(0);
+    animation: scaleIn 0.6s ease-out 0.5s forwards;
+  }
+}
+
+@keyframes scaleIn {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.emphasis-text {
+  color: #7cb342;
+  font-weight: 600;
+  font-style: italic;
+  text-shadow: 0 1px 2px rgba(124, 179, 66, 0.2);
+}
+
+.stats-container {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  opacity: 0.9;
+  transition: var(--transition-medium);
+
+  &:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+.stat-icon {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #e2e8f0;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .about-image-container {
   width: 100%;
-  height: 400px;
+  height: 450px;
   overflow: hidden;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease;
-}
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-heavy);
+  transition: all var(--transition-medium);
+  position: relative;
 
-.about-image-container:hover {
-  transform: scale(1.02);
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 60%, rgba(229, 62, 62, 0.1) 100%);
+    opacity: 0;
+    transition: var(--transition-medium);
+  }
+
+  &:hover {
+    transform: translateY(-8px) rotateY(2deg);
+
+    &::after {
+      opacity: 1;
+    }
+  }
 }
 
 .about-img {
@@ -945,33 +2017,64 @@ export default defineComponent({
   height: 100%;
   object-fit: cover;
   object-position: center;
+  transition: all var(--transition-slow);
 }
 
 /* ========================================= */
-/* ESTILOS DE LA SECCIÓN MISIÓN */
+/* ESTILOS DE LA SECCIÓN MISIÓN MODERNOS */
 /* ========================================= */
 .mission-section {
-  padding: 5rem 0;
-  background: rgba(255, 169, 169, 0.723);
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(232, 165, 165, 0.08) 0%, transparent 70%);
+  }
 }
 
 .mission-section .row {
   display: flex;
   align-items: center;
-  min-height: 450px;
+  min-height: 500px;
+  position: relative;
+  z-index: 1;
 }
 
 .mission-image-container {
   width: 100%;
-  height: 350px;
+  height: 400px;
   overflow: hidden;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  transition: transform 0.3s ease;
-}
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-heavy);
+  transition: all var(--transition-medium);
+  position: relative;
 
-.mission-image-container:hover {
-  transform: scale(1.02);
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(229, 62, 62, 0.15) 100%);
+    opacity: 0;
+    transition: var(--transition-medium);
+  }
+
+  &:hover {
+    transform: translateY(-8px) rotateY(-2deg);
+
+    &::after {
+      opacity: 1;
+    }
+  }
 }
 
 .mission-img {
@@ -979,151 +2082,521 @@ export default defineComponent({
   height: 100%;
   object-fit: cover;
   object-position: center;
+  transition: all var(--transition-slow);
 }
 
 .mission-content {
-  background: linear-gradient(135deg, #e53e3e, #ff6b6b);
+  background: var(--gradient-primary);
   color: white;
   height: 100%;
   display: flex;
   align-items: center;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    animation: shimmer 15s ease-in-out infinite;
+  }
+}
+
+/* Estilos mejorados para el contenido de Misión */
+.mission-section-enhanced {
+  padding: 3rem 2.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.mission-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.mission-icon-container {
+  margin-bottom: 1rem;
+  position: relative;
+  display: inline-block;
+}
+
+.mission-icon-large {
+  color: rgba(255, 255, 255, 0.9);
+  filter: drop-shadow(0 4px 12px rgba(255, 255, 255, 0.3));
+  animation: pulseSubtle 3s ease-in-out infinite;
+}
+
+.mission-subtitle {
+  font-size: 1rem;
+  opacity: 0.85;
+  font-style: italic;
+  margin-top: 0.5rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.mission-content-wrapper {
+  position: relative;
+}
+
+.mission-text-block {
+  position: relative;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.mission-quote-mark {
+  font-size: 4rem;
+  font-family: 'Playfair Display', serif;
+  color: rgba(255, 255, 255, 0.3);
+  position: absolute;
+  font-weight: 700;
+  line-height: 1;
+
+  &.closing {
+    right: 1rem;
+    bottom: -1rem;
+    transform: rotate(180deg);
+  }
+
+  &:not(.closing) {
+    left: 1rem;
+    top: -1rem;
+  }
+}
+
+.mission-highlight {
+  font-size: 1.2rem;
+  line-height: 1.9;
+  text-align: justify;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.mission-emphasis {
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 40%;
+  background-position: 0 85%;
+  font-weight: 700;
+  color: #ffffff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.impact-text {
+  color: #81c784;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(129, 199, 132, 0.4);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #81c784, #4caf50);
+    border-radius: 1px;
+    transform: scaleX(0);
+    animation: scaleIn 0.8s ease-out 1s forwards;
+  }
+}
+
+.excellence-text {
+  color: #ffeb3b;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(255, 235, 59, 0.4);
+}
+
+.impact-highlight {
+  background: linear-gradient(45deg, #ff6b6b, #feca57);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+  font-size: 1.1em;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, rgba(255, 107, 107, 0.1), rgba(254, 202, 87, 0.1));
+    border-radius: 4px;
+    z-index: -1;
+  }
+}
+
+.mission-pillars {
+  display: flex;
+  justify-content: space-around;
+  margin: 2rem 0;
+  padding: 1.5rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.pillar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  transition: var(--transition-medium);
+  padding: 1rem 0.5rem;
+  border-radius: 8px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
+  }
+
+  span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+.pillar-icon {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+.mission-cta {
+  text-align: center;
+  margin-top: 2rem;
+  position: relative;
+}
+
+.cta-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.cta-underline {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  margin: 0 auto;
+  border-radius: 1px;
+  animation: pulseWidth 2s ease-in-out infinite;
+}
+
+@keyframes pulseWidth {
+  0%,
+  100% {
+    width: 60px;
+    opacity: 0.6;
+  }
+  50% {
+    width: 100px;
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    transform: translate(-100%, -100%) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(0%, 0%) scale(1);
+    opacity: 1;
+  }
 }
 
 .mission-title {
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
-  font-weight: bold;
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  font-weight: 800;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .mission-text {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   line-height: 1.8;
+  font-weight: 400;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* ========================================= */
-/* ESTILOS DE LAS LÍNEAS DE INVESTIGACIÓN */
+/* ESTILOS DE LAS LÍNEAS DE INVESTIGACIÓN MODERNOS */
 /* ========================================= */
 .research-section {
-  padding: 5rem 0;
-  background: #f8f9fa;
+  padding: 6rem 0;
+  background: linear-gradient(
+    135deg,
+    var(--soft-gray) 0%,
+    var(--white) 50%,
+    var(--pastel-mint) 100%
+  );
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(232, 165, 165, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 70% 80%, rgba(168, 184, 216, 0.03) 0%, transparent 50%);
+  }
 }
 
 .research-title {
   text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 3rem;
-  color: #333;
-  font-weight: bold;
+  font-size: 3.5rem;
+  margin-bottom: 4rem;
+  color: var(--text-dark);
+  font-weight: 800;
+  font-family: 'Playfair Display', serif;
+  position: relative;
+  z-index: 1;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+  }
 }
 
 .research-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
-  margin-top: 3rem;
-  perspective: 1000px; /* Agregar perspectiva para efectos 3D sutiles */
+  margin-top: 4rem;
+  perspective: 1200px;
+  position: relative;
+  z-index: 1;
 }
 
-.research-card {
-  background: #c1c0c0 !important; /* Forzar el color solicitado */
-  box-shadow: none !important; /* Asegurar que no haya sombras que alteren la percepción del color */
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Transición suave con easing personalizado */
-  cursor: pointer; /* Indicar que es interactivo */
-  transform-origin: center; /* Punto de origen para la transformación */
-  border-radius: 8px; /* Bordes redondeados */
+.research-card-enhanced {
+  background: linear-gradient(135deg, var(--white) 0%, var(--soft-gray) 100%);
+  box-shadow: var(--shadow-soft);
+  transition: all var(--transition-slow) cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  transform-origin: center;
+  border-radius: var(--border-radius);
+  border: 2px solid rgba(229, 62, 62, 0.3);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(229, 62, 62, 0.05) 0%, rgba(255, 107, 107, 0.1) 100%);
+    opacity: 0;
+    transition: var(--transition-medium);
+    z-index: 0;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(229, 62, 62, 0.1) 0%, transparent 70%);
+    transform: scale(0);
+    transition: var(--transition-slow);
+    z-index: 0;
+  }
 
   &:hover {
-    background: #f7c0c0 !important;
-    transform: scale(0.85) translateY(-5px); /* Contracción más pronunciada y elevar más */
-    box-shadow: 0 12px 35px rgba(229, 62, 62, 0.35) !important; /* Sombra más intensa */
+    transform: translateY(-10px) scale(1.05);
+    box-shadow:
+      0 20px 40px rgba(229, 62, 62, 0.3),
+      0 10px 20px rgba(0, 0, 0, 0.1);
+    border-color: #e53e3e;
+
+    &::before {
+      opacity: 1;
+    }
+
+    &::after {
+      transform: scale(1);
+    }
   }
 
   &.full-width {
     grid-column: 1 / -1;
-    max-width: 400px;
+    max-width: 450px;
     margin: 0 auto;
-    justify-self: center; /* Centrar la tarjeta en el grid */
+    justify-self: center;
+  }
+
+  .q-card-section {
+    position: relative;
+    z-index: 2;
+    padding: 3rem 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   h3 {
-    font-size: 1rem;
-    margin-top: 1rem;
-    color: #333;
-    font-weight: 600;
-    transition: all 0.3s ease; /* Transición suave para el color del texto */
+    font-size: 1.15rem;
+    margin-top: 1.5rem;
+    color: var(--text-dark);
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    transition: all var(--transition-medium);
+    line-height: 1.4;
+    text-align: center;
   }
 
   &:hover h3 {
-    color: #e53e3e; /* Cambiar color del texto en hover */
-    transform: scale(1.08); /* Aumentar más el tamaño del texto */
+    color: #e53e3e;
+    transform: scale(1.05);
+    text-shadow: 0 2px 4px rgba(229, 62, 62, 0.3);
   }
 }
 
-.research-icon {
+.icon-enhanced {
   color: #e53e3e;
-  transition: all 0.3s ease; /* Transición suave para el ícono */
+  transition: all var(--transition-medium);
+  filter: drop-shadow(0 6px 12px rgba(229, 62, 62, 0.4));
+  position: relative;
+  z-index: 2;
+  font-size: 56px !important;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(20, 20, 20, 0.9) 100%);
+  border-radius: 50%;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(229, 62, 62, 0.6);
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.3),
+    inset 0 1px 2px rgba(255, 255, 255, 0.1);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #e53e3e, transparent, #e53e3e);
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0;
+    transition: all var(--transition-medium);
+  }
 }
 
-.research-card:hover .research-icon {
-  transform: scale(1.2) rotate(8deg); /* Aumentar más el tamaño y rotar más */
-  color: #c53030; /* Color más oscuro en hover */
+.research-card-enhanced:hover .icon-enhanced {
+  transform: scale(1.2) rotate(10deg);
+  color: #ff6b6b;
+  filter: drop-shadow(0 10px 20px rgba(255, 107, 107, 0.6));
+  animation: iconBounce 0.6s ease-in-out;
+  border-color: #ff6b6b;
+  background: linear-gradient(135deg, rgba(30, 30, 30, 0.9) 0%, rgba(50, 50, 50, 0.95) 100%);
+  box-shadow:
+    0 12px 35px rgba(255, 107, 107, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+
+  &::before {
+    opacity: 1;
+    animation: rotate 3s linear infinite;
+  }
+}
+
+@keyframes iconBounce {
+  0%,
+  100% {
+    transform: scale(1.3) rotate(10deg);
+  }
+  50% {
+    transform: scale(1.4) rotate(12deg);
+  }
 }
 
 /* ========================================= */
-/* ESTILOS DEL FOOTER MEJORADO */
+/* ESTILOS DEL FOOTER MODERNO */
 /* ========================================= */
 .footer {
-  background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+  background: linear-gradient(135deg, #e53e3e 0%, #dc2626 50%, #b91c1c 100%);
   color: white;
-  padding: 40px 0 15px;
+  padding: 50px 0 20px;
   margin-top: auto;
   width: 100%;
   min-height: 200px;
-}
+  position: relative;
 
-/* ========================================= */
-/* ESTILOS DEL CHAT FLOTANTE */
-/* ========================================= */
-.chat-floating {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 9999;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  }
 }
 
 .footer-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .footer-content {
   display: grid;
   grid-template-columns: 1.8fr 1fr 1fr;
-  gap: 30px;
-  margin-bottom: 25px;
+  gap: 40px;
+  margin-bottom: 30px;
 }
 
-/* Sección del logo e información institucional */
 .logo-info-section {
   padding-right: 20px;
-}
-
-.footer-logo-section {
-  margin-bottom: 20px;
 }
 
 .footer-logo {
   display: flex;
   align-items: flex-start;
   gap: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .footer-logo-icon {
-  background: rgba(229, 62, 62, 0.2);
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
   border-radius: 50%;
   padding: 12px;
   display: flex;
@@ -1131,13 +2604,22 @@ export default defineComponent({
   justify-content: center;
   min-width: 48px;
   height: 48px;
+  transition: var(--transition-medium);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: white;
+    transform: scale(1.1);
+  }
 }
 
 .footer-logo-text .university-name {
-  font-size: 28px;
-  font-weight: bold;
-  color: #e53e3e;
+  font-size: 32px;
+  font-weight: 900;
+  color: white;
   margin-bottom: 5px;
+  font-family: 'Playfair Display', serif;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .footer-logo-text .department-name {
@@ -1145,114 +2627,110 @@ export default defineComponent({
   opacity: 0.9;
   line-height: 1.4;
   color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
 }
 
-/* Sección de redes sociales integrada */
 .social-section-integrated {
-  margin: 15px 0;
-  padding: 15px 0;
+  margin: 20px 0;
+  padding: 20px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .social-section-integrated .footer-subtitle {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: #e53e3e;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: white;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
+  font-family: 'Inter', sans-serif;
 }
 
 .social-section-integrated .social-description {
-  font-size: 13px;
+  font-size: 14px;
   opacity: 0.8;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   line-height: 1.5;
   color: #ffffff;
+  font-family: 'Inter', sans-serif;
 }
 
 .social-section-integrated .social-links {
   display: flex;
   justify-content: flex-start;
-  gap: 12px;
+  gap: 15px;
   flex-wrap: wrap;
 }
 
 .social-section-integrated .social-link {
-  width: 40px;
-  height: 40px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  width: 42px;
+  height: 42px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   text-decoration: none;
-  transition: all 0.4s ease;
+  transition: all var(--transition-medium);
   position: relative;
   overflow: hidden;
-}
 
-.social-section-integrated .social-link::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, #e53e3e, #ff6b6b);
-  transition: all 0.4s ease;
-  z-index: 0;
-}
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+    transition: all var(--transition-medium);
+    z-index: 0;
+  }
 
-.social-section-integrated .social-link:hover::before {
-  left: 0;
-}
+  &:hover {
+    border-color: white;
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
 
-.social-section-integrated .social-link:hover {
-  border-color: #e53e3e;
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 6px 15px rgba(229, 62, 62, 0.3);
-}
+    &::before {
+      left: 0;
+    }
+  }
 
-.social-section-integrated .social-link i {
-  font-size: 16px;
-  position: relative;
-  z-index: 1;
-}
+  i {
+    font-size: 18px;
+    position: relative;
+    z-index: 1;
+    transition: var(--transition-fast);
+  }
 
-.footer-subtitle {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 15px;
-  color: #e53e3e;
-  text-transform: uppercase;
-}
-
-/* Secciones de enlaces */
-.links-section,
-.info-section {
-  padding-top: 10px;
+  &:hover i {
+    transform: rotate(360deg);
+  }
 }
 
 .footer-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  color: #e53e3e;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: white;
   text-transform: uppercase;
   position: relative;
-}
+  font-family: 'Inter', sans-serif;
 
-.footer-title::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 0;
-  width: 40px;
-  height: 2px;
-  background: #e53e3e;
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.6) 100%);
+    border-radius: 2px;
+  }
 }
 
 .footer-links {
@@ -1262,187 +2740,173 @@ export default defineComponent({
 }
 
 .footer-links li {
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .footer-links li a {
   color: #ffffff;
   text-decoration: none;
-  font-size: 14px;
-  transition: all 0.3s ease;
+  font-size: 15px;
+  transition: all var(--transition-medium);
   position: relative;
   padding-left: 0;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+
+  &::before {
+    content: '→';
+    position: absolute;
+    left: -20px;
+    opacity: 0;
+    transition: all var(--transition-medium);
+    color: white;
+  }
+
+  &:hover {
+    color: white;
+    padding-left: 15px;
+    transform: translateX(5px);
+
+    &::before {
+      opacity: 1;
+      left: -15px;
+    }
+  }
 }
 
-.footer-links li a:hover {
-  color: #e53e3e;
-  padding-left: 10px;
-}
-
-.footer-links li a::before {
-  content: '→';
-  position: absolute;
-  left: -15px;
-  opacity: 0;
-  transition: all 0.3s ease;
-}
-
-.footer-links li a:hover::before {
-  opacity: 1;
-  left: -10px;
-}
-
-/* Sección del icono decorativo */
 .footer-icon-section {
   text-align: center;
   margin-top: 30px;
-  opacity: 0.3;
+  opacity: 0.2;
+  transition: var(--transition-medium);
+
+  &:hover {
+    opacity: 0.4;
+    transform: scale(1.1);
+  }
 }
 
-/* Sección de redes sociales */
-.social-section {
-  text-align: center;
-  padding-top: 10px;
-}
-
-.social-description {
-  font-size: 14px;
-  opacity: 0.8;
-  margin-bottom: 25px;
-  line-height: 1.5;
-}
-
-.social-links {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-.social-link {
-  width: 45px;
-  height: 45px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  text-decoration: none;
-  transition: all 0.4s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.social-link::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, #e53e3e, #ff6b6b);
-  transition: all 0.4s ease;
-  z-index: 0;
-}
-
-.social-link:hover::before {
-  left: 0;
-}
-
-.social-link:hover {
-  border-color: #e53e3e;
-  transform: translateY(-3px) scale(1.1);
-  box-shadow: 0 8px 20px rgba(229, 62, 62, 0.3);
-}
-
-.social-link i {
-  font-size: 18px;
-  position: relative;
-  z-index: 1;
-}
-
-/* Footer bottom */
 .footer-bottom {
-  margin-top: 15px;
+  margin-top: 20px;
 }
 
 .footer-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  margin-bottom: 20px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  margin-bottom: 25px;
 }
 
 .footer-copyright {
   text-align: center;
-  padding: 10px 0;
+  padding: 15px 0;
 }
 
 .footer-copyright p {
-  font-size: 12px;
+  font-size: 13px;
   opacity: 0.7;
   margin: 0;
-}
-
-@media (max-width: 768px) {
-  .footer-content {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-
-  .social-links {
-    justify-content: center;
-  }
-
-  .footer-section {
-    text-align: center;
-  }
-
-  .logo {
-    justify-content: center;
-  }
-
-  .contact-info {
-    justify-content: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .footer {
-    padding: 30px 0 15px;
-  }
-
-  .footer-container {
-    padding: 0 15px;
-  }
-
-  .footer-content {
-    gap: 25px;
-  }
-
-  .logo-text {
-    font-size: 20px;
-  }
-}
-
-.contact-section {
-  padding: 2rem 0; // Reducir el espacio superior e inferior
-}
-
-.contact-title {
-  margin-bottom: 1rem; // Reducir el margen inferior del título
-}
-
-.social-links {
-  margin-top: 1rem; // Reducir el margen superior de los enlaces sociales
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
 }
 
 /* ========================================= */
-/* MEDIA QUERIES PARA RESPONSIVIDAD */
+/* ESTILOS DEL CHAT FLOTANTE MEJORADO */
+/* ========================================= */
+.chat-floating {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 99999;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-heavy);
+  transition: var(--transition-medium);
+  pointer-events: auto;
+  isolation: isolate;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+
+  &:hover {
+    transform: translateY(-5px) scale(1.05) translateZ(0);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Asegurar que el contenido del chat también tenga z-index alto */
+  * {
+    z-index: inherit;
+    position: relative;
+  }
+
+  /* Prevenir cualquier interferencia de animaciones */
+  &,
+  * {
+    animation-fill-mode: both;
+    -webkit-animation-fill-mode: both;
+  }
+}
+
+/* Estilos adicionales para overlays y modales del ChatBot */
+:global(.q-dialog),
+:global(.q-menu),
+:global(.q-popup-proxy),
+:global(.q-tooltip),
+:global(.chat-overlay),
+:global(.chat-modal),
+:global(.chat-popup) {
+  z-index: 99999 !important;
+  position: fixed !important;
+  isolation: isolate !important;
+  will-change: auto !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+}
+
+/* Asegurar que el backdrop del chat tenga prioridad */
+:global(.q-dialog__backdrop),
+:global(.chat-backdrop) {
+  z-index: 99998 !important;
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+}
+
+/* ========================================= */
+/* MEDIA QUERIES PARA RESPONSIVIDAD MEJORADAS */
 /* ========================================= */
 
 /* Tablets */
 @media (max-width: 1023px) {
+  .nav-container {
+    padding: 8px 1.5rem;
+  }
+
+  .nav-title {
+    font-size: 1.6rem;
+  }
+
+  .hero-title {
+    font-size: 3.2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .hero-cards {
+    gap: 2rem;
+  }
+
+  .section-title {
+    font-size: 2.5rem;
+  }
+
+  .research-title {
+    font-size: 3rem;
+  }
+
   .text-content {
     padding-right: 0;
     padding-bottom: 2rem;
@@ -1456,14 +2920,13 @@ export default defineComponent({
 
   .about-image-container,
   .mission-image-container {
-    height: 300px;
-    margin-top: 1rem;
+    height: 350px;
+    margin-top: 1.5rem;
   }
 
-  /* Footer responsive para tablets */
   .footer-content {
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 25px;
   }
 
   .logo-info-section {
@@ -1479,21 +2942,57 @@ export default defineComponent({
 
 /* Dispositivos móviles */
 @media (max-width: 768px) {
+  .nav-container {
+    padding: 8px 1rem;
+    min-height: 65px;
+  }
+
   .nav-menu {
     display: none;
   }
 
+  .nav-title {
+    font-size: 1.4rem;
+  }
+
+  .title-line-1,
+  .title-line-2 {
+    text-align: center;
+  }
+
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
+    text-align: center;
+    white-space: normal;
+    border-right: none;
+    color: #e8a5a5; /* Mantener el color rosa pastel suave en móvil */
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .hero-content {
+    padding: 2rem 1rem;
   }
 
   .hero-cards {
     flex-direction: column;
     align-items: center;
+    gap: 1.5rem;
+  }
+
+  .hero-card {
+    min-width: 250px;
   }
 
   .research-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .research-title {
+    font-size: 2.5rem;
   }
 
   .about-image-container,
@@ -1502,18 +3001,74 @@ export default defineComponent({
   }
 
   .section-title {
-    font-size: 2rem;
+    font-size: 2.2rem;
     text-align: center;
   }
 
-  .about-text {
+  .mission-title {
+    font-size: 2.2rem;
+  }
+
+  .about-text,
+  .mission-text {
+    text-align: left;
+    font-size: 1.1rem;
+  }
+
+  /* Mejoras para texto móvil */
+  .content-section-enhanced,
+  .mission-section-enhanced {
+    padding: 2rem 1.5rem;
+  }
+
+  .text-block {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    text-align: center;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  .text-number {
+    margin-bottom: 0.5rem;
+  }
+
+  .stats-container {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .mission-pillars {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .mission-quote-mark {
+    font-size: 3rem;
+
+    &.closing {
+      right: 0.5rem;
+      bottom: -0.5rem;
+    }
+
+    &:not(.closing) {
+      left: 0.5rem;
+      top: -0.5rem;
+    }
+  }
+
+  .mission-highlight {
+    font-size: 1.1rem;
     text-align: left;
   }
 
-  /* Footer responsivo para móviles */
   .footer-content {
     grid-template-columns: 1fr;
-    gap: 25px;
+    gap: 30px;
     text-align: center;
   }
 
@@ -1527,19 +3082,51 @@ export default defineComponent({
 
   .footer-links li a:hover {
     padding-left: 0;
+    transform: none;
   }
 
   .social-section-integrated .social-links {
     justify-content: center;
   }
 
-  .social-links {
-    justify-content: center;
+  .chat-floating {
+    bottom: 20px;
+    right: 15px;
   }
 }
 
 /* Dispositivos muy pequeños */
 @media (max-width: 480px) {
+  .nav-container {
+    padding: 5px 0.5rem;
+  }
+
+  .nav-title {
+    font-size: 1.2rem;
+  }
+
+  .logo-img {
+    height: 35px;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+    line-height: 1.2;
+    color: #e8a5a5; /* Mantener el color rosa pastel suave */
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-content {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .hero-card {
+    min-width: 200px;
+  }
+
   .about-image-container,
   .mission-image-container {
     height: 250px;
@@ -1549,14 +3136,25 @@ export default defineComponent({
     padding: 0 1rem;
   }
 
-  .contact-title,
-  .map-title {
-    font-size: 1.5rem;
+  .section-title {
+    font-size: 1.8rem;
   }
 
-  /* Footer para dispositivos muy pequeños */
+  .mission-title {
+    font-size: 1.8rem;
+  }
+
+  .research-title {
+    font-size: 2rem;
+  }
+
+  .about-text,
+  .mission-text {
+    font-size: 1rem;
+  }
+
   .footer {
-    padding: 25px 0 10px;
+    padding: 35px 0 15px;
   }
 
   .footer-container {
@@ -1564,29 +3162,128 @@ export default defineComponent({
   }
 
   .footer-content {
-    gap: 20px;
+    gap: 25px;
   }
 
   .footer-logo-text .university-name {
-    font-size: 24px;
+    font-size: 26px;
   }
 
   .footer-logo-text .department-name {
-    font-size: 12px;
-  }
-
-  .social-link {
-    width: 40px;
-    height: 40px;
+    font-size: 13px;
   }
 
   .social-section-integrated .social-link {
-    width: 35px;
-    height: 35px;
+    width: 38px;
+    height: 38px;
   }
 
   .social-section-integrated .social-link i {
-    font-size: 14px;
+    font-size: 16px;
+  }
+
+  .chat-floating {
+    bottom: 15px;
+    right: 10px;
+    transform: scale(0.9);
+  }
+}
+
+/* Dispositivos ultra pequeños */
+@media (max-width: 360px) {
+  .hero-title {
+    font-size: 1.9rem;
+    color: #e8a5a5; /* Mantener el color rosa pastel suave */
+  }
+
+  .hero-cards {
+    padding: 0 0.5rem;
+  }
+
+  .hero-card {
+    min-width: 180px;
+  }
+
+  .section-title,
+  .mission-title {
+    font-size: 1.6rem;
+  }
+
+  .research-title {
+    font-size: 1.8rem;
+  }
+
+  .research-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Mejoras para dispositivos con orientación paisaje */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero {
+    height: auto;
+    min-height: 100vh;
+    padding: 2rem 0;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-cards {
+    margin-top: 2rem;
+    gap: 1rem;
+  }
+}
+
+/* Mejoras para pantallas de alta resolución */
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1400px;
+  }
+
+  .nav-container {
+    padding: 10px 4rem;
+  }
+
+  .hero-title {
+    font-size: 4.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 3.5rem;
+  }
+
+  .research-title {
+    font-size: 4rem;
+  }
+
+  .about-image-container,
+  .mission-image-container {
+    height: 500px;
+  }
+}
+
+/* Mejoras para pantallas ultra anchas */
+@media (min-width: 1920px) {
+  .container {
+    max-width: 1600px;
+  }
+
+  .research-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
   }
 }
 </style>
