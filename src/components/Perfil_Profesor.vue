@@ -27,15 +27,15 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 
 export default defineComponent({
   name: 'UserProfileSidebar',
   emits: ['menu-selected'],
   setup(props, { emit }) {
     const userProfile = ref({
-      fullName: 'Eduardo Coli Vergara',
-      additionalName: 'Marcos',
+      fullName: localStorage.getItem('nombreyApellido'),
+      
       avatar: '/src/assets/Logo_Universidad.png', // Ruta de la imagen del usuario
     })
 
@@ -43,6 +43,11 @@ export default defineComponent({
       { id: 1, label: 'Consulta ISSN', active: true }, // ISSN starts as active
       { id: 2, label: 'Consulta lista cerrada', active: false },
     ])
+
+    // Emitir automáticamente el evento para mostrar 'Consulta ISSN' al montar
+    onMounted(() => {
+      emit('menu-selected', menuItems.value[0])
+    })
 
     const selectMenuItem = (id) => {
       // Desactivar todos los elementos
