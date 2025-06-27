@@ -2,9 +2,18 @@ const routes = [
   // Ruta principal que usa el layout vacío
   {
     path: '/',
-    component: () => import('layouts/HomeLayout..vue'),
-    children: [{ path: '', component: () => import('pages/HomePantalla.vue') }],
+    component: () => import('layouts/EmptyLayout.vue'),
+    children: [{ path: '/', component: () => import('pages/HomePantalla.vue') }],
   },
+
+  // Ruta de login independiente
+  { path: '/login', component: () => import('pages/LoginPage.vue') },
+
+  // Ruta de chat independiente
+  { path: '/chat', component: () => import('components/ChatBot.vue') },
+
+  // Rutas que usan MainLayout.vue como padre
+
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
