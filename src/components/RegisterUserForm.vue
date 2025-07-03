@@ -1,37 +1,43 @@
 <template>
   <div>
-    <q-btn label="Registrar Usuario" color="primary" @click="dialog = true" />
+    <q-btn label="Registrar Usuario" color="primary" @click="abrirDialogo" />
 
     <q-dialog v-model="dialog" persistent>
-      <q-card style="min-width: 700px; max-width: 95vw">
-        <!-- Cabecera -->
+      <q-card style="min-width: 800px; max-width: 95vw">
+        <!-- Cabecera del diálogo -->
         <q-card-section class="row items-center justify-between">
           <div class="text-h6">Registrar nuevo usuario</div>
-          <q-btn flat dense round icon="close" @click="dialog = false" />
+          <q-btn flat dense round icon="close" @click="cerrarDialogo" />
         </q-card-section>
 
-        <!-- Cuerpo del formulario -->
+        <!-- Contenido del formulario -->
         <q-card-section class="q-gutter-md">
-          <!-- Lista de Profesores como select -->
-          <q-select
-            filled
-            v-model="selectedProfesor"
-            :options="profesores"
-            label="Profesor"
-            option-label="label"
-            option-value="value"
-            emit-value
-            map-options
-            class="q-mb-sm"
-          />
+          <!-- Tabla de profesores -->
+          <q-table
+            title="Seleccione un Profesor"
+            :rows="profesores"
+            :columns="columns"
+            row-key="id_Profesor_Admis"
+            selection="single"
+            v-model:selected="selectedProfesorRow"
+            dense
+            flat
+            bordered
+            :pagination="{ rowsPerPage: 5 }"
+            @selection="onSeleccionarProfesor"
+          >
+            <template v-slot:body-cell-select="props">
+              <q-td :props="props">
+                <q-radio v-model="selectedProfesorId" :val="props.row.id_Profesor_Admis" />
+              </q-td>
+            </template>
+          </q-table>
 
-          <!-- ComboBox de Rol -->
+          <!-- Rol y Estado -->
           <q-select filled v-model="selectedRol" :options="roles" label="Rol" class="q-mb-sm" />
-
-          <!-- Estado -->
           <q-select filled v-model="estado" :options="estados" label="Estado" class="q-mb-sm" />
 
-          <!-- Contraseña -->
+          <!-- Contraseñas -->
           <q-input
             filled
             v-model="password"
@@ -48,7 +54,6 @@
             </template>
           </q-input>
 
-          <!-- Repetir contraseña -->
           <q-input
             filled
             v-model="repetirPassword"
@@ -84,48 +89,58 @@ const dialog = ref(false)
 const showPassword = ref(false)
 
 const profesores = ref([])
-const roles = ['Administrador', 'Profesor']
-const estados = ['Activo', 'Inactivo']
-
-const selectedProfesor = ref(null)
+const selectedProfesorId = ref(null)
+const selectedProfesorRow = ref([])
 const selectedRol = ref(null)
 const estado = ref('Activo')
 const password = ref('')
 const repetirPassword = ref('')
 
-onMounted(async () => {
-  try {
-    const res = await axios.get('http://localhost:5009/api/ProfesoresAdmis')
-    profesores.value = res.data.map((p) => ({
-      label: p.nombreyApellido,
-      value: p.idProfesorAdmis,
-    }))
-  } catch (err) {
-    console.error('Error al cargar profesores:', err)
-    if (err.response?.status === 404) {
-      console.warn('El endpoint de profesores no está disponible')
-    } else {
-      console.error('Error de conexión con el servidor')
-    }
-    // Agregar datos de ejemplo para desarrollo
-    profesores.value = [
-      { label: 'Dr. Juan Pérez García (Ejemplo)', value: 1 },
-      { label: 'Dra. María González López (Ejemplo)', value: 2 },
-      { label: 'Dr. Carlos Rodríguez Sánchez (Ejemplo)', value: 3 },
-    ]
-  }
-})
+const roles = ['Administrador', 'Profesor']
+const estados = ['Activo', 'Inactivo']
 
-function limpiarFormulario() {
-  selectedProfesor.value = null
+const columns = [
+  { name: 'select', label: '', field: 'select', align: 'center' },
+  { name: 'dni', label: 'DNI', field: 'dni', align: 'left' },
+  { name: 'nombreyApellido', label: 'Nombre y Apellido', field: 'nombreyApellido', align: 'left' },
+  { name: 'correo', label: 'Correo', field: 'correo', align: 'left' },
+]
+
+const abrirDialogo = () => {
+  limpiarFormulario()
+  dialog.value = true
+}
+
+const cerrarDialogo = () => {
+  dialog.value = false
+}
+
+const limpiarFormulario = () => {
+  selectedProfesorId.value = null
+  selectedProfesorRow.value = []
   selectedRol.value = null
   estado.value = 'Activo'
   password.value = ''
   repetirPassword.value = ''
 }
 
-async function registrarUsuario() {
-  if (!selectedProfesor.value || !selectedRol.value || !password.value) {
+const onSeleccionarProfesor = () => {
+  if (selectedProfesorRow.value.length > 0) {
+    selectedProfesorId.value = selectedProfesorRow.value[0].id_Profesor_Admis
+  }
+}
+
+onMounted(async () => {
+  try {
+    const res = await axios.get('http://localhost:5009/api/ProfesoresAdmis')
+    profesores.value = res.data
+  } catch (err) {
+    console.error('Error al cargar profesores:', err)
+  }
+})
+
+const registrarUsuario = async () => {
+  if (!selectedProfesorId.value || !selectedRol.value || !password.value) {
     alert('Todos los campos son obligatorios.')
     return
   }
@@ -137,27 +152,18 @@ async function registrarUsuario() {
 
   try {
     await axios.post('http://localhost:5009/api/usuarios', {
-      idProfesorAdmis: selectedProfesor.value,
-      Id_Rol: selectedRol.value === 'Administrador' ? 1 : 2,
-      Estado: estado.value === 'Activo' ? 1 : 0,
-      Contraseña: password.value,
-      Correo: '', // Puedes agregar un campo correo si se requiere
-      FechaCreacion: new Date(),
-      FechaModificacion: new Date(),
+      idProfesorAdmis: selectedProfesorId.value,
+      correo: selectedProfesorRow.value[0].correo || '',
+      contraseña: password.value,
+      idRol: selectedRol.value === 'Administrador' ? 1 : 2,
+      estado: estado.value === 'Activo' ? 1 : 0,
     })
 
     alert('Usuario registrado correctamente')
-    dialog.value = false
-    limpiarFormulario()
+    cerrarDialogo()
   } catch (err) {
-    console.error('Error al registrar:', err)
-    if (err.response?.status === 404) {
-      alert(
-        'El endpoint para registrar usuarios no está disponible en el backend. Por favor, contacte al administrador del sistema.',
-      )
-    } else {
-      alert('Error al registrar usuario: ' + (err.message || 'Error desconocido'))
-    }
+    console.error('Error al registrar usuario:', err)
+    alert('No se pudo registrar usuario. Verifica la API o los campos.')
   }
 }
 </script>
