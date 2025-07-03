@@ -19,39 +19,37 @@
         flat
         bordered
         dense
+        no-data-label="No se encontraron usuarios"
       />
     </q-card>
   </div>
 </template>
 
+<!-- UserList.vue -->
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 
-const search = ref('')
 const usuarios = ref([])
+const search = ref('')
 
-const columns = [
-  { name: 'correo', label: 'Correo', field: 'correo', align: 'left', sortable: true },
-  { name: 'trabajador', label: 'Trabajador', field: 'trabajador', align: 'left', sortable: true },
-  { name: 'documento', label: 'N° DOC', field: 'documento', align: 'left', sortable: true },
-  { name: 'categoria', label: 'Categoría', field: 'categoria', align: 'left', sortable: true },
-]
-
-onMounted(async () => {
+async function cargarUsuarios() {
   try {
-    const res = await axios.get('http://localhost:5009/api/ProfesoresAdmis')
-    usuarios.value = res.data.map((prof) => ({
-      idUsuario: prof.idProfesorAdmis,
-      correo: prof.correo,
-      trabajador: prof.nombreyApellido,
-      documento: prof.dni,
-      categoria: prof.categoria,
+    const res = await axios.get('http://localhost:5009/api/usuario')
+    usuarios.value = res.data.map((u) => ({
+      idUsuario: u.idUsuario,
+      correo: u.correo,
+      nombreyApellido: u.nombreyApellido,
+      dni: u.dni ?? '-',
+      categoria: u.categoria ?? '-',
     }))
   } catch (err) {
     console.error('Error al cargar usuarios:', err)
   }
-})
+}
+
+onMounted(cargarUsuarios)
+defineExpose({ cargarUsuarios }) // Para ser llamado desde RegisterUserForm.vue
 
 const usuariosFiltrados = computed(() => {
   if (!search.value) return usuarios.value
@@ -59,15 +57,21 @@ const usuariosFiltrados = computed(() => {
   return usuarios.value.filter(
     (u) =>
       (u.correo ?? '').toLowerCase().includes(term) ||
-      (u.trabajador ?? '').toLowerCase().includes(term) ||
+      (u.nombreyApellido ?? '').toLowerCase().includes(term) ||
       String(u.documento ?? '').includes(term),
   )
 })
-</script>
 
-<style scoped>
-.q-table {
-  max-height: 400px;
-  overflow-y: auto;
-}
-</style>
+const columns = [
+  { name: 'correo', label: 'Correo', field: 'correo', align: 'left', sortable: true },
+  {
+    name: 'nombreyApellido',
+    label: 'Trabajador',
+    field: 'nombreyApellido',
+    align: 'left',
+    sortable: true,
+  },
+  { name: 'dni', label: 'DNI', field: 'dni', align: 'left', sortable: true },
+  { name: 'categoria', label: 'Categoría', field: 'categoria', align: 'left', sortable: true },
+]
+</script>
