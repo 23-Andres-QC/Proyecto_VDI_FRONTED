@@ -293,37 +293,17 @@
               <h4 class="footer-subtitle">NUESTRAS REDES SOCIALES</h4>
               <p class="social-description">Mantente conectado con nosotros</p>
               <div class="social-links">
-                <a
-                  href="https://www.facebook.com/uesan/"
-                  class="social-link"
-                  aria-label="Facebook"
-                  target="_blank"
-                >
-                  <q-icon name="facebook" size="16px" />
+                <a href="#" class="social-link" aria-label="Facebook">
+                  <i class="fa-brands fa-facebook-f"></i>
                 </a>
-                <a
-                  href="https://www.instagram.com/uesan_oficial/"
-                  class="social-link"
-                  aria-label="Instagram"
-                  target="_blank"
-                >
-                  <q-icon name="camera_alt" size="16px" />
+                <a href="#" class="social-link" aria-label="Instagram">
+                  <i class="fa-brands fa-instagram"></i>
                 </a>
-                <a
-                  href="https://www.linkedin.com/school/esan/?originalSubdomain=pe"
-                  class="social-link"
-                  aria-label="LinkedIn"
-                  target="_blank"
-                >
-                  <q-icon name="business" size="16px" />
+                <a href="#" class="social-link" aria-label="LinkedIn">
+                  <i class="fa-brands fa-linkedin-in"></i>
                 </a>
-                <a
-                  href="https://www.tiktok.com/@somosesan"
-                  class="social-link"
-                  aria-label="TikTok"
-                  target="_blank"
-                >
-                  <q-icon name="videocam" size="16px" />
+                <a href="#" class="social-link" aria-label="X Twitter">
+                  <i class="fa-brands fa-x-twitter"></i>
                 </a>
               </div>
             </div>
@@ -391,6 +371,7 @@ import { useRouter } from 'vue-router'
 import CampusEsanImg from '../assets/Home_imagenes/CampusEsan.jpg'
 import EstudianteImg from '../assets/Home_imagenes/Estudiante.jpg'
 import VicerrectoradoImg from '../assets/Home_imagenes/Vicerrectorado.jpg'
+import Vicerrectorado1Img from '../assets/Home_imagenes/Vicerrectorado1.jpg'
 import MisionImg from '../assets/Home_imagenes/mision.jpg'
 
 const { getScrollTarget, setVerticalScrollPosition } = scroll
@@ -407,7 +388,13 @@ export default defineComponent({
       router.push('/login')
     }
     // Imagen hero transicionable - usando imports de todas las imágenes disponibles
-    const heroImages = [CampusEsanImg, EstudianteImg, VicerrectoradoImg, MisionImg]
+    const heroImages = [
+      CampusEsanImg,
+      EstudianteImg,
+      VicerrectoradoImg,
+      Vicerrectorado1Img,
+      MisionImg,
+    ]
     const currentHeroImage = ref(heroImages[0])
     let intervalId = null
 
@@ -1582,8 +1569,7 @@ export default defineComponent({
   box-shadow: 0 6px 15px rgba(229, 62, 62, 0.3);
 }
 
-.social-section-integrated .social-link i,
-.social-section-integrated .social-link .q-icon {
+.social-section-integrated .social-link i {
   font-size: 16px;
   position: relative;
   z-index: 1;
@@ -1723,8 +1709,7 @@ export default defineComponent({
   box-shadow: 0 8px 20px rgba(229, 62, 62, 0.3);
 }
 
-.social-link i,
-.social-link .q-icon {
+.social-link i {
   font-size: 18px;
   position: relative;
   z-index: 1;
@@ -1953,8 +1938,7 @@ export default defineComponent({
     height: 35px;
   }
 
-  .social-section-integrated .social-link i,
-  .social-section-integrated .social-link .q-icon {
+  .social-section-integrated .social-link i {
     font-size: 14px;
   }
 }
