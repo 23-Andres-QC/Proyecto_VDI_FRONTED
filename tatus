@@ -1,0 +1,38 @@
+[33m33330d9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeat/Login_OlvidarContrasenia_RegUsuarios[m[33m, [m[1;31morigin/feat/Login_OlvidarContrasenia_RegUsuarios[m[33m)[m Mejora interfaz centrada y botón de intercambio en conversor
+[33m94538cf[m Merge pull request #11 from 23-Andres-QC/fix/Reportes
+[33m29185be[m[33m ([m[1;31morigin/fix/Reportes[m[33m)[m Merge branch 'main' into fix/Reportes
+[33ma98c883[m Merge pull request #12 from 23-Andres-QC/fix/correcion_y_ordenamiento_De_pajinas
+[33m3f8b5af[m[33m ([m[1;31morigin/fix/correcion_y_ordenamiento_De_pajinas[m[33m)[m ordenacion e implementacion de botones
+[33mcbc0bdd[m Fix: exportación de tabla ahora respeta filtros y columnas visibles en reportes dinámicos
+[33m62d2fcd[m Merge pull request #10 from 23-Andres-QC/fix/importacion_de_revista
+[33m0461550[m[33m ([m[1;31morigin/fix/importacion_de_revista[m[33m)[m Limpieza: se elimina texto de commit accidental en HomePantalla.vue
+[33m2ab4a07[m Merge pull request #9 from 23-Andres-QC/login
+[33m5ef7d3a[m[33m ([m[1;31morigin/login[m[33m)[m Merge branch 'main' into login
+[33m276c984[m Pantalla principal del proyecto: HomePantalla.vue
+[33m2284487[m Merge pull request #6 from 23-Andres-QC/feat/Login_OlvidarContrasenia_RegUsuarios
+[33m99eee36[m Merge branch 'main' into feat/Login_OlvidarContrasenia_RegUsuarios
+[33m5bf3205[m Merge pull request #8 from 23-Andres-QC/feat/Reportes
+[33m45fc791[m[33m ([m[1;31morigin/feat/Reportes[m[33m)[m Merge branch 'main' into feat/Reportes
+[33m9044fef[m Subir todos los cambios a la rama remota
+[33m78175f4[m Merge pull request #7 from 23-Andres-QC/fix/importacion_de_revista
+[33m7f700ca[m Merge branch 'main' into fix/importacion_de_revista
+[33mee296a9[m Mejoras visuales y de usabilidad en ImportarRevistas.vue según feedback de diseño
+[33m649b614[m Basico
+[33m6a61e72[m Implementa login, recuperar contraseña (componente) y registro de usuarios
+[33mcb64129[m Merge pull request #5 from 23-Andres-QC/feat/componente_usuario/jh
+[33m92cd612[m[33m ([m[1;31morigin/feat/componente_usuario/jh[m[33m)[m implementación funcional de perfiles
+[33ma07a520[m[33m ([m[1;31morigin/LoginActualizacion1[m[33m)[m Agrega nuevos la pantalla principal
+[33maf23ba2[m implentacion de los componentes de perfiles y profesores
+[33m4e73586[m Merge pull request #4 from 23-Andres-QC/feat/Preguntas_Frecuentes/jh
+[33m7b23137[m Merge pull request #3 from 23-Andres-QC/Fetch/Geminie_IA/Jh
+[33m0560147[m[33m ([m[1;31morigin/feat/Preguntas_Frecuentes/jh[m[33m)[m Implementacion de el componente de preguntas gestion de preguntas frecuente
+[33mdae52fe[m[33m ([m[1;31morigin/Fetch/Geminie_IA/Jh[m[33m)[m fix: mostrar correctamente la respuesta del backend en el chat
+[33mbb95a56[m Merge pull request #2 from 23-Andres-QC/feat/Implemetacion_ChatBot
+[33mabd250e[m[33m ([m[1;31morigin/feat/Implemetacion_ChatBot[m[33m)[m fix(chatbot): animación typing mínima de 1s y scroll suave al responder
+[33mb648029[m Merge pull request #1 from 23-Andres-QC/feat/Implemetacion_ChatBot
+[33mf95a943[m Implementacion Funcional del Chat Bot
+[33mdf71ce0[m implementacion de frot a chatbot
+[33m6caca8f[m firts2
+[33m591f18a[m QQ
+[33m3dd261b[m first1
+[33mf5f8d3c[m Initialize the project 🚀
