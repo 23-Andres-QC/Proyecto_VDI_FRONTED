@@ -66,9 +66,24 @@
               @click="showChangePassword = true"
             />
 
+            <!-- Botón para registrarse -->
+            <q-btn
+              label="Registrarse"
+              color="red"
+              class="full-width q-mb-md register-btn"
+              flat
+              size="md"
+              @click="showRegister = true"
+            />
+
             <!-- Modal para cambiar contraseña -->
             <q-dialog v-model="showChangePassword">
               <ChangePasswordForm @close="showChangePassword = false" />
+            </q-dialog>
+
+            <!-- Modal para registrarse -->
+            <q-dialog v-model="showRegister">
+              <registrarseComponente @close="showRegister = false" />
             </q-dialog>
           </q-card-section>
 
@@ -86,11 +101,13 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { api } from 'boot/axios'
 import ChangePasswordForm from './ChangePasswordForm.vue'
+import registrarseComponente from '../components/registrarseComponente.vue'
 
 const username = ref('')
 const password = ref('')
 const isPwd = ref(true)
 const showChangePassword = ref(false)
+const showRegister = ref(false)
 const router = useRouter()
 
 async function handleLogin() {
