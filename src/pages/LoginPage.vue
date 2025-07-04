@@ -57,6 +57,15 @@
               @click="handleLogin"
             />
 
+            <q-btn
+              label="Recuperar Contraseña"
+              color="grey-8"
+              class="full-width q-mb-md forgot-password-btn"
+              flat
+              size="md"
+              @click="showChangePassword = true"
+            />
+
             <!-- Modal para cambiar contraseña -->
             <q-dialog v-model="showChangePassword">
               <ChangePasswordForm @close="showChangePassword = false" />
