@@ -84,14 +84,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import * as XLSX from 'xlsx'
 import { api } from 'src/boot/axios'
 import { Notify } from 'quasar'
 
+const emit = defineEmits(['cancelar', 'importacionCompleta'])
+
 const archivo = ref(null)
 const tabla = ref([])
 const apiData = ref([])
+const categorias = ref([])
 const pagination = ref({
   page: 1,
   rowsPerPage: 20,
@@ -106,6 +109,64 @@ const columnas = [
   { name: 'dni', label: 'N° Doc', field: 'dni', align: 'left' },
   { name: 'categoria', label: 'Categoría', field: 'categoria', align: 'left' },
 ]
+
+// Cargar categorías al montar el componente
+onMounted(async () => {
+  await cargarCategorias()
+})
+
+async function cargarCategorias() {
+  try {
+    const response = await api.get('/api/categorias/all')
+    categorias.value = response.data
+  } catch (error) {
+    console.error('Error cargando categorías:', error)
+    Notify.create({
+      type: 'negative',
+      message: 'Error al cargar las categorías',
+      position: 'top',
+    })
+  }
+}
+
+// Función para obtener el ID de categoría basado en la descripción
+function obtenerIdCategoria(descripcionCategoria) {
+  const categoria = categorias.value.find(
+    (cat) => cat.descripcion.toLowerCase() === descripcionCategoria.toLowerCase(),
+  )
+  return categoria ? categoria.idCategoria : null
+}
+
+// Función para crear nuevas categorías
+async function crearCategoriasNuevas(categoriasUnicas) {
+  const nuevasCategorias = []
+  for (const descripcion of categoriasUnicas) {
+    if (!obtenerIdCategoria(descripcion)) {
+      try {
+        await api.post('/api/categorias', {
+          descripcion: descripcion,
+          estado: 1,
+        })
+        nuevasCategorias.push(descripcion)
+      } catch (error) {
+        console.error(`Error creando categoría ${descripcion}:`, error)
+        throw new Error(`No se pudo crear la categoría: ${descripcion}`)
+      }
+    }
+  }
+
+  if (nuevasCategorias.length > 0) {
+    Notify.create({
+      type: 'positive',
+      message: `Se crearon ${nuevasCategorias.length} nuevas categorías`,
+      position: 'top',
+    })
+  }
+
+  // Recargar las categorías para obtener los nuevos IDs
+  await cargarCategorias()
+  return nuevasCategorias
+}
 
 function onFileChange(file) {
   if (!file) return
@@ -144,15 +205,20 @@ function onFileChange(file) {
       dni: rowArr[headerMap.dni] || '',
       categoria: rowArr[headerMap.categoria] || '',
     }))
-    // Preparar datos para la API (simulación, la lógica real de categoría debe estar en backend)
-    apiData.value = tabla.value.map((row) => ({
-      idCategoria: null, // El backend debe resolver esto
-      dni: row.dni,
-      nombreyApellido: row.nombreyApellido,
-      correo: row.correo,
-      estado: 1,
-      categoria: row.categoria, // Se envía para que el backend la resuelva
-    }))
+    // Preparar datos para la API según el formato ProfesoresAdmisCreateDTO
+    apiData.value = tabla.value.map((row) => {
+      const idCategoria = obtenerIdCategoria(row.categoria)
+      if (!idCategoria) {
+        console.warn(`Categoría no encontrada: ${row.categoria}`)
+      }
+      return {
+        idCategoria: idCategoria,
+        dni: row.dni,
+        nombreyApellido: row.nombreyApellido,
+        correo: row.correo,
+        estado: 1,
+      }
+    })
     await minTime
     cargandoPreview.value = false
   }
@@ -161,17 +227,76 @@ function onFileChange(file) {
 
 async function importarExcel() {
   if (!tabla.value.length) return
+
   cargandoImport.value = true
   const minTime = new Promise((resolve) => setTimeout(resolve, 1000))
+
   try {
-    await Promise.all([api.post('/api/ProfesoresAdmis/importar', apiData.value), minTime])
-    Notify.create({ type: 'positive', message: 'Importación completada' })
-    // Cerrar previsualización después de importar
-    archivo.value = null
-    tabla.value = []
-  } catch (e) {
-    console.error('Error importando docentes:', e)
-    Notify.create({ type: 'negative', message: 'Error en la importación' })
+    // Obtener categorías únicas del Excel y filtrar las que no existen
+    const categoriasUnicas = [...new Set(tabla.value.map((row) => row.categoria))]
+    const categoriasNoExistentes = categoriasUnicas.filter((cat) => !obtenerIdCategoria(cat))
+
+    if (categoriasNoExistentes.length > 0) {
+      // Mostrar las categorías que se van a crear
+      Notify.create({
+        type: 'info',
+        message: `Se crearán las siguientes categorías: ${categoriasNoExistentes.join(', ')}`,
+        position: 'top',
+        timeout: 3000,
+      })
+
+      // Crear las categorías nuevas
+      await crearCategoriasNuevas(categoriasUnicas)
+    }
+
+    // Preparar los datos de docentes con los IDs de categoría actualizados
+    const docentesData = tabla.value.map((row) => {
+      const idCategoria = obtenerIdCategoria(row.categoria)
+      if (!idCategoria) {
+        throw new Error(`No se pudo obtener el ID para la categoría: ${row.categoria}`)
+      }
+      return {
+        idCategoria: idCategoria,
+        dni: row.dni,
+        nombreyApellido: row.nombreyApellido,
+        correo: row.correo,
+        estado: 1,
+      }
+    })
+
+    // Importar docentes
+    const response = await api.post('/api/profesoresadmis', docentesData)
+    await minTime
+
+    if (response.status === 200) {
+      Notify.create({
+        type: 'positive',
+        message: 'Importación completada exitosamente',
+        position: 'top',
+      })
+      archivo.value = null
+      tabla.value = []
+      emit('importacionCompleta')
+    }
+  } catch (error) {
+    console.error('Error en el proceso de importación:', error)
+    let errorMessage = 'Error en la importación'
+    if (error.message && error.message.includes('categoría')) {
+      errorMessage = error.message
+    } else if (error.response) {
+      if (error.response.status === 405) {
+        errorMessage = 'El método de importación no está permitido'
+      } else if (error.response.status === 400) {
+        errorMessage = 'Datos inválidos en el archivo'
+      } else if (error.response.data && error.response.data.message) {
+        errorMessage = error.response.data.message
+      }
+    }
+    Notify.create({
+      type: 'negative',
+      message: errorMessage,
+      position: 'top',
+    })
   } finally {
     cargandoImport.value = false
   }

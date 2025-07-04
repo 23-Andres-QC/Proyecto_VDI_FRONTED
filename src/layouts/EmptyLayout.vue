@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="hHh lpR fFf">
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -10,8 +10,9 @@
 // Layout vacío para páginas sin header/footer
 </script>
 
-<style scoped>
-.q-layout {
+<style lang="scss">
+.q-page-container {
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
   min-height: 100vh;
 }
 </style>
