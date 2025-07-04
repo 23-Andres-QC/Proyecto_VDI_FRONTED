@@ -1,5 +1,5 @@
 <template>
-  <div class="users-table-container">
+  <div class="users-table-container scrollable-content">
     <!-- Search Section -->
     <div class="search-section">
       <div class="search-input-container">
@@ -478,6 +478,12 @@ export default defineComponent({
 
 .status-toggle-btn:hover {
   background: #bbdefb;
+}
+
+/* Scrollable Content */
+.scrollable-content {
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
 /* Responsive */
