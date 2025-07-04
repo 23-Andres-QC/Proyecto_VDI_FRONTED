@@ -1,17 +1,20 @@
 /* Essential styles for the 9 components */
 .contenedor-reporte {
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: 1000px;
   margin: 0 auto;
-  padding: 10px;
-  border: 1px solid red;
+  padding: 20px;
+  border: 1px solid #e63946;
   border-radius: 10px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  background-color: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .tipo-contenedor-horizontal {
@@ -28,83 +31,284 @@
 /* Default state for tipo-btn */
 .tipo-btn {
   background-color: white;
-  color: black;
-  border: 1px solid black;
+  color: #333;
+  border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 10px;
+  padding: 10px 15px;
   cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.tipo-btn:hover:not(.active) {
+  border-color: #e63946;
+  color: #e63946;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Active state for tipo-btn */
 .tipo-btn.active {
-  background-color: red;
+  background-color: #e63946;
   color: white;
-  border: 1px solid red;
+  border: 1px solid #e63946;
+  box-shadow: 0 2px 5px rgba(230, 57, 70, 0.3);
+}
+
+/* Checkmark styling */
+.checkmark {
+  margin-right: 5px;
+  font-weight: bold;
 }
 
 .exportar-contenedor {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 8px;
   width: 100%;
+  padding: 5px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+  height: 70px;
+  overflow: visible;
 }
 
 /* Default state for select */
 .exportar-contenedor select {
   height: 40px;
   font-size: 16px;
-  padding: 5px;
+  padding: 5px 12px;
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: white;
   color: black;
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.exportar-contenedor select:focus {
+  outline: none;
+  border-color: #e63946;
+  box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.2);
 }
 
 /* Active state for select */
 .exportar-contenedor select.active {
-  background-color: red;
+  background-color: #e63946;
   color: white;
-  border: 1px solid black;
+  border: 1px solid #d90429;
+}
+
+/* Agregar estilos para compacto-exportar y reducido */
+.compacto-exportar {
+  flex-wrap: wrap;
+}
+
+.reducido {
+  max-width: 800px;
+  width: 800px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilos específicos para el modo responsivo */
+@media (max-width: 768px) {
+  .exportar-contenedor {
+    flex-direction: column;
+    padding: 15px;
+    height: auto;
+  }
+
+  .exportar-contenedor select,
+  .exportar-contenedor textarea,
+  .exportar-contenedor input,
+  .exportar-contenedor button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .exportar-contenedor textarea {
+    width: 100%;
+  }
 }
 
 .exportar-contenedor textarea {
   height: 40px;
-  width: 450px;
+  width: 100%;
+  max-width: 780px;
   font-size: 16px;
-  padding: 5px;
-  border: 1px solid black;
+  padding: 10px;
+  border: 1px solid #ccc;
   border-radius: 5px;
   background-color: white;
-  color: black;
-  resize: both;
-  overflow: auto;
+  color: #333;
+  resize: none;
+  overflow: hidden;
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
+  font-family: inherit;
+  line-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.exportar-contenedor textarea:focus {
+  outline: none;
+  border-color: #e63946;
+  box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.2);
 }
 
 .exportar-contenedor input {
   height: 40px;
+  width: 100%;
+  max-width: 780px;
   font-size: 16px;
-  padding: 5px;
-  border: 1px solid black;
+  padding: 5px 12px;
+  border: 1px solid #ccc;
   border-radius: 5px;
   background-color: white;
-  color: black;
+  color: #333;
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.exportar-contenedor input:focus {
+  outline: none;
+  border-color: #e63946;
+  box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.2);
 }
 
 .exportar-contenedor button {
   height: 40px;
   font-size: 16px;
-  padding: 5px;
-  border: 1px solid red;
+  padding: 5px 15px;
+  border: 1px solid #e63946;
   border-radius: 5px;
   background-color: white;
-  color: black;
+  color: #e63946;
   cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.exportar-contenedor button:active,
 .exportar-contenedor button:hover {
-  background-color: red;
+  background-color: #e63946;
   color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(230, 57, 70, 0.3);
+}
+
+.exportar-contenedor button:active {
+  background-color: #d90429;
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(230, 57, 70, 0.3);
+}
+
+/* Estilo para mostrar validación de campos */
+.exportar-contenedor input:valid,
+.exportar-contenedor textarea:valid,
+.exportar-contenedor select:valid:not([value='']) {
+  border-left: 3px solid #2ecc71;
+}
+
+.exportar-contenedor input:invalid:focus,
+.exportar-contenedor textarea:invalid:focus {
+  border-left: 3px solid #e74c3c;
+}
+
+/* Estilos para mejorar la accesibilidad */
+.tipo-btn:focus,
+.exportar-contenedor button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(230, 57, 70, 0.4);
+}
+
+/* Estilos para los íconos en los botones */
+.exportar-contenedor button i {
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+/* Ajustes para el ancho fijo de 800px */
+.reducido .exportar-contenedor {
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  overflow: visible;
+}
+
+.reducido .filtro-profesores-expandable-scroll {
+  width: 100%;
+  min-height: 40px;
+}
+
+.reducido .filtro-profesores-input {
+  width: 100%;
+}
+
+/* Ajustar estilos para mejor visualización en 800px */
+@media (max-width: 820px) {
+  .reducido {
+    width: 95%;
+    max-width: 800px;
+  }
+}
+
+/* Ajustes específicos para el ancho de 800px */
+.reducido select.filtro-issn-select {
+  width: 110px;
+  min-width: 110px;
+  flex-shrink: 0;
+  max-height: 40px;
+}
+
+.reducido textarea.filtro-profesores-expandable-scroll {
+  width: 210px;
+  min-width: 210px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 40px;
+}
+
+.reducido input.filtro-profesores-input {
+  width: 300px;
+  min-width: 300px;
+  flex-shrink: 0;
+  max-height: 40px;
+}
+
+.reducido button {
+  width: 110px;
+  min-width: 110px;
+  flex-shrink: 0;
+  max-height: 40px;
+  margin-left: auto;
+}
+
+/* Estilos adicionales para garantizar que todo esté en una sola fila */
+.exportar-contenedor {
+  white-space: nowrap;
+  display: flex;
+}
+
+/* Corregir anchos para asegurar que todo encaje en 800px */
+.reducido.compacto-exportar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 800px;
+  box-sizing: border-box;
 }

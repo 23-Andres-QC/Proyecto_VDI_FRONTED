@@ -40,8 +40,8 @@ export default defineComponent({
     })
 
     const menuItems = ref([
-      { id: 1, label: 'Consulta ISSN', active: true }, // ISSN starts as active
-      { id: 2, label: 'Consulta lista cerrada', active: false },
+      { id: 2, label: 'Consulta ISSN', active: true }, // ISSN starts as active
+      { id: 1, label: 'Consulta lista cerrada', active: false },
     ])
 
     // Emitir automáticamente el evento para mostrar 'Consulta ISSN' al montar
