@@ -3,7 +3,15 @@
     <div class="importar-revistas-panel card-style importar-revistas-flotante">
       <div class="importar-header">
         <span class="importar-titulo">Importar revistas</span>
-        <q-btn flat round dense icon="close" class="cerrar-x" @click="$emit('cancelar')" />
+        <q-btn
+          flat
+          round
+          dense
+          icon="close"
+          class="cerrar-x"
+          @click="$emit('cancelar')"
+          :disable="loadingExcel || loadingImport"
+        />
       </div>
       <div class="importar-instruccion">Selecciona un archivo .xlsx para importar revistas</div>
       <div class="importar-form-row">
@@ -17,14 +25,24 @@
           :prepend-icon="'insert_drive_file'"
           color="primary"
           text-color="dark"
+          :disable="loadingExcel || loadingImport"
         />
         <q-btn
           class="importar-btn importar-btn-main acciones-btn"
           label="IMPORTAR"
           icon="cloud_upload"
           @click="importarExcel"
-          :disable="!archivo"
-        />
+          :loading="loadingImport"
+          :disable="!archivo || loadingExcel || loadingImport"
+        >
+          <template v-slot:loading>
+            <q-spinner-dots color="white" />
+          </template>
+        </q-btn>
+      </div>
+      <div v-if="loadingExcel" class="text-center q-pa-md">
+        <q-spinner-dots color="primary" size="40" />
+        <div class="text-body1 q-mt-md">Procesando archivo Excel...</div>
       </div>
       <div v-if="tabla && tabla.length > 0" class="tabla-container">
         <div class="visualizacion-header">
@@ -78,16 +96,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import * as XLSX from 'xlsx'
 import { api } from 'src/boot/axios'
 import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 
 const $q = useQuasar()
+const router = useRouter()
 
 const archivo = ref(null)
 const tabla = ref([])
 const apiData = ref([])
+const loadingExcel = ref(false)
+const loadingImport = ref(false)
+const idUsuario = ref(null)
 const pagination = ref({
   page: 1,
   rowsPerPage: 20,
@@ -178,7 +201,7 @@ const columnas = [
 
 function onFileChange(file) {
   if (!file) return
-  // --- Declarar headerAdapt antes de cualquier uso ---
+  loadingExcel.value = true
   const headerAdapt = {
     scopus: 'Scopus',
     'wos(q)': 'WoSQ',
@@ -225,201 +248,222 @@ function onFileChange(file) {
   }
   const reader = new FileReader()
   reader.onload = (e) => {
-    const data = new Uint8Array(e.target.result)
-    const workbook = XLSX.read(data, { type: 'array' })
-    const sheetName = workbook.SheetNames[0]
-    const worksheet = workbook.Sheets[sheetName]
-    // Obtener los datos como matriz (incluyendo encabezados y filas)
-    const allRows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' })
-    if (!allRows.length) return
-    const excelHeaders = allRows[0].map((h) => (typeof h === 'string' ? h.trim() : h))
-    const dataRows = allRows.slice(1)
-    // Filtrar filas vacías antes de procesar
-    const filteredRows = dataRows.filter(
-      (rowArr) =>
-        Array.isArray(rowArr) &&
-        rowArr.some((cell) => cell !== '' && cell !== undefined && cell !== null),
-    )
-    // Adaptar los encabezados del Excel a los nombres de la API para la tabla previa
-    // --- ARREGLO: Normalizar los nombres de columnas para WoS (Q) y WoS (S) ---
-    const columnasAdaptadas = excelHeaders.map((col) => {
-      let key = col.trim().toLowerCase()
-      // Normalización especial para WoS (Q) y WoS (S)
-      if (key === 'wos (q)' || key === 'wos(q)') key = 'wos(q)'
-      if (key === 'wos (s)' || key === 'wos(s)') key = 'wos(s)'
-      const adaptKey = headerAdapt[key] || col.trim()
-      return {
-        name: adaptKey,
-        label: adaptKey,
-        field: adaptKey,
-        align: 'left',
-      }
-    })
-    columnas.value = columnasAdaptadas
-    // --- Vista previa: mostrar los datos originales del Excel con los encabezados adaptados ---
-    // Este bloque genera la tabla de previa visualización que ves en pantalla
-    tabla.value = filteredRows.map((rowArr) => {
-      const obj = {}
-      columnasAdaptadas.forEach((col, idx) => {
-        obj[col.name] = rowArr[idx] !== undefined ? rowArr[idx] : ''
-      })
-      return obj
-    })
-    // --- Fin de la generación de la previa visualización ---
-    mostrarTabla.value = true // Mostrar la tabla automáticamente al cargar archivo
-    // --- Nuevo: Mapeo por nombre flexible y adaptación de encabezados personalizados ---
-    // Lista de campos esperados por la API en orden (según tu JSON ejemplo)
-    // --- Mapeo por nombre flexible y adaptación de encabezados personalizados para la API ---
-    // Este bloque toma los datos de la tabla previa y los mapea a los campos esperados por la API
-    // usando el headerMap generado a partir de los encabezados del Excel adaptados
-    const apiFields = [
-      'ISSN',
-      'Nombre',
-      'Scopus',
-      'WoSQ',
-      'WoSS',
-      'WoSEsci',
-      'EsciQ',
-      'Ajg4star',
-      'Ajg',
-      'AjgS',
-      'Cnrs',
-      'CnrsS',
-      'Abdc',
-      'AbdcS',
-      'AlMenosUnaLista',
-      'SoloUnaLista',
-      'Scielo',
-      'WoSLatam',
-      'Top50',
-      'N',
-      'BeallsList',
-      'Mdpi',
-      'Insights',
-      'AjgExiste',
-      'CnrsExiste',
-      'AbdcExiste',
-      'WoSTopExiste',
-      'WoSEsciExiste',
-      'ScopusExiste',
-      'SoloScieloExiste',
-      'Especial216b',
-      'LatamSinEsciExiste',
-      'EsciScieloSinScopus',
-      'Multiple',
-      'MultidisciplinaryWos',
-      'CoautoriaEsan',
-      'PosicionAutor',
-      'Jif',
-      'Country',
-      'MultyAlMenosUnaLista',
-      'MultidisciplinaryScopus',
-      'MultidisciplinaryWosOScopys',
-    ]
-    // Crear un diccionario de encabezados del Excel para buscar por nombre flexible y adaptar
-    const headerMap = {}
-    excelHeaders.forEach((h, idx) => {
-      if (typeof h === 'string') {
-        let key = h.trim().toLowerCase().replace(/\s+/g, '')
+    try {
+      const data = new Uint8Array(e.target.result)
+      const workbook = XLSX.read(data, { type: 'array' })
+      const sheetName = workbook.SheetNames[0]
+      const worksheet = workbook.Sheets[sheetName]
+      // Obtener los datos como matriz (incluyendo encabezados y filas)
+      const allRows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' })
+      if (!allRows.length) return
+      const excelHeaders = allRows[0].map((h) => (typeof h === 'string' ? h.trim() : h))
+      const dataRows = allRows.slice(1)
+      // Filtrar filas vacías antes de procesar
+      const filteredRows = dataRows.filter(
+        (rowArr) =>
+          Array.isArray(rowArr) &&
+          rowArr.some((cell) => cell !== '' && cell !== undefined && cell !== null),
+      )
+      // Adaptar los encabezados del Excel a los nombres de la API para la tabla previa
+      // --- ARREGLO: Normalizar los nombres de columnas para WoS (Q) y WoS (S) ---
+      const columnasAdaptadas = excelHeaders.map((col) => {
+        let key = col.trim().toLowerCase()
         // Normalización especial para WoS (Q) y WoS (S)
-        if (key === 'wos(q)' || key === 'wos(q)') key = 'wos(q)'
-        if (key === 'wos(s)' || key === 'wos(s)') key = 'wos(s)'
-        const adaptKey = headerAdapt[h.trim().toLowerCase()] || headerAdapt[key] || h.trim()
-        headerMap[adaptKey.toLowerCase().replace(/\s+/g, '')] = idx
-      }
-    })
-    apiData.value = filteredRows.map((rowArr) => {
-      const obj = {}
-      apiFields.forEach((apiField) => {
-        const key = apiField.toLowerCase().replace(/\s+/g, '')
-        const idx = headerMap[key]
-        let val = idx !== undefined ? rowArr[idx] : ''
-        // --- Conversión automática según tipo de campo en la base de datos ---
-        const stringFields = [
-          'WoSQ',
-          'WoSEsci',
-          'EsciQ',
-          'Ajg4star',
-          'Ajg',
-          'Cnrs',
-          'Abdc',
-          'AlMenosUnaLista',
-          'SoloUnaLista',
-          'Scielo',
-          'WoSLatam',
-          'Top50',
-          'BeallsList',
-          'Mdpi',
-          'Insights',
-          'CoautoriaEsan',
-          'PosicionAutor',
-          'Country',
-          'Nombre',
-          'ISSN',
-        ]
-        const floatFields = ['Jif']
-        const intFields = [
-          'WoSS',
-          'AjgS',
-          'CnrsS',
-          'AbdcS',
-          'N',
-          'AjgExiste',
-          'CnrsExiste',
-          'AbdcExiste',
-          'WoSTopExiste',
-          'WoSEsciExiste',
-          'ScopusExiste',
-          'SoloScieloExiste',
-          'Especial216b',
-          'LatamSinEsciExiste',
-          'EsciScieloSinScopus',
-          'MultyAlMenosUnaLista',
-          'MultidisciplinaryWos',
-          'MultidisciplinaryScopus',
-          'MultidisciplinaryWosOScopys',
-          'Multiple',
-        ]
-        // Convertir todos los campos vacíos a null
-        if (val === '' || val === undefined) val = null
-        // Si es campo string, forzar a string si no es null
-        if (stringFields.includes(apiField) && val !== null) {
-          val = String(val)
+        if (key === 'wos (q)' || key === 'wos(q)') key = 'wos(q)'
+        if (key === 'wos (s)' || key === 'wos(s)') key = 'wos(s)'
+        const adaptKey = headerAdapt[key] || col.trim()
+        return {
+          name: adaptKey,
+          label: adaptKey,
+          field: adaptKey,
+          align: 'left',
         }
-        // Si es campo float, forzar a number (o null)
-        if (floatFields.includes(apiField) && val !== null) {
-          val = isNaN(Number(val)) ? null : Number(val)
-        }
-        // Si es campo int, forzar a number si es posible, si no null
-        if (intFields.includes(apiField) && val !== null) {
-          val = isNaN(Number(val)) ? null : Number(val)
-        }
-        obj[apiField] = val
       })
-      return obj
+      columnas.value = columnasAdaptadas
+      // --- Vista previa: mostrar los datos originales del Excel con los encabezados adaptados ---
+      // Este bloque genera la tabla de previa visualización que ves en pantalla
+      tabla.value = filteredRows.map((rowArr) => {
+        const obj = {}
+        columnasAdaptadas.forEach((col, idx) => {
+          obj[col.name] = rowArr[idx] !== undefined ? rowArr[idx] : ''
+        })
+        return obj
+      })
+      // --- Fin de la generación de la previa visualización ---
+      mostrarTabla.value = true // Mostrar la tabla automáticamente al cargar archivo
+      // --- Nuevo: Mapeo por nombre flexible y adaptación de encabezados personalizados ---
+      // Lista de campos esperados por la API en orden (según tu JSON ejemplo)
+      // --- Mapeo por nombre flexible y adaptación de encabezados personalizados para la API ---
+      // Este bloque toma los datos de la tabla previa y los mapea a los campos esperados por la API
+      // usando el headerMap generado a partir de los encabezados del Excel adaptados
+      const apiFields = [
+        'ISSN',
+        'Nombre',
+        'Scopus',
+        'WoSQ',
+        'WoSS',
+        'WoSEsci',
+        'EsciQ',
+        'Ajg4star',
+        'Ajg',
+        'AjgS',
+        'Cnrs',
+        'CnrsS',
+        'Abdc',
+        'AbdcS',
+        'AlMenosUnaLista',
+        'SoloUnaLista',
+        'Scielo',
+        'WoSLatam',
+        'Top50',
+        'N',
+        'BeallsList',
+        'Mdpi',
+        'Insights',
+        'AjgExiste',
+        'CnrsExiste',
+        'AbdcExiste',
+        'WoSTopExiste',
+        'WoSEsciExiste',
+        'ScopusExiste',
+        'SoloScieloExiste',
+        'Especial216b',
+        'LatamSinEsciExiste',
+        'EsciScieloSinScopus',
+        'Multiple',
+        'MultidisciplinaryWos',
+        'CoautoriaEsan',
+        'PosicionAutor',
+        'Jif',
+        'Country',
+        'MultyAlMenosUnaLista',
+        'MultidisciplinaryScopus',
+        'MultidisciplinaryWosOScopys',
+      ]
+      // Crear un diccionario de encabezados del Excel para buscar por nombre flexible y adaptar
+      const headerMap = {}
+      excelHeaders.forEach((h, idx) => {
+        if (typeof h === 'string') {
+          let key = h.trim().toLowerCase().replace(/\s+/g, '')
+          // Normalización especial para WoS (Q) y WoS (S)
+          if (key === 'wos(q)' || key === 'wos(q)') key = 'wos(q)'
+          if (key === 'wos(s)' || key === 'wos(s)') key = 'wos(s)'
+          const adaptKey = headerAdapt[h.trim().toLowerCase()] || headerAdapt[key] || h.trim()
+          headerMap[adaptKey.toLowerCase().replace(/\s+/g, '')] = idx
+        }
+      })
+      apiData.value = filteredRows.map((rowArr) => {
+        const obj = {}
+        apiFields.forEach((apiField) => {
+          const key = apiField.toLowerCase().replace(/\s+/g, '')
+          const idx = headerMap[key]
+          let val = idx !== undefined ? rowArr[idx] : ''
+          // --- Conversión automática según tipo de campo en la base de datos ---
+          const stringFields = [
+            'WoSQ',
+            'WoSEsci',
+            'EsciQ',
+            'Ajg4star',
+            'Ajg',
+            'Cnrs',
+            'Abdc',
+            'AlMenosUnaLista',
+            'SoloUnaLista',
+            'Scielo',
+            'WoSLatam',
+            'Top50',
+            'BeallsList',
+            'Mdpi',
+            'Insights',
+            'CoautoriaEsan',
+            'PosicionAutor',
+            'Country',
+            'Nombre',
+            'ISSN',
+          ]
+          const floatFields = ['Jif']
+          const intFields = [
+            'WoSS',
+            'AjgS',
+            'CnrsS',
+            'AbdcS',
+            'N',
+            'AjgExiste',
+            'CnrsExiste',
+            'AbdcExiste',
+            'WoSTopExiste',
+            'WoSEsciExiste',
+            'ScopusExiste',
+            'SoloScieloExiste',
+            'Especial216b',
+            'LatamSinEsciExiste',
+            'EsciScieloSinScopus',
+            'MultyAlMenosUnaLista',
+            'MultidisciplinaryWos',
+            'MultidisciplinaryScopus',
+            'MultidisciplinaryWosOScopys',
+            'Multiple',
+          ]
+          // Convertir todos los campos vacíos a null
+          if (val === '' || val === undefined) val = null
+          // Si es campo string, forzar a string si no es null
+          if (stringFields.includes(apiField) && val !== null) {
+            val = String(val)
+          }
+          // Si es campo float, forzar a number (o null)
+          if (floatFields.includes(apiField) && val !== null) {
+            val = isNaN(Number(val)) ? null : Number(val)
+          }
+          // Si es campo int, forzar a number si es posible, si no null
+          if (intFields.includes(apiField) && val !== null) {
+            val = isNaN(Number(val)) ? null : Number(val)
+          }
+          obj[apiField] = val
+        })
+        return obj
+      })
+      // --- Fin del mapeo para importación a la API ---
+      console.log('Datos procesados:', apiData.value)
+    } catch (error) {
+      console.error('Error al procesar el archivo:', error)
+      $q.notify({
+        type: 'negative',
+        message: 'Error al procesar el archivo Excel',
+      })
+      tabla.value = []
+      apiData.value = []
+    } finally {
+      loadingExcel.value = false
+    }
+  }
+  reader.onerror = () => {
+    $q.notify({
+      type: 'negative',
+      message: 'Error al leer el archivo',
     })
-    // --- Fin del mapeo para importación a la API ---
-    // DEBUG: Mostrar en consola lo que se está leyendo y mapeando
-    console.log('allRows', allRows)
-    console.log('excelHeaders', excelHeaders)
-    console.log('filteredRows', filteredRows)
-    console.log('apiData', apiData.value)
+    loadingExcel.value = false
   }
   reader.readAsArrayBuffer(file)
 }
 
 async function importarExcel() {
   if (!tabla.value.length) return
+  if (!checkAuth()) return
+
+  loadingImport.value = true
   try {
     console.log('Datos enviados al backend:', apiData.value.length ? apiData.value : tabla.value)
     await api.post(
-      `/api/Revista?idUsuario=${localStorage.getItem('idUsuario')}&tipoRevista=SCI`,
+      `/api/Revista?idUsuario=${idUsuario.value}&tipoRevista=SCI`,
       apiData.value.length ? apiData.value : tabla.value,
     )
     $q.notify({ type: 'positive', message: 'Importación completada' })
+    cancelarImportacion()
   } catch (e) {
     console.error('Error importando revistas:', e)
     $q.notify({ type: 'negative', message: 'Error en la importación' })
+  } finally {
+    loadingImport.value = false
   }
 }
 
@@ -427,6 +471,24 @@ function cancelarImportacion() {
   archivo.value = null
   tabla.value = []
   mostrarTabla.value = false
+}
+
+onMounted(() => {
+  checkAuth()
+})
+
+function checkAuth() {
+  const storedIdUsuario = localStorage.getItem('idUsuario')
+  if (!storedIdUsuario) {
+    $q.notify({
+      type: 'negative',
+      message: 'Debe iniciar sesión para importar revistas',
+    })
+    router.push('/login')
+    return false
+  }
+  idUsuario.value = storedIdUsuario
+  return true
 }
 </script>
 
