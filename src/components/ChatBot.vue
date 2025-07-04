@@ -48,7 +48,7 @@
         min-height: 38rem;
         height: 38rem;
         max-height: 38rem;
-        background: url('/src/components/chat_components/image/FondoChat1.png') center center/cover
+        background: url('/src/components/chat_components/image/pino.jpg') center center/cover
           no-repeat;
       "
     >
@@ -98,6 +98,15 @@
                   ? 'bg-red-700 rounded-br-md' // Pregunta del usuario (input o FAQ) fondo rojo
                   : 'bg-black rounded-bl-md' // Respuesta del bot fondo negro
               "
+              v-if="!(idx === messages.length - 1 && !message.isUser && showFaqs === false)"
+            >
+              {{ message.text }}
+            </div>
+            <!-- Respuesta de FAQ con ref para scroll -->
+            <div
+              v-else
+              ref="faqAnswerMsg"
+              class="max-w-xs px-4 py-3 rounded-2xl text-white font-medium bg-black rounded-bl-md"
             >
               {{ message.text }}
             </div>
@@ -127,12 +136,13 @@
               class="mb-2 font-semibold"
               style="
                 color: #fff;
-                background: #a12a38;
+                background: #2563eb; /* azul tailwind-500 */
                 border-radius: 0.4rem;
                 padding: 0.5rem 1rem;
                 width: fit-content;
                 margin-bottom: 1rem;
               "
+              ref="faqTitle"
             >
               Preguntas Frecuentes
             </div>
@@ -143,10 +153,9 @@
                 @click="handleFaqClick(faq)"
                 :class="[
                   'w-full text-left px-4 py-2 rounded-md transition-colors',
-                  faq.clicked
-                    ? 'bg-red-700 text-white'
-                    : 'bg-red-600 hover:bg-red-300 text-gray-800',
+                  faq.clicked ? 'bg-red-700 text-white' : 'bg-red-600 text-white hover:bg-red-700',
                 ]"
+                style="font-weight: 600; font-size: 1rem"
               >
                 {{ faq.pregunta }}
               </button>
@@ -248,6 +257,7 @@ export default {
         isUser: true,
       })
       await this.fetchRespuestaDePreguntaFrecuentes(faq.id)
+      // Quitar scrollToBottom aquí para que no baje hasta el final tras FAQ
     },
 
     // Método para obtener la respuesta de la pregunta frecuente seleccionada
@@ -279,7 +289,15 @@ export default {
           text: response.data.respuesta,
           isUser: false,
         })
-        this.scrollToBottom()
+        await nextTick()
+        // Enfoca el scroll en el título de Preguntas Frecuentes de forma instantánea
+        const faqTitle = this.$refs.faqTitle
+        if (faqTitle && faqTitle.scrollIntoView) {
+          faqTitle.scrollIntoView({ behavior: 'auto', block: 'center' })
+        }
+        // NO hacer scrollToBottom aquí para FAQ
+        // Si quieres que el scroll enfoque la última respuesta pero NO hasta el fondo,
+        // puedes usar scrollIntoView en el mensaje recién agregado, pero eso requiere un ref por mensaje.
       } catch {
         this.isTyping = false
         this.loading = false
@@ -287,7 +305,7 @@ export default {
           type: 'negative',
           message: 'Error al cargar respuesta de preguntas frecuentes',
         })
-        this.scrollToBottom()
+        // NO hacer scrollToBottom aquí
       }
     },
 

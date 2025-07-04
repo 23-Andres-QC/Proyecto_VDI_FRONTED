@@ -36,7 +36,7 @@ export default defineComponent({
     const userProfile = ref({
       fullName: localStorage.getItem('nombreyApellido'),
 
-      avatar: '/src/assets/Logo_Universidad.png', // Ruta de la imagen del usuario
+      avatar: '/src/assets/Home_imagenes/admin.png', // Ruta de la imagen del usuario
     })
 
     const menuItems = ref([
