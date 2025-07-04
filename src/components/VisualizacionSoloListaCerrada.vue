@@ -1,6 +1,12 @@
 <template>
   <div class="tabla-margen-centrada">
-    <div class="tabla-scroll-estatica tabla-margen-separador">
+    <!-- Indicador de carga -->
+    <div v-if="cargando" class="loading-container">
+      <q-spinner-dots size="50px" color="red" />
+      <p class="loading-text">Cargando...</p>
+    </div>
+
+    <div v-else class="tabla-scroll-wrapper tabla-borde-centrada">
       <q-table
         v-if="listaCerradaFiltrada.length > 0"
         :rows="listaCerradaFiltrada"
@@ -11,12 +17,12 @@
         class="tabla-excel custom-table tabla-scrollable"
         :pagination="pagination"
         v-model:pagination="pagination"
-        :rows-per-page-options="[5, 10, 20, 50, 100, 200, 500, 1000]"
+        :rows-per-page-options="[16, 20, 30, 50, 75, 100, 150]"
         :wrap-cells="false"
         :virtual-scroll="false"
         :table-style="{
           maxWidth: '100%',
-          maxHeight: '340px',
+          maxHeight: '600px',
           overflow: 'auto',
           display: 'block',
         }"
@@ -47,6 +53,7 @@ const props = defineProps({
 })
 
 const listaCerrada = ref([])
+const cargando = ref(false)
 
 const columnasListaCerrada = [
   { name: 'issn', label: 'ISSN', field: 'issn', align: 'left', style: 'width: 80px' },
@@ -101,17 +108,20 @@ const listaCerradaFiltrada = computed(() => {
 })
 
 const fetchListaCerrada = async () => {
+  cargando.value = true
   try {
     const { data } = await api.get('/api/Revista/lcd')
     listaCerrada.value = data
   } catch {
     listaCerrada.value = []
+  } finally {
+    cargando.value = false
   }
 }
 
 const pagination = ref({
   page: 1,
-  rowsPerPage: 20,
+  rowsPerPage: 16,
   rowsNumber: 0,
 })
 
@@ -121,6 +131,22 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* Loading */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 12px;
+}
+
+.loading-text {
+  color: #666;
+  font-size: 1rem;
+  margin: 0;
+}
+
 .tabla-margen-centrada {
   max-width: 90%;
   width: 90%;
@@ -131,7 +157,7 @@ onMounted(() => {
   align-items: center;
   justify-content: flex-start;
 }
-.tabla-scroll-estatica {
+.tabla-borde-centrada {
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -145,13 +171,19 @@ onMounted(() => {
   padding: 15px;
   overflow: hidden;
 }
-.tabla-margen-separador {
-  margin-left: 0 !important;
+.tabla-scroll-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 600px;
+  margin-bottom: 1.5rem;
+  background: transparent;
 }
 .tabla-scrollable {
   overflow-x: auto !important;
   overflow-y: auto !important;
-  max-height: 340px !important;
+  max-height: 600px !important;
   width: 100% !important;
   max-width: 100% !important;
 }
@@ -186,6 +218,9 @@ onMounted(() => {
   width: 200px !important;
   min-width: 200px !important;
 }
+.custom-table >>> tbody tr {
+  background: #fff;
+}
 .custom-table >>> tbody tr td {
   border-right: 1px solid #f5f5f5 !important;
   border-bottom: 1px solid #f5f5f5 !important;
@@ -206,9 +241,6 @@ onMounted(() => {
   max-width: 200px !important;
   text-align: left !important;
   padding: 8px 6px !important;
-}
-.custom-table >>> tbody tr {
-  background: #fff;
 }
 .custom-table >>> tbody tr:nth-child(even) {
   background: #fafafa;
