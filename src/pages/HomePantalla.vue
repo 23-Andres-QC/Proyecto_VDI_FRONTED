@@ -26,27 +26,104 @@
           <q-btn flat label="UE Esan" @click="openUeEsan" />
           <q-btn flat label="Portal Académico" @click="openPortalAcademico" />
           <q-btn flat label="Nosotros" @click="scrollTo('nosotros')" />
-          <q-btn flat label="Recursos" @click="openRecursos" />
-          <div class="dropdown-container" @mouseenter="showDropdown" @mouseleave="hideDropdown">
-            <q-btn-dropdown flat label="Publicaciones" v-model="dropdownVisible" auto-close>
-              <q-list>
-                <q-item clickable>
-                  <q-item-section>Publicaciones 2020</q-item-section>
+          <div
+            class="dropdown-container recursos-dropdown"
+            @mouseenter="handleRecursosMouseEnter"
+            @mouseleave="handleRecursosMouseLeave"
+          >
+            <q-btn-dropdown
+              flat
+              label="Recursos"
+              v-model="recursosDropdownVisible"
+              :auto-close="false"
+              @click="toggleRecursosDropdown"
+              menu-anchor="bottom middle"
+              menu-self="top middle"
+              :offset="[0, 0]"
+            >
+              <q-list
+                class="recursos-list"
+                @mouseenter="handleRecursosMouseEnter"
+                @mouseleave="handleRecursosMouseLeave"
+              >
+                <q-item
+                  clickable
+                  @click="openBiblioteca"
+                  @mouseenter="keepDropdownOpenOnItemHover"
+                  class="recursos-item"
+                >
+                  <q-item-section>Biblioteca</q-item-section>
                 </q-item>
-                <q-item clickable>
-                  <q-item-section>Publicaciones 2021</q-item-section>
+                <q-item
+                  clickable
+                  @click="openFabLab"
+                  @mouseenter="keepDropdownOpenOnItemHover"
+                  class="recursos-item"
+                >
+                  <q-item-section>FabLab</q-item-section>
                 </q-item>
-                <q-item clickable>
-                  <q-item-section>Publicaciones 2022</q-item-section>
+                <q-item
+                  clickable
+                  @click="openBolsaTrabajo"
+                  @mouseenter="keepDropdownOpenOnItemHover"
+                  class="recursos-item"
+                >
+                  <q-item-section>Bolsa de trabajo</q-item-section>
                 </q-item>
-                <q-item clickable>
+              </q-list>
+            </q-btn-dropdown>
+          </div>
+          <div
+            class="dropdown-container publicaciones-dropdown"
+            @mouseenter="handlePublicacionesMouseEnter"
+            @mouseleave="handlePublicacionesMouseLeave"
+          >
+            <q-btn-dropdown
+              flat
+              label="Publicaciones"
+              v-model="publicacionesDropdownVisible"
+              :auto-close="false"
+              @click="togglePublicacionesDropdown"
+              menu-anchor="bottom middle"
+              menu-self="top middle"
+              :offset="[0, 0]"
+            >
+              <q-list
+                class="publicaciones-list"
+                @mouseenter="handlePublicacionesMouseEnter"
+                @mouseleave="handlePublicacionesMouseLeave"
+              >
+                <q-item
+                  clickable
+                  @click="openPublicaciones2023"
+                  @mouseenter="keepPublicacionesDropdownOpenOnItemHover"
+                  class="publicaciones-item"
+                >
                   <q-item-section>Publicaciones 2023</q-item-section>
                 </q-item>
-                <q-item clickable>
-                  <q-item-section>Publicaciones 2024</q-item-section>
+                <q-item
+                  clickable
+                  @click="openPublicaciones2022"
+                  @mouseenter="keepPublicacionesDropdownOpenOnItemHover"
+                  class="publicaciones-item"
+                >
+                  <q-item-section>Publicaciones 2022</q-item-section>
                 </q-item>
-                <q-item clickable>
-                  <q-item-section>Publicaciones 2025</q-item-section>
+                <q-item
+                  clickable
+                  @click="openPublicaciones2021"
+                  @mouseenter="keepPublicacionesDropdownOpenOnItemHover"
+                  class="publicaciones-item"
+                >
+                  <q-item-section>Publicaciones 2021</q-item-section>
+                </q-item>
+                <q-item
+                  clickable
+                  @click="openPublicaciones2020"
+                  @mouseenter="keepPublicacionesDropdownOpenOnItemHover"
+                  class="publicaciones-item"
+                >
+                  <q-item-section>Publicaciones 2020</q-item-section>
                 </q-item>
               </q-list>
             </q-btn-dropdown>
@@ -63,11 +140,19 @@
     <section class="hero" id="inicio">
       <!-- Contenedor de imagen de fondo con overlay oscuro -->
       <div class="hero-background">
+        <!-- Capa base de imagen (siempre visible) -->
         <img
           :src="currentHeroImage"
-          :key="currentHeroImage"
-          alt="Estudiante investigando en biblioteca"
-          class="hero-image"
+          alt="Imagen de fondo base"
+          class="hero-image hero-image-base"
+        />
+        <!-- Capa de transición (para transiciones suaves) -->
+        <img
+          :src="nextHeroImage"
+          :key="currentImageIndex"
+          alt="Imagen de transición"
+          class="hero-image hero-image-transition"
+          :class="{ 'fade-in': isTransitioning }"
         />
         <div class="hero-overlay"></div>
 
@@ -117,7 +202,7 @@
           <div class="col-md-6 col-12 text-content">
             <q-card class="queHace-content">
               <q-card-section>
-                <h2 class="section-title">¿QUE HACE?</h2>
+                <h2 class="section-title">¿Qué hace?</h2>
                 <p class="about-text">
                   El Vicerrectorado de Investigación se encarga de promover, coordinar y supervisar
                   las actividades de investigación científica, tecnológica e innovación dentro de la
@@ -172,11 +257,20 @@
           <div class="col-md-6 col-12">
             <q-card class="mission-content">
               <q-card-section>
-                <h2 class="mission-title">Misión</h2>
+                <div class="title-with-icon mission-title-container">
+                  <q-icon name="flag" class="mission-icon" />
+                  <h2 class="mission-title">Misión</h2>
+                </div>
                 <p class="mission-text">
-                  Fomentar una cultura de investigación e innovación en la comunidad universitaria,
-                  contribuyendo al desarrollo científico, tecnológico y social del país mediante la
-                  generación de conocimiento de calidad y con impacto positivo en la sociedad.
+                  Fomentar una cultura sólida de investigación, innovación y pensamiento crítico en
+                  la comunidad universitaria, impulsando la generación de conocimiento original y de
+                  calidad.
+                </p>
+                <p class="mission-text">
+                  Contribuir activamente al desarrollo científico, tecnológico, económico y social
+                  del país mediante proyectos de impacto, formación académica de alto nivel,
+                  publicaciones especializadas y alianzas estratégicas con instituciones nacionales
+                  e internacionales.
                 </p>
               </q-card-section>
             </q-card>
@@ -213,7 +307,6 @@
             @click="previousSlide"
             @mouseenter="pauseAutoplay"
             @mouseleave="resumeAutoplay"
-            :disabled="currentSlide === 0"
           >
             <q-icon name="chevron_left" size="24px" />
           </button>
@@ -222,7 +315,6 @@
             @click="nextSlide"
             @mouseenter="pauseAutoplay"
             @mouseleave="resumeAutoplay"
-            :disabled="currentSlide >= totalSlides - 1"
           >
             <q-icon name="chevron_right" size="24px" />
           </button>
@@ -236,7 +328,7 @@
           >
             <div
               class="research-track"
-              :style="{ transform: `translateX(-${currentSlide * (cardWidth + 48)}px)` }"
+              :style="{ transform: `translateX(-${getCarouselTransform()}px)` }"
             >
               <q-card
                 v-for="item in filteredResearchSlides"
@@ -313,14 +405,18 @@
           <div class="footer-section links-section">
             <h3 class="footer-title">Sobre ESAN VDI</h3>
             <ul class="footer-links">
-              <li><a href="#nosotros" @click="scrollTo('nosotros')">Nosotros</a></li>
+              <li><a href="#" @click.prevent="scrollTo('nosotros')">Nosotros</a></li>
               <li>
-                <a href="#investigacion" @click="scrollTo('investigacion')"
-                  >Líneas de Investigación</a
+                <a href="#" @click.prevent="scrollTo('investigacion')">Líneas de Investigación</a>
+              </li>
+              <li>
+                <a
+                  href="https://biblioteca.uesan.edu.pe/servicios-y-productos/asistencia-para-la-investigacion"
+                  target="_blank"
+                  >Gestión de la Investigación</a
                 >
               </li>
-              <li><a href="#gestion-investigacion">Gestión de la Investigación</a></li>
-              <li><a href="#esan-ediciones" @click="openEsanEdiciones">ESAN Ediciones</a></li>
+              <li><a href="https://ediciones.esan.edu.pe/" target="_blank">ESAN Ediciones</a></li>
             </ul>
           </div>
 
@@ -328,13 +424,27 @@
           <div class="footer-section info-section">
             <h3 class="footer-title">Información de Interés</h3>
             <ul class="footer-links">
-              <li><a href="#politica-privacidad">Política de Privacidad</a></li>
-              <li><a href="#libro-reclamaciones">Libro de Reclamaciones</a></li>
-              <li><a href="#terminos-condiciones">Términos y Condiciones</a></li>
+              <li>
+                <a href="https://www.ue.edu.pe/pregrado/politica-de-privacidad" target="_blank"
+                  >Política de Privacidad</a
+                >
+              </li>
+              <li>
+                <a
+                  href="https://intranet.esan.edu.pe/SistemasEsan/LibroReclamaciones.nsf"
+                  target="_blank"
+                  >Libro de Reclamaciones</a
+                >
+              </li>
             </ul>
 
             <div class="footer-icon-section">
-              <q-icon name="menu_book" size="56px" color="rgba(255,255,255,0.3)" />
+              <a
+                href="https://intranet.esan.edu.pe/SistemasEsan/LibroReclamaciones.nsf"
+                target="_blank"
+              >
+                <q-icon name="menu_book" size="56px" color="rgba(255,255,255,0.3)" />
+              </a>
             </div>
           </div>
         </div>
@@ -370,8 +480,6 @@ import { useRouter } from 'vue-router'
 // Importar las imágenes del hero
 import CampusEsanImg from '../assets/Home_imagenes/CampusEsan.jpg'
 import EstudianteImg from '../assets/Home_imagenes/Estudiante.jpg'
-import VicerrectoradoImg from '../assets/Home_imagenes/Vicerrectorado.jpg'
-import Vicerrectorado1Img from '../assets/Home_imagenes/Vicerrectorado1.jpg'
 import MisionImg from '../assets/Home_imagenes/mision.jpg'
 
 const { getScrollTarget, setVerticalScrollPosition } = scroll
@@ -388,13 +496,7 @@ export default defineComponent({
       router.push('/login')
     }
     // Imagen hero transicionable - usando imports de todas las imágenes disponibles
-    const heroImages = [
-      CampusEsanImg,
-      EstudianteImg,
-      VicerrectoradoImg,
-      Vicerrectorado1Img,
-      MisionImg,
-    ]
+    const heroImages = [CampusEsanImg, EstudianteImg, MisionImg]
     const currentHeroImage = ref(heroImages[0])
     let intervalId = null
 
@@ -411,7 +513,7 @@ export default defineComponent({
           'de',
           heroImages.length,
         ) // Debug mejorado
-      }, 4000) // Cambiar cada 4 segundos para dar más tiempo a ver cada imagen
+      }, 6000) // Cambiar cada 6 segundos para dar más tiempo a ver cada imagen
     })
     onBeforeUnmount(() => {
       if (intervalId) clearInterval(intervalId)
@@ -427,6 +529,10 @@ export default defineComponent({
     return {
       dropdownVisible: false,
       dropdownTimer: null, // Timer para controlar el delay
+      recursosDropdownVisible: false,
+      recursosDropdownTimer: null, // Timer para controlar el delay del dropdown de recursos
+      publicacionesDropdownVisible: false,
+      publicacionesDropdownTimer: null, // Timer para controlar el delay del dropdown de publicaciones
       // Carrusel de investigación
       currentSlide: 0,
       slideWidth: 0,
@@ -559,30 +665,58 @@ export default defineComponent({
       }
       return this.researchSlides.filter((slide) => slide.faculty === this.selectedFaculty)
     },
+    maxSlideIndex() {
+      return Math.max(0, this.filteredResearchSlides.length - this.visibleCards)
+    },
+    isAtStart() {
+      return this.currentSlide === 0
+    },
+    isAtEnd() {
+      return this.currentSlide >= this.maxSlideIndex
+    },
   },
   mounted() {
     this.calculateSlideWidth()
     this.startAutoplay()
     window.addEventListener('resize', this.calculateSlideWidth)
+    // Agregar listener para cerrar dropdown al hacer clic fuera
+    document.addEventListener('click', this.handleClickOutside)
   },
   beforeUnmount() {
     this.stopAutoplay()
     window.removeEventListener('resize', this.calculateSlideWidth)
+    document.removeEventListener('click', this.handleClickOutside)
     // Limpiar el timer del dropdown al desmontar el componente
     if (this.dropdownTimer) {
       clearTimeout(this.dropdownTimer)
       this.dropdownTimer = null
+    }
+    // Limpiar el timer del dropdown de recursos al desmontar el componente
+    if (this.recursosDropdownTimer) {
+      clearTimeout(this.recursosDropdownTimer)
+      this.recursosDropdownTimer = null
+    }
+    // Limpiar el timer del dropdown de publicaciones al desmontar el componente
+    if (this.publicacionesDropdownTimer) {
+      clearTimeout(this.publicacionesDropdownTimer)
+      this.publicacionesDropdownTimer = null
     }
   },
   methods: {
     // Función para navegación suave entre secciones
     // Utiliza la API de scroll de Quasar para animaciones fluidas
     scrollTo(elementId) {
+      console.log(`Navigating to element: ${elementId}`)
       const element = document.getElementById(elementId)
-      const target = getScrollTarget(element)
-      const offset = element.offsetTop
-      const duration = 1000 // Duración de la animación en milisegundos
-      setVerticalScrollPosition(target, offset, duration)
+      if (element) {
+        const target = getScrollTarget(element)
+        const offset = element.offsetTop - 80 // Ajustar para el header fijo
+        const duration = 1000 // Duración de la animación en milisegundos
+        console.log(`Scrolling to offset: ${offset}`)
+        setVerticalScrollPosition(target, offset, duration)
+      } else {
+        console.warn(`Element with id "${elementId}" not found`)
+      }
     },
     openEsanEdiciones() {
       console.log('Opening link: https://ediciones.esan.edu.pe/')
@@ -605,20 +739,148 @@ export default defineComponent({
       console.log('Opening link: https://biblioteca.uesan.edu.pe/')
       window.open('https://biblioteca.uesan.edu.pe/', '_blank')
     },
-    showDropdown() {
-      // Limpiar cualquier timer existente
-      if (this.dropdownTimer) {
-        clearTimeout(this.dropdownTimer)
-        this.dropdownTimer = null
+    openBiblioteca() {
+      console.log('Opening Biblioteca link: https://biblioteca.uesan.edu.pe/')
+      window.open('https://biblioteca.uesan.edu.pe/', '_blank')
+      // Cerrar el dropdown después de hacer clic
+      this.recursosDropdownVisible = false
+    },
+    openFabLab() {
+      console.log('Opening FabLab link: https://fablab.esan.edu.pe/')
+      window.open('https://fablab.esan.edu.pe/', '_blank')
+      // Cerrar el dropdown después de hacer clic
+      this.recursosDropdownVisible = false
+    },
+    openBolsaTrabajo() {
+      console.log('Opening Bolsa de trabajo link: https://bolsatrabajo.uesan.edu.pe/')
+      window.open('https://bolsatrabajo.uesan.edu.pe/', '_blank')
+      // Cerrar el dropdown después de hacer clic
+      this.recursosDropdownVisible = false
+    },
+    // Métodos para abrir enlaces de Publicaciones
+    openPublicaciones2023() {
+      console.log(
+        'Opening Publicaciones 2023: https://investigaciones.esan.edu.pe/publicaciones-2023/',
+      )
+      window.open('https://investigaciones.esan.edu.pe/publicaciones-2023/', '_blank')
+      // Cerrar el dropdown después de hacer clic
+      this.publicacionesDropdownVisible = false
+    },
+    openPublicaciones2022() {
+      console.log(
+        'Opening Publicaciones 2022: https://investigaciones.esan.edu.pe/publicaciones-2022/',
+      )
+      window.open('https://investigaciones.esan.edu.pe/publicaciones-2022/', '_blank')
+      // Cerrar el dropdown después de hacer clic
+      this.publicacionesDropdownVisible = false
+    },
+    openPublicaciones2021() {
+      console.log(
+        'Opening Publicaciones 2021: https://investigaciones.esan.edu.pe/publicaciones-2021/',
+      )
+      window.open('https://investigaciones.esan.edu.pe/publicaciones-2021/', '_blank')
+      // Cerrar el dropdown después de hacer clic
+      this.publicacionesDropdownVisible = false
+    },
+    openPublicaciones2020() {
+      console.log(
+        'Opening Publicaciones 2020: https://investigaciones.esan.edu.pe/publicaciones-2020-2/',
+      )
+      window.open('https://investigaciones.esan.edu.pe/publicaciones-2020-2/', '_blank')
+      // Cerrar el dropdown después de hacer clic
+      this.publicacionesDropdownVisible = false
+    },
+    // Métodos para el dropdown de Publicaciones
+    handlePublicacionesMouseEnter() {
+      // Limpiar cualquier timer existente y abrir el dropdown
+      if (this.publicacionesDropdownTimer) {
+        clearTimeout(this.publicacionesDropdownTimer)
+        this.publicacionesDropdownTimer = null
       }
-      this.dropdownVisible = true
+      this.publicacionesDropdownVisible = true
+    },
+    handlePublicacionesMouseLeave() {
+      // Solo cerrar cuando salgas completamente del contenedor con un delay más largo
+      this.publicacionesDropdownTimer = setTimeout(() => {
+        this.publicacionesDropdownVisible = false
+        this.publicacionesDropdownTimer = null
+      }, 500) // 500ms de delay para mayor estabilidad
+    },
+    togglePublicacionesDropdown() {
+      // Alternar el estado del dropdown al hacer clic
+      this.publicacionesDropdownVisible = !this.publicacionesDropdownVisible
+      // Limpiar cualquier timer de cierre automático
+      if (this.publicacionesDropdownTimer) {
+        clearTimeout(this.publicacionesDropdownTimer)
+        this.publicacionesDropdownTimer = null
+      }
+    },
+    keepPublicacionesDropdownOpenOnItemHover() {
+      if (this.publicacionesDropdownTimer) {
+        clearTimeout(this.publicacionesDropdownTimer)
+        this.publicacionesDropdownTimer = null
+      }
+    },
+    // Métodos antiguos para compatibilidad (ya no se usan)
+    showDropdown() {
+      this.handlePublicacionesMouseEnter()
     },
     hideDropdown() {
-      // Agregar un pequeño delay antes de cerrar
-      this.dropdownTimer = setTimeout(() => {
-        this.dropdownVisible = false
-        this.dropdownTimer = null
-      }, 150) // 150ms de delay
+      this.handlePublicacionesMouseLeave()
+    },
+    handleRecursosMouseEnter() {
+      // Limpiar cualquier timer existente y abrir el dropdown
+      if (this.recursosDropdownTimer) {
+        clearTimeout(this.recursosDropdownTimer)
+        this.recursosDropdownTimer = null
+      }
+      this.recursosDropdownVisible = true
+    },
+    handleRecursosMouseLeave() {
+      // Solo cerrar cuando salgas completamente del contenedor con un delay más largo
+      this.recursosDropdownTimer = setTimeout(() => {
+        this.recursosDropdownVisible = false
+        this.recursosDropdownTimer = null
+      }, 500) // Aumentado a 500ms para mayor estabilidad
+    },
+    toggleRecursosDropdown() {
+      // Alternar el estado del dropdown al hacer clic
+      this.recursosDropdownVisible = !this.recursosDropdownVisible
+      // Limpiar cualquier timer de cierre automático
+      if (this.recursosDropdownTimer) {
+        clearTimeout(this.recursosDropdownTimer)
+        this.recursosDropdownTimer = null
+      }
+    },
+    handleClickOutside(event) {
+      // Verificar si el clic fue fuera del dropdown de recursos
+      const recursosDropdown = event.target.closest('.recursos-dropdown')
+      if (!recursosDropdown && this.recursosDropdownVisible) {
+        this.recursosDropdownVisible = false
+        // Limpiar timer si existe
+        if (this.recursosDropdownTimer) {
+          clearTimeout(this.recursosDropdownTimer)
+          this.recursosDropdownTimer = null
+        }
+      }
+
+      // Verificar si el clic fue fuera del dropdown de publicaciones
+      const publicacionesDropdown = event.target.closest('.publicaciones-dropdown')
+      if (!publicacionesDropdown && this.publicacionesDropdownVisible) {
+        this.publicacionesDropdownVisible = false
+        // Limpiar timer si existe
+        if (this.publicacionesDropdownTimer) {
+          clearTimeout(this.publicacionesDropdownTimer)
+          this.publicacionesDropdownTimer = null
+        }
+      }
+    },
+    // Método especial para mantener el dropdown abierto cuando se hace hover sobre los items
+    keepDropdownOpenOnItemHover() {
+      if (this.recursosDropdownTimer) {
+        clearTimeout(this.recursosDropdownTimer)
+        this.recursosDropdownTimer = null
+      }
     },
     // Métodos del carrusel de investigación
     calculateSlideWidth() {
@@ -633,20 +895,19 @@ export default defineComponent({
       })
     },
     nextSlide() {
-      // Navegar hasta que la última tarjeta visible sea la última tarjeta del array
-      const maxSlide = this.filteredResearchSlides.length - this.visibleCards
-      if (this.currentSlide < maxSlide) {
+      // Navegación cíclica: al llegar al final, volver al inicio
+      if (this.currentSlide < this.maxSlideIndex) {
         this.currentSlide++
       } else {
         this.currentSlide = 0 // Volver al inicio
       }
     },
     previousSlide() {
-      const maxSlide = this.filteredResearchSlides.length - this.visibleCards
+      // Navegación cíclica: al llegar al inicio, ir al final
       if (this.currentSlide > 0) {
         this.currentSlide--
       } else {
-        this.currentSlide = maxSlide // Ir al final
+        this.currentSlide = this.maxSlideIndex // Ir al final
       }
     },
     goToSlide(index) {
@@ -654,6 +915,7 @@ export default defineComponent({
     },
     startAutoplay() {
       this.autoplayInterval = setInterval(() => {
+        // Navegación cíclica en autoplay
         this.nextSlide()
       }, 5000) // Cambiar cada 5 segundos
     },
@@ -675,6 +937,11 @@ export default defineComponent({
       this.currentSlide = 0 // Reiniciar el carrusel al inicio
       this.stopAutoplay()
       this.startAutoplay()
+    },
+    // Calcular la transformación del carrusel para navegación suave
+    getCarouselTransform() {
+      const gap = 48 // Espacio entre tarjetas
+      return this.currentSlide * (this.cardWidth + gap)
     },
   },
 })
@@ -847,6 +1114,160 @@ export default defineComponent({
   color: #e53e3e !important;
 }
 
+/* Estilos específicos para el dropdown de recursos */
+.recursos-dropdown {
+  position: relative;
+}
+
+.recursos-dropdown .q-menu {
+  margin-top: 0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+.recursos-dropdown .q-btn-dropdown__arrow {
+  margin-left: 4px;
+}
+
+.recursos-list {
+  min-width: 140px !important;
+  background: white !important;
+  border-radius: 8px !important;
+  padding: 0 !important;
+}
+
+.recursos-item {
+  padding: 12px 16px !important;
+  transition: all 0.2s ease !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+  min-height: 44px !important;
+}
+
+.recursos-item:last-child {
+  border-bottom: none !important;
+}
+
+.recursos-item:hover {
+  background-color: rgba(229, 62, 62, 0.08) !important;
+  color: #e53e3e !important;
+}
+
+.recursos-item .q-item__section {
+  color: inherit !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+}
+
+/* Asegurar que no haya espacios entre el botón y el dropdown */
+.recursos-dropdown .q-btn-dropdown {
+  position: relative !important;
+}
+
+.recursos-dropdown .q-btn-dropdown .q-menu {
+  top: 100% !important;
+  left: 0 !important;
+  margin-top: -1px !important; /* Eliminar cualquier gap */
+}
+
+/* Hacer el área de hover más amplia y estable */
+.recursos-dropdown::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 5px; /* Crear una zona invisible de 5px para capturar el hover */
+  background: transparent;
+  z-index: 1000;
+}
+
+/* Asegurar que el dropdown permanezca visible durante las transiciones */
+.recursos-dropdown .q-menu {
+  pointer-events: auto !important;
+}
+
+.recursos-dropdown:hover .q-menu {
+  display: block !important;
+}
+
+/* Estilos específicos para el dropdown de publicaciones */
+.publicaciones-dropdown {
+  position: relative;
+}
+
+.publicaciones-dropdown .q-menu {
+  margin-top: 0 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+.publicaciones-dropdown .q-btn-dropdown__arrow {
+  margin-left: 4px;
+}
+
+.publicaciones-list {
+  min-width: 160px !important;
+  background: white !important;
+  border-radius: 8px !important;
+  padding: 0 !important;
+}
+
+.publicaciones-item {
+  padding: 12px 16px !important;
+  transition: all 0.2s ease !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+  min-height: 44px !important;
+}
+
+.publicaciones-item:last-child {
+  border-bottom: none !important;
+}
+
+.publicaciones-item:hover {
+  background-color: rgba(229, 62, 62, 0.08) !important;
+  color: #e53e3e !important;
+}
+
+.publicaciones-item .q-item__section {
+  color: inherit !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+}
+
+/* Asegurar que no haya espacios entre el botón y el dropdown */
+.publicaciones-dropdown .q-btn-dropdown {
+  position: relative !important;
+}
+
+.publicaciones-dropdown .q-btn-dropdown .q-menu {
+  top: 100% !important;
+  left: 0 !important;
+  margin-top: -1px !important; /* Eliminar cualquier gap */
+}
+
+/* Hacer el área de hover más amplia y estable */
+.publicaciones-dropdown::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 5px; /* Crear una zona invisible de 5px para capturar el hover */
+  background: transparent;
+  z-index: 1000;
+}
+
+/* Asegurar que el dropdown permanezca visible durante las transiciones */
+.publicaciones-dropdown .q-menu {
+  pointer-events: auto !important;
+}
+
+.publicaciones-dropdown:hover .q-menu {
+  display: block !important;
+}
+
 /* ========================================= */
 /* ESTILOS DE LA SECCIÓN HERO */
 /* ========================================= */
@@ -972,7 +1393,7 @@ export default defineComponent({
   min-width: 200px;
 
   &:hover {
-    transform: translateY(-5px);
+    transform: translateY(-5px) scale(0.95); // Contraer la tarjeta completa
     box-shadow: 0 10px 30px rgba(229, 62, 62, 0.3);
   }
 
@@ -985,6 +1406,28 @@ export default defineComponent({
 
 .hero-card-icon {
   color: white;
+  transition: transform 0.3s ease;
+  display: inline-block;
+
+  // Animación leve continua del icono
+  animation: iconGentleFloat 4s ease-in-out infinite;
+}
+
+// Animación de movimiento leve para los iconos
+@keyframes iconGentleFloat {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-3px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-3px) rotate(-1deg);
+  }
 }
 
 /* ========================================= */
@@ -1023,31 +1466,64 @@ export default defineComponent({
   justify-content: center;
 }
 
+/* Contenedor para título con icono */
+.title-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.section-icon {
+  font-size: 3.5rem !important;
+  color: #e53e3e;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+  animation: pulse 2s infinite;
+}
+
 .section-title {
   color: #e53e3e;
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
-  font-weight: bold;
+  font-size: 3rem;
+  margin: 0 0 2rem 0;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1px;
+  line-height: 1.2;
+  background: linear-gradient(45deg, #e53e3e, #ff6666);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .about-text {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   line-height: 1.8;
   margin-bottom: 1rem;
   color: #333;
   text-align: justify;
+  font-weight: 400;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 .queHace-content {
   background: linear-gradient(135deg, #9b9898, #ebe7e7);
   color: white;
-  height: 100%;
+  min-height: 450px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  padding: 2rem;
   display: flex;
   align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.queHace-content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
 }
 
 .about-image-container {
   width: 100%;
-  height: 400px;
+  height: 450px;
   overflow: hidden;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -1081,7 +1557,7 @@ export default defineComponent({
 
 .mission-image-container {
   width: 100%;
-  height: 350px;
+  height: 450px;
   overflow: hidden;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -1102,20 +1578,53 @@ export default defineComponent({
 .mission-content {
   background: linear-gradient(135deg, #e53e3e, #ff6b6b);
   color: white;
-  height: 100%;
+  min-height: 450px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  padding: 2rem;
   display: flex;
   align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.mission-content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Contenedor específico para el título de misión con icono */
+.mission-title-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.mission-icon {
+  font-size: 3.5rem !important;
+  color: #ffffff;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+  animation: wave 3s ease-in-out infinite;
 }
 
 .mission-title {
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
-  font-weight: bold;
+  font-size: 3rem;
+  margin: 0;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 1px;
+  line-height: 1.2;
+  background: linear-gradient(45deg, #ffffff, #ffeeee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .mission-text {
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   line-height: 1.8;
+  font-weight: 400;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* ========================================= */
@@ -1650,6 +2159,23 @@ export default defineComponent({
   text-align: center;
   margin-top: 30px;
   opacity: 0.3;
+  transition: all 0.3s ease;
+}
+
+.footer-icon-section a {
+  display: inline-block;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.footer-icon-section:hover {
+  opacity: 0.7;
+  transform: translateY(-2px);
+}
+
+.footer-icon-section a:hover .q-icon {
+  color: #e53e3e !important;
+  transform: scale(1.1);
 }
 
 /* Sección de redes sociales */
@@ -1854,12 +2380,27 @@ export default defineComponent({
     height: 300px;
   }
 
+  .queHace-content,
+  .mission-content {
+    min-height: 350px;
+    padding: 1.5rem;
+  }
+
   .section-title {
-    font-size: 2rem;
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .mission-title {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
     text-align: center;
   }
 
-  .about-text {
+  .about-text,
+  .mission-text {
+    font-size: 1.1rem;
     text-align: left;
   }
 
@@ -1896,6 +2437,28 @@ export default defineComponent({
   .about-image-container,
   .mission-image-container {
     height: 250px;
+  }
+
+  .queHace-content,
+  .mission-content {
+    min-height: 300px;
+    padding: 1rem;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .mission-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .about-text,
+  .mission-text {
+    font-size: 1rem;
+    line-height: 1.6;
   }
 
   .container {
@@ -1942,4 +2505,47 @@ export default defineComponent({
     font-size: 14px;
   }
 }
+
+/* ========================================= */
+/* ANIMACIONES PARA ICONOS */
+/* ========================================= */
+/* Animación de pulso para el icono de "¿Qué hace?" */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Animación de ondulación para el icono de "Misión" */
+@keyframes wave {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+}
+
+/* Efecto hover adicional para los títulos */
+.title-with-icon:hover .section-icon {
+  transform: scale(1.2);
+  transition: transform 0.3s ease;
+}
+
+.mission-title-container:hover .mission-icon {
+  transform: scale(1.2) rotate(15deg);
+  transition: transform 0.3s ease;
+}
+
+/* ========================================= */
 </style>

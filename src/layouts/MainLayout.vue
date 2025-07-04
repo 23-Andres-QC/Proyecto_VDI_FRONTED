@@ -5,7 +5,7 @@
         <!-- Logo Section -->
         <div class="logo-section">
           <img src="../assets/Logo_Universidad.png" alt="Universidad ESAN" class="logo-image" />
-          <span class="logo-text">Universidad ESAN</span>
+          <span class="logo-text">Vicerrectorado de investigación</span>
         </div>
 
         <!-- Header Actions -->
@@ -146,17 +146,46 @@ watch(
 }
 
 .logout-btn {
-  background-color: #333;
+  background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
   color: white;
-  border-radius: 4px;
-  font-size: 13px;
-  padding: 8px 16px;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
+  border-radius: 12px; /* Más rectangular (antes era 25px) */
+  font-size: 1.4rem !important; /* Forzamos el tamaño de letra más grande */
+  padding: 3px 28px; /* Padding igual, no cambia el tamaño del botón */
+  font-weight: 600;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: none;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.logout-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
 }
 
 .logout-btn:hover {
-  background-color: #555;
+  background: linear-gradient(135deg, #404040 0%, #2c2c2c 100%);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+.logout-btn:hover::before {
+  left: 100%;
+}
+
+.logout-btn:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Main Container */
@@ -217,9 +246,14 @@ watch(
     height: 32px;
   }
 
+  .logo-text {
+    font-size: 1.2rem;
+  }
+
   .logout-btn {
-    font-size: 12px;
-    padding: 6px 12px;
+    font-size: 2rem !important; /* Forzamos letra grande en tablets */
+    padding: 8px 16px; /* Padding igual */
+    border-radius: 10px;
   }
 
   .footer-content {
@@ -240,9 +274,14 @@ watch(
     height: 28px;
   }
 
+  .logo-text {
+    font-size: 1rem;
+  }
+
   .logout-btn {
-    font-size: 11px;
-    padding: 5px 10px;
+    font-size: 1.4rem !important; /* Forzamos letra grande en móviles */
+    padding: 6px 12px;
+    border-radius: 8px;
   }
 
   .footer-content {
@@ -266,10 +305,12 @@ watch(
 }
 
 .logout-btn {
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .logout-btn:active {
-  transform: translateY(1px);
+  transform: translateY(0px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.1s ease;
 }
 </style>
