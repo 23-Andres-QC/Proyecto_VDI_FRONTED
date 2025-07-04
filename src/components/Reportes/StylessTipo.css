@@ -216,22 +216,6 @@
   box-shadow: 0 2px 4px rgba(230, 57, 70, 0.3);
 }
 
-/* Añadir animaciones y transiciones */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.contenedor-reporte {
-  animation: fadeIn 0.5s ease-out;
-}
-
 /* Estilo para mostrar validación de campos */
 .exportar-contenedor input:valid,
 .exportar-contenedor textarea:valid,
