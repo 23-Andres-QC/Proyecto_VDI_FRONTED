@@ -201,7 +201,7 @@ import ImportarListaCerrada from 'components/Importaciones_excel/ImportarListaCe
 import VisualizacionSoloListaCerrada from 'components/VisualizacionSoloListaCerrada.vue'
 import ImportarDocentes from 'components/Importaciones_excel/ImportarDocentes.vue'
 
-const mostrarComponente = ref('adminRevistas')
+const mostrarComponente = ref('adminDocentes')
 const mostrarImportar = ref(false)
 const visualizacionRef = ref(null)
 const busqueda = ref('')
