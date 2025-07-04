@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import PerfilProfesor from 'components/Perfil_Profesor.vue'
 import ConsultarListaCerrada from 'src/components/Reportes/ConsultarListaCerrada.vue'
 import ConsultarRevistas from 'src/components/Reportes/ConsultarRevistas.vue'
@@ -70,6 +70,10 @@ import ConsultarRevistas from 'src/components/Reportes/ConsultarRevistas.vue'
 //import ListaProfesores from 'components/Lista_profesores.vue'
 
 const mostrarComponente = ref('revista')
+
+onMounted(() => {
+  mostrarComponente.value = 'consultarListaCerrada'
+})
 
 function handleMenuButtonClicked(menuItem) {
   if (menuItem.id === 1) {
