@@ -25,10 +25,20 @@
           label="IMPORTAR"
           icon="cloud_upload"
           @click="importarExcel"
-          :disable="!archivo"
+          :disable="!archivo || cargandoImport"
+        />
+        <q-spinner
+          v-if="cargandoImport"
+          color="primary"
+          size="28px"
+          class="spinner-inline-importar"
         />
       </div>
-      <div v-if="tabla && tabla.length > 0" class="tabla-container">
+      <div v-if="cargandoPreview" class="preview-loading-row">
+        <q-spinner color="primary" size="28px" class="spinner-inline-importar" />
+        <span class="preview-cargando-text">Cargando previsualización...</span>
+      </div>
+      <div v-else-if="tabla && tabla.length > 0" class="tabla-container">
         <div class="visualizacion-header">
           <h3>Visualización de docentes</h3>
         </div>
@@ -87,6 +97,8 @@ const pagination = ref({
   rowsPerPage: 20,
   rowsNumber: 0,
 })
+const cargandoImport = ref(false)
+const cargandoPreview = ref(false)
 
 const columnas = [
   { name: 'correo', label: 'Correo', field: 'correo', align: 'left' },
@@ -97,14 +109,20 @@ const columnas = [
 
 function onFileChange(file) {
   if (!file) return
+  cargandoPreview.value = true
+  const minTime = new Promise((resolve) => setTimeout(resolve, 1000))
   const reader = new FileReader()
-  reader.onload = (e) => {
+  reader.onload = async (e) => {
     const data = new Uint8Array(e.target.result)
     const workbook = XLSX.read(data, { type: 'array' })
     const sheetName = workbook.SheetNames[0]
     const worksheet = workbook.Sheets[sheetName]
     const allRows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' })
-    if (!allRows.length) return
+    if (!allRows.length) {
+      await minTime
+      cargandoPreview.value = false
+      return
+    }
     const excelHeaders = allRows[0].map((h) => (typeof h === 'string' ? h.trim().toLowerCase() : h))
     const dataRows = allRows.slice(1)
     const filteredRows = dataRows.filter(
@@ -135,18 +153,27 @@ function onFileChange(file) {
       estado: 1,
       categoria: row.categoria, // Se envía para que el backend la resuelva
     }))
+    await minTime
+    cargandoPreview.value = false
   }
   reader.readAsArrayBuffer(file)
 }
 
 async function importarExcel() {
   if (!tabla.value.length) return
+  cargandoImport.value = true
+  const minTime = new Promise((resolve) => setTimeout(resolve, 1000))
   try {
-    await api.post('/api/ProfesoresAdmis/importar', apiData.value)
+    await Promise.all([api.post('/api/ProfesoresAdmis/importar', apiData.value), minTime])
     Notify.create({ type: 'positive', message: 'Importación completada' })
+    // Cerrar previsualización después de importar
+    archivo.value = null
+    tabla.value = []
   } catch (e) {
     console.error('Error importando docentes:', e)
     Notify.create({ type: 'negative', message: 'Error en la importación' })
+  } finally {
+    cargandoImport.value = false
   }
 }
 
@@ -258,5 +285,21 @@ function cancelarImportacion() {
   margin-bottom: 0.5rem;
   background: #fff;
   z-index: 2;
+}
+.spinner-inline-importar {
+  margin-left: 0.5rem;
+}
+.preview-loading-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  min-height: 60px;
+  font-size: 1.1em;
+  color: #1976d2;
+  font-weight: 500;
+}
+.preview-cargando-text {
+  margin-left: 0.2rem;
 }
 </style>
