@@ -31,14 +31,18 @@
     <!-- Lista de preguntas -->
     <div class="notifications-list">
       <q-card v-for="pregunta in preguntas" :key="pregunta.id" class="notification-card">
-        <q-card-section class="card-header">
+        <q-card-section
+          class="card-header"
+          @click="handleExpandirPregunta(pregunta.id)"
+          style="cursor: pointer"
+        >
           <div class="user-info">
             <q-avatar size="sm" class="user-avatar">
               <q-icon name="help_outline" />
             </q-avatar>
-            <span class="user-name">Pregunta</span>
+            <span class="user-name">{{ pregunta.pregunta }}</span>
           </div>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2" @click.stop>
             <q-btn
               flat
               dense
@@ -63,21 +67,26 @@
             />
           </div>
         </q-card-section>
-
+        <q-card-section v-if="preguntaExpandidaId === pregunta.id" class="card-content">
+          <p class="message-text">
+            <span v-if="respuestaExpandidaLoading">Cargando respuesta...</span>
+            <span v-else>{{ respuestaExpandida }}</span>
+          </p>
+        </q-card-section>
         <q-card-section class="card-content">
           <q-input
             v-if="editandoId === pregunta.id"
             v-model="preguntaEdit"
-            type="text"
+            type="textarea"
+            autogrow
             label="Pregunta"
             dense
             autofocus
             @blur="onBlurPregunta"
             @focus="onFocusPregunta"
-            @keyup.enter="onEnterPregunta"
             class="pregunta-edit"
           />
-          <p v-else class="message-text">{{ pregunta.pregunta }}</p>
+          <!-- Solo mostrar la pregunta aquí si está en modo edición -->
         </q-card-section>
 
         <q-card-section v-if="editandoId === pregunta.id" class="card-content">
@@ -126,8 +135,12 @@ export default defineComponent({
     const creandoPregunta = ref(false)
     const nuevaPregunta = ref('')
     const nuevaRespuesta = ref('')
+    const preguntaExpandidaId = ref(null)
+    const respuestaExpandida = ref('')
+    const respuestaExpandidaLoading = ref(false)
     // Obtener el IdUsuario del usuario logueado
-    const IdUsuario = window?.$q?.sessionStorage?.getItem('IdUsuario') || 7 // fallback demo
+    const IdUsuario =
+      localStorage.getItem('idUsuario') || window?.$q?.sessionStorage?.getItem('IdUsuario') // fallback demo
     let blurTimeout = null
     let preguntaFocus = false
     let respuestaFocus = false
@@ -137,7 +150,7 @@ export default defineComponent({
       loading.value = true
       try {
         const response = await api.get('api/preguntasfrecuenteschatbot')
-        preguntas.value = response.data.map((p) => ({
+        preguntas.value = response.data.reverse().map((p) => ({
           id: p.idPregunta,
           pregunta: p.pregunta,
         }))
@@ -220,19 +233,20 @@ export default defineComponent({
         return
       }
       try {
-        await api.post('api/preguntasfrecuenteschatbot', {
+        const response = await api.post('api/preguntasfrecuenteschatbot', {
           Pregunta: nuevaPregunta.value,
           Respuesta: nuevaRespuesta.value,
           IdUsuario: Number(IdUsuario),
         })
         if (window.$q) window.$q.notify({ type: 'positive', message: 'Pregunta creada.' })
         creandoPregunta.value = false
+        // Agregar la nueva pregunta al inicio de la lista
+        preguntas.value.unshift({
+          id: response.data.idPregunta || response.data.id || Date.now(),
+          pregunta: nuevaPregunta.value,
+        })
         nuevaPregunta.value = ''
         nuevaRespuesta.value = ''
-        // Refrescar lista
-        loading.value = true
-        const response = await api.get('api/preguntasfrecuenteschatbot')
-        preguntas.value = response.data.map((p) => ({ id: p.idPregunta, pregunta: p.pregunta }))
       } catch {
         if (window.$q) window.$q.notify({ type: 'negative', message: 'Error al crear.' })
       } finally {
@@ -277,6 +291,25 @@ export default defineComponent({
       if (editandoId.value) toggleEditar(editandoId.value)
     }
 
+    const handleExpandirPregunta = async (id) => {
+      if (preguntaExpandidaId.value === id) {
+        preguntaExpandidaId.value = null
+        respuestaExpandida.value = ''
+        return
+      }
+      preguntaExpandidaId.value = id
+      respuestaExpandida.value = ''
+      respuestaExpandidaLoading.value = true
+      try {
+        const resp = await api.get(`api/preguntasfrecuenteschatbot/byid/${id}`)
+        respuestaExpandida.value = resp.data.respuesta || 'Respuesta no disponible.'
+      } catch {
+        respuestaExpandida.value = 'Error al cargar la respuesta.'
+      } finally {
+        respuestaExpandidaLoading.value = false
+      }
+    }
+
     return {
       preguntas,
       loading,
@@ -297,6 +330,10 @@ export default defineComponent({
       nuevaPregunta,
       nuevaRespuesta,
       guardarPregunta,
+      preguntaExpandidaId,
+      respuestaExpandida,
+      respuestaExpandidaLoading,
+      handleExpandirPregunta,
     }
   },
 })
@@ -308,7 +345,11 @@ export default defineComponent({
   margin: 0 auto;
   padding: 16px;
   background-color: #f5f5f5;
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* Limita la altura máxima al 80% del viewport para evitar desbordes */
+  max-height: 80vh;
+  height: auto;
 }
 
 .header-section {
@@ -326,6 +367,11 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   gap: 12px;
+  flex: 1 1 0%;
+  overflow-y: auto;
+  min-height: 0;
+  /* Limita la altura máxima de la lista para que solo ella haga scroll */
+  max-height: 60vh;
 }
 
 .notification-card {
@@ -357,6 +403,8 @@ export default defineComponent({
   font-weight: 600;
   color: #333;
   font-size: 14px;
+  word-break: break-word;
+  white-space: pre-line;
 }
 
 .close-btn {
