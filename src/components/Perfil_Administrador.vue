@@ -32,7 +32,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const userProfile = ref({
       name: localStorage.getItem('nombreyApellido'),
-      avatar: '/src/assets/Logo_Universidad.png',
+      avatar: '/src/assets/Home_imagenes/admin.png',
     })
 
     const menuItems = ref([
@@ -102,7 +102,6 @@ export default defineComponent({
   height: 120px;
   border-radius: 12px;
   object-fit: cover;
-  border: 2px solid rgba(255, 255, 255, 0.3); /* Borde más fino */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
