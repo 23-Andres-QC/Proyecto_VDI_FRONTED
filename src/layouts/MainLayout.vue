@@ -69,9 +69,9 @@ const buttonLabel = computed(() => {
 
 function handleHeaderButton() {
   if (isLoginPage.value) {
-    router.back() // Volver a la página anterior
+    router.push('/') // Ir a la página principal cuando presiona "Salir"
   } else if (!isAuthenticated.value) {
-    router.push('/login') // Ir a login
+    router.push('/') // Ir a la página principal
   } else {
     // Cerrar sesión
     isAuthenticated.value = false
@@ -83,7 +83,7 @@ function handleHeaderButton() {
       message: 'Sesión cerrada exitosamente',
       position: 'top',
     })
-    router.push('/login')
+    router.push('/') // Ir a la página principal
   }
 }
 
@@ -149,7 +149,7 @@ watch(
   background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
   color: white;
   border-radius: 12px; /* Más rectangular (antes era 25px) */
-  font-size: 1.4rem !important; /* Forzamos el tamaño de letra más grande */
+  font-size: 1rem !important; /* Forzamos el tamaño de letra más grande */
   padding: 3px 28px; /* Padding igual, no cambia el tamaño del botón */
   font-weight: 600;
   border: 2px solid rgba(255, 255, 255, 0.1);
