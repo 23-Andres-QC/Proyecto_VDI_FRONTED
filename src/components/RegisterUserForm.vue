@@ -1,11 +1,17 @@
 <template>
-  <div>
-    <q-btn label="Registrar Usuario" color="primary" @click="abrirDialogo()" />
+  <div class="register-container">
+    <q-btn 
+      label="Registrar Usuario" 
+      color="primary" 
+      class="register-btn" 
+      @click="abrirDialogo()"
+      icon="person_add"
+    />
 
     <q-dialog v-model="dialog" persistent>
       <q-card class="register-card">
         <!-- TÍTULO -->
-        <q-card-section class="row items-center justify-between">
+        <q-card-section class="row items-center justify-between q-pb-sm">
           <div class="text-h6">
             {{ editando ? 'Actualizar usuario' : 'Registrar nuevo usuario' }}
           </div>
@@ -13,7 +19,7 @@
         </q-card-section>
 
         <!-- FILTROS -->
-        <q-card-section class="q-gutter-md">
+        <q-card-section class="q-pa-md">
           <div class="row q-col-gutter-md items-center">
             <div class="col-4">
               <q-input
@@ -23,7 +29,12 @@
                 label="Buscar por nombre, DNI o categoría"
                 debounce="300"
                 clearable
-              />
+                class="search-input"
+              >
+                <template v-slot:prepend>
+                  <q-icon name="search" />
+                </template>
+              </q-input>
             </div>
             <div class="col-4">
               <q-select
@@ -32,7 +43,11 @@
                 :options="estadoOpciones"
                 label="Filtrar por Estado"
                 clearable
-              />
+              >
+                <template v-slot:prepend>
+                  <q-icon name="filter_list" />
+                </template>
+              </q-select>
             </div>
             <div class="col-4">
               <q-select
@@ -41,79 +56,144 @@
                 :options="categoriasDisponibles"
                 label="Filtrar por Categoría"
                 clearable
-              />
+              >
+                <template v-slot:prepend>
+                  <q-icon name="category" />
+                </template>
+              </q-select>
             </div>
           </div>
 
           <!-- TABLA -->
-          <q-table
-            :rows="profesoresFiltrados"
-            :columns="columns"
-            row-key="idProfesorAdmis"
-            dense
-            flat
-            bordered
-            :pagination="{ rowsPerPage: 5 }"
-            :sort-method="customSort"
-            no-data-label="No hay profesores disponibles"
-            class="tabla-fija"
-          >
-            <template v-slot:body-cell-radio="props">
-              <q-td :props="props">
-                <q-radio
-                  v-model="selectedProfesorId"
-                  :val="props.row.idProfesorAdmis"
-                  @update:model-value="onSeleccionarProfesor(props.row)"
-                />
-              </q-td>
-            </template>
-          </q-table>
+          <div class="table-wrapper q-mt-md">
+            <q-table
+              :rows="profesoresFiltrados"
+              :columns="columns"
+              row-key="idProfesorAdmis"
+              dense
+              flat
+              bordered
+              :pagination="{
+                rowsPerPage: 0
+              }"
+              hide-pagination
+              :sort-method="customSort"
+              no-data-label="No hay profesores disponibles"
+              class="tabla-fija"
+            >
+              <template v-slot:body-cell-radio="props">
+                <q-td :props="props">
+                  <q-radio
+                    v-model="selectedProfesorId"
+                    :val="props.row.idProfesorAdmis"
+                    @update:model-value="onSeleccionarProfesor(props.row)"
+                  />
+                </q-td>
+              </template>
+              <template v-slot:body-cell-estado="props">
+                <q-td :props="props">
+                  <q-chip
+                    :color="props.row.estado === 'Activo' ? 'positive' : 'negative'"
+                    text-color="white"
+                    dense
+                    class="estado-chip"
+                  >
+                    {{ props.row.estado }}
+                  </q-chip>
+                </q-td>
+              </template>
+            </q-table>
+          </div>
         </q-card-section>
 
         <!-- FORMULARIO -->
-        <q-card-section class="q-gutter-md">
-          <q-select filled v-model="selectedRol" :options="roles" label="Rol" class="q-mb-sm" />
-          <q-select filled v-model="estado" :options="estados" label="Estado" class="q-mb-sm" />
+        <q-card-section class="form-section q-pa-md">
+          <div class="row q-col-gutter-md">
+            <div class="col-6">
+              <q-select 
+                filled 
+                v-model="selectedRol" 
+                :options="roles" 
+                label="Rol" 
+                class="q-mb-sm"
+              >
+                <template v-slot:prepend>
+                  <q-icon name="badge" />
+                </template>
+              </q-select>
+            </div>
+            <div class="col-6">
+              <q-select 
+                filled 
+                v-model="estado" 
+                :options="estados" 
+                label="Estado" 
+                class="q-mb-sm"
+              >
+                <template v-slot:prepend>
+                  <q-icon name="toggle_on" />
+                </template>
+              </q-select>
+            </div>
+          </div>
 
-          <q-input
-            filled
-            v-model="password"
-            :type="showPassword ? 'text' : 'password'"
-            label="Contraseña"
-            class="q-mb-sm"
-          >
-            <template v-slot:append>
-              <q-icon
-                :name="showPassword ? 'visibility' : 'visibility_off'"
-                class="cursor-pointer"
-                @click="showPassword = !showPassword"
-              />
-            </template>
-          </q-input>
-
-          <q-input
-            filled
-            v-model="repetirPassword"
-            :type="showPassword ? 'text' : 'password'"
-            label="Repetir Contraseña"
-            class="q-mb-sm"
-          >
-            <template v-slot:append>
-              <q-icon
-                :name="showPassword ? 'visibility' : 'visibility_off'"
-                class="cursor-pointer"
-                @click="showPassword = !showPassword"
-              />
-            </template>
-          </q-input>
+          <div class="row q-col-gutter-md">
+            <div class="col-6">
+              <q-input
+                filled
+                v-model="password"
+                :type="showPassword ? 'text' : 'password'"
+                label="Contraseña"
+                class="q-mb-sm"
+              >
+                <template v-slot:prepend>
+                  <q-icon name="lock" />
+                </template>
+                <template v-slot:append>
+                  <q-icon
+                    :name="showPassword ? 'visibility' : 'visibility_off'"
+                    class="cursor-pointer"
+                    @click="showPassword = !showPassword"
+                  />
+                </template>
+              </q-input>
+            </div>
+            <div class="col-6">
+              <q-input
+                filled
+                v-model="repetirPassword"
+                :type="showPassword ? 'text' : 'password'"
+                label="Repetir Contraseña"
+                class="q-mb-sm"
+              >
+                <template v-slot:prepend>
+                  <q-icon name="lock" />
+                </template>
+                <template v-slot:append>
+                  <q-icon
+                    :name="showPassword ? 'visibility' : 'visibility_off'"
+                    class="cursor-pointer"
+                    @click="showPassword = !showPassword"
+                  />
+                </template>
+              </q-input>
+            </div>
+          </div>
         </q-card-section>
 
-        <q-card-actions align="right">
-          <q-btn flat label="Limpiar" color="warning" @click="limpiarFormulario" />
+        <q-card-actions align="right" class="q-pa-md">
+          <q-btn 
+            flat 
+            label="Limpiar" 
+            color="warning" 
+            @click="limpiarFormulario"
+            icon="refresh"
+            class="q-mr-sm"
+          />
           <q-btn
-            flat
             :label="editando ? 'Actualizar' : 'Registrar'"
             color="primary"
+            :icon="editando ? 'update' : 'save'"
             @click="editando ? actualizarUsuario() : registrarUsuario()"
           />
         </q-card-actions>
@@ -275,15 +355,114 @@ function customSort(rows, sortBy, descending) {
 </script>
 
 <style scoped>
+.register-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
 .register-card {
-  min-width: 700px;
+  width: 900px;
   max-width: 95vw;
-  min-height: 700px;
-  max-height: 90vh;
-  overflow-y: auto;
+  height: auto;
+  background: white;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilo para el título */
+:deep(.q-card__section:first-child) {
+  background-color: #e53935;
+  color: white;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+/* Estilo para el botón de cerrar en el título */
+:deep(.q-card__section:first-child .q-btn) {
+  color: white;
+}
+
+/* Estilos para la tabla */
+.table-wrapper {
+  height: 300px;
 }
 
 .tabla-fija {
-  min-height: 230px;
+  max-height: 300px !important;
+}
+
+:deep(.q-table__container) {
+  height: 300px !important;
+}
+
+:deep(.q-table__middle) {
+  overflow-y: auto !important;
+  max-height: 250px !important;
+}
+
+:deep(.q-table__top),
+:deep(.q-table__bottom) {
+  padding: 8px 16px;
+}
+
+:deep(.q-table th) {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  font-weight: 600;
+  font-size: 0.875rem;
+  background: #e53935 !important;
+  color: white !important;
+  text-transform: uppercase;
+}
+
+:deep(.q-table td) {
+  font-size: 0.875rem;
+}
+
+:deep(.q-table--bordered) {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+/* Estilos para los inputs y filtros */
+.q-input,
+.q-select {
+  border-radius: 4px;
+}
+
+:deep(.q-field--filled .q-field__control) {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Estilo para el botón principal */
+:deep(.q-btn.q-btn--standard) {
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* Estilos para las acciones del card */
+.q-card__actions {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 16px;
+}
+
+/* Añadir espacio entre secciones */
+.q-card-section {
+  padding: 20px;
+}
+
+/* Estilo para el botón de registro inicial */
+.q-btn.register-btn {
+  margin: 16px;
+  background-color: #e53935;
+  color: white;
+}
+
+/* Estilos para el chip de estado */
+.estado-chip {
+  min-width: 80px;
+  text-align: center;
 }
 </style>
