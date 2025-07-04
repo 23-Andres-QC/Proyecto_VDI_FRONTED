@@ -34,7 +34,7 @@
       v-model:pagination="pagination"
       :separator="'cell'"
       :wrap-cells="true"
-      style="height: 350px; width: 100%; max-width: 1020px; margin-top: 2px"
+      style="height: 460px; width: 100%; max-width: 1020px; margin-top: 2px"
     >
       <template v-slot:body="props">
         <q-tr :props="props">

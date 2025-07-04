@@ -8,7 +8,7 @@
       />
       <!-- Reduced height -->
     </div>
-    <div class="contenido-reporte ancho-tabla tabla-menos-abajo" style="gap: 10px">
+    <div class="contenido-reporte ancho-tabla tabla-menos-abajo">
       <div v-if="reporteSeleccionado === 'Usuarios'" class="tabla-usuarios">
         <Tablausuarios ref="tablaRefUsuarios" @update:filtrados="actualizarTabla" />
       </div>
@@ -110,37 +110,75 @@ async function manejarEnvio({ formato, correos }) {
 </script>
 
 <style scoped>
+.contenedor-reportes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .Tipo {
   top: 180px;
   left: 70px;
+  margin-bottom: 10px;
 }
+
 .header-reportes-min {
   top: 100px;
   left: 850px;
+  margin: 10px 0;
 }
 
 /* Independent positioning for tables */
 .tabla-usuarios {
   position: absolute;
   top: 180px;
-  left: 350px;
+  left: 320px;
+  margin: 10px;
 }
 
 .tabla-profesores {
   position: absolute;
   top: 180px;
-  left: 350px;
+  left: 320px;
+  margin: 10px;
 }
 
 .tabla-issn {
   position: absolute;
   top: 180px;
-  left: 350px;
+  left: 320px;
+  margin: 10px;
 }
 
 .tabla-lista-cerrada {
   position: absolute;
   top: 180px;
-  left: 350px;
+  left: 320px;
+  margin: 10px;
+}
+
+/* Estilos para espaciado consistente entre componentes */
+.contenido-reporte {
+  gap: 10px;
+  padding: 10px;
+}
+
+/* Añadir espaciado para los componentes internos */
+.contenido-reporte > div {
+  margin-bottom: 10px;
+}
+
+/* Estilos para las tablas */
+.tabla-usuarios,
+.tabla-profesores,
+.tabla-issn,
+.tabla-lista-cerrada {
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Espaciado entre el contenedor de tipo y las tablas */
+.Tipo + .contenido-reporte {
+  margin-top: 10px;
 }
 </style>

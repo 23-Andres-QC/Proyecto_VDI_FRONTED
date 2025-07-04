@@ -35,13 +35,13 @@ export default defineComponent({
   setup(props, { emit }) {
     const userProfile = ref({
       fullName: localStorage.getItem('nombreyApellido'),
-      
+
       avatar: '/src/assets/Logo_Universidad.png', // Ruta de la imagen del usuario
     })
 
     const menuItems = ref([
-      { id: 1, label: 'Consulta ISSN', active: true }, // ISSN starts as active
-      { id: 2, label: 'Consulta lista cerrada', active: false },
+      { id: 2, label: 'Consulta ISSN', active: true }, // ISSN starts as active
+      { id: 1, label: 'Consulta lista cerrada', active: false },
     ])
 
     // Emitir automáticamente el evento para mostrar 'Consulta ISSN' al montar

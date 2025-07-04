@@ -64,7 +64,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import TablaISSN from 'components/Reportes/Tablas/TablaISSN.vue'
+import TablaISSN from 'components/Reportes/Tablas/TablaISSNCon.vue'
 import { exportarExcelPorTipo } from './exportarUtils.js'
 
 const tablaActual = ref([])

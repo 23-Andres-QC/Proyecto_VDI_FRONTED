@@ -28,28 +28,33 @@
       </select>
     </div>
 
-    <div class="exportar-contenedor compacto-exportar reducido">
-      <select id="formato" class="filtro-issn-select" v-model="formato" required>
-        <option value="" disabled selected>Formato</option>
-        <option value="PDF">PDF</option>
-        <option value="Excel">Excel</option>
-      </select>
-      <textarea
-        id="descripcion"
-        class="filtro-profesores-expandable-scroll"
-        v-model="descripcion"
-        placeholder="Escribe una descripción..."
-        required
-      ></textarea>
-      <input
-        id="correos"
-        class="filtro-profesores-input"
-        v-model="correos"
-        type="text"
-        placeholder="Ej: correo@dominio.com, otro@dominio.com"
-        required
-      />
-      <button @click="enviarFormulario">Enviar</button>
+    <div class="reducido">
+      <div class="exportar-contenedor">
+        <select id="formato" class="filtro-issn-select" v-model="formato" required>
+          <option value="" disabled selected>Formato</option>
+          <option value="PDF">PDF</option>
+          <option value="Excel">Excel</option>
+        </select>
+        <textarea
+          id="descripcion"
+          class="filtro-profesores-expandable-scroll"
+          v-model="descripcion"
+          placeholder="Escribe una descripción..."
+          required
+        ></textarea>
+        <input
+          id="correos"
+          class="filtro-profesores-input"
+          v-model="correos"
+          type="text"
+          placeholder="Ej: correo@dominio.com, otro@dominio.com"
+          required
+        />
+        <button @click="enviarFormulario">
+          <i class="material-icons">send</i>
+          Enviar
+        </button>
+      </div>
     </div>
   </div>
 </template>
